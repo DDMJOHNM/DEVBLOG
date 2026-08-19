@@ -3,17 +3,17 @@
 <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DevBlog - System Design</title>
+<title>DevBlog - Database and Storage</title>
 
 
 
-<meta name="description" content="Course notes and framework">
-<meta name="twitter:title" content="DevBlog - System Design">
+<meta name="description" content="SQL vs NoSQL, sharding, replication, and object storage">
+<meta name="twitter:title" content="DevBlog - Database and Storage">
 <meta name="author" content="John Mason">
 <meta name="keywords" content="System Design">
-<meta property="og:description" content="Course notes and framework">
-<meta property="og:title" content="DevBlog - System Design">
-<meta property="og:article:published_time" content="2026-07-15T01:48:00+00:00">
+<meta property="og:description" content="SQL vs NoSQL, sharding, replication, and object storage">
+<meta property="og:title" content="DevBlog - Database and Storage">
+<meta property="og:article:published_time" content="2026-08-19T16:00:00+00:00">
 <meta property="og:type" content="article">
 
 
@@ -93,78 +93,181 @@
     <section>
         
     <main id="content" class="mx-auto max-w-7xl py-16 px-8">
-        <article aria-label="Article" id="system-design" itemscope itemtype="https://schema.org/BlogPosting"
+        <article aria-label="Article" id="system-design-database-storage" itemscope itemtype="https://schema.org/BlogPosting"
     class="post-article mx-auto prose dark:prose-invert">
-    <meta itemprop="identifier" content="system-design">
+    <meta itemprop="identifier" content="system-design-database-storage">
     
     <header aria-label="Header section" role="doc-pageheader">
-        <h1 itemprop="headline" class="mb-4">System Design</h1>
+        <h1 itemprop="headline" class="mb-4">Database and Storage</h1>
         <div id="byline" aria-label="About the post" role="doc-introduction">
-            Posted <time itemprop="dateCreated datePublished" datetime="2026-07-15T01:48:00+00:00" title="Wednesday Jul 15th, 2026, at 1:48am">Jul 15th, 2026</time>            by author
+            Posted <time itemprop="dateCreated datePublished" datetime="2026-08-19T16:00:00+00:00" title="Wednesday Aug 19th, 2026, at 4:00pm">Aug 19th, 2026</time>            by author
 <address itemprop="author" itemscope itemtype="https://schema.org/Person" aria-label="The post author" style="display: inline;">
                 <span itemprop="name" aria-label="The author's name" title=@john_mason>John Mason</span>
             </address>            in the category "System Design"        </div>
     </header>
         <div aria-label="Article body" itemprop="articleBody">
-        <h2>Overview</h2>
-<p>Course notes covering networking, protocols, architecture, storage, performance, reliability, security, and a practical project. Use the <a href="/posts/system-design-interview-framework.html">interview framework</a> for structured problem-solving.</p>
-<h2>Course sections</h2>
+        <p>Storage choices impact performance, reliability, and cost. Every system design starts with understanding your data: structured vs unstructured, access patterns, and scale requirements.</p>
+<h2>Storage types</h2>
 <ul>
-<li><a href="/posts/networking.html">Networking</a> — IP, DNS, TCP/UDP, HTTP, TLS, CDNs, load balancers</li>
-<li><a href="/posts/system-design-protocols.html">Protocols</a> — REST, WebSockets, gRPC, GraphQL, autoscaling</li>
-<li><a href="/posts/system-design-architectural-patterns.html">Architectural Patterns</a> — monoliths, microservices, event-driven, N-tier</li>
-<li><a href="/posts/system-design-web-concepts.html">Web Concepts</a> — sessions, auth, serialization, CORS</li>
-<li><a href="/posts/system-design-scalability.html">Scalability</a> — vertical, horizontal, diagonal scaling</li>
-<li><a href="/posts/system-design-database-storage.html">Database and Storage</a> — SQL vs NoSQL, sharding, replication, object storage</li>
-<li><a href="/posts/system-design-performance.html">Performance</a> — caching, messaging, concurrency, DB optimization</li>
-<li><a href="/posts/system-design-reliability.html">Reliability and Availability</a> — redundancy, backup, disaster recovery</li>
-<li><a href="/posts/system-design-security.html">Security</a> — threat modeling, encryption, cloud security</li>
-<li><a href="/posts/system-design-interview-framework.html">Interview Framework</a> — four-step approach to design problems</li>
+<li><strong>Structured data</strong> — predefined schema (relational databases)</li>
+<li><strong>Unstructured data</strong> — flexible formats (object/blob storage)</li>
+<li><strong>File storage</strong> — NFS, legacy systems</li>
+<li><strong>Block storage</strong> — raw storage blocks (e.g. AWS EBS)</li>
 </ul>
-<h2>Project</h2>
+<h2>SQL vs NoSQL</h2>
+<h3>Relational (SQL)</h3>
+<p>MySQL, PostgreSQL. Data stored in rows and columns with a predefined schema.</p>
+<p><strong>ACID properties:</strong></p>
 <ul>
-<li><a href="/posts/system-design-project-observability.html">Observability Dashboard</a> — logging system for OpenAI and AWS project monitoring</li>
+<li><strong>Atomicity</strong> — all or nothing</li>
+<li><strong>Consistency</strong> — data integrity maintained</li>
+<li><strong>Isolation</strong> — transactions do not interfere</li>
+<li><strong>Durability</strong> — changes survive system failures</li>
 </ul>
-<h2>System Design Trade-offs</h2>
-<p>System design trade-offs are essential engineering decisions, where improving one attribute—such as latency, scalability, or availability—inevitably sacrifices another. Common trade-offs include choosing between strong consistency (accuracy) and high availability (speed), or choosing between denormalization (faster reads) and normalization (better integrity).</p>
-<h3>Key Trade-offs</h3>
+<p><strong>Best for:</strong> complex queries and relationships, strong consistency, structured data (banking, ERP).</p>
+<p><strong>Not ideal for:</strong> rapidly changing schema-less data, large-scale horizontal scaling, deeply nested JSON.</p>
+<h3>NoSQL</h3>
+<p>Flexibility and scale. Schema-less or dynamic schema.</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Examples</th>
+<th>Use case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Document</td>
+<td>MongoDB</td>
+<td>JSON-like structures, user profiles, CMS</td>
+</tr>
+<tr>
+<td>Key-value</td>
+<td>Redis, DynamoDB</td>
+<td>Caching, high-performance lookups</td>
+</tr>
+<tr>
+<td>Columnar</td>
+<td>Cassandra, HBase</td>
+<td>Analytics over large datasets</td>
+</tr>
+<tr>
+<td>Graph</td>
+<td>Neo4j</td>
+<td>Highly connected data, social networks</td>
+</tr>
+</tbody>
+</table>
+<p><strong>BASE properties:</strong></p>
 <ul>
-<li><strong>Consistency vs. Availability (CAP Theorem):</strong> In a distributed system, you can prioritize either immediate data consistency (all nodes see the same data simultaneously) or high availability (the system stays functional even if nodes fail or network issues occur).</li>
-<li><strong>Latency vs. Throughput:</strong> Optimizing for low latency reduces the time to process a single request, whereas high throughput increases the total amount of data processed per second.</li>
-<li><strong>Stateful vs. Stateless:</strong> Stateful systems remember past interactions, making them better for personalization but harder to scale. Stateless systems are easier to scale horizontally but require external storage to maintain session data.</li>
-<li><strong>SQL (Normalized) vs. NoSQL (Denormalized):</strong> SQL ensures data integrity and reduces redundancy. NoSQL databases (e.g. Cassandra) are better at scaling horizontally and handling high-volume write traffic, often sacrificing strict consistency.</li>
-<li><strong>Sync vs. Async Processing:</strong> Synchronous calls (e.g. HTTP) are simpler but create dependencies. Asynchronous processing (e.g. messaging queues) decouples services for better performance, but increases complexity.</li>
-<li><strong>Monolith vs. Microservices:</strong> Monoliths are simpler to develop and deploy initially. Microservices offer better scalability and flexibility but are much harder to manage and debug.</li>
-<li><strong>Caching (Performance) vs. Memory (Cost):</strong> Adding cache (e.g. Redis) improves read speeds (lowers latency) but increases cost, complexity, and the risk of data inconsistency.</li>
+<li><strong>Basically available</strong> — always returns a response</li>
+<li><strong>Soft state</strong> — system may change over time</li>
+<li><strong>Eventually consistent</strong> — updates propagate through the system</li>
 </ul>
-<h3>How to Approach Trade-offs in Interviews</h3>
-<ol>
-<li><strong>Understand requirements:</strong> Define if the system is read-heavy or write-heavy.</li>
-<li><strong>Highlight trade-offs:</strong> Always explain what is gained and what is lost when choosing a technology.</li>
-<li><strong>Justify decisions:</strong> Base decisions on specific product needs (e.g. banking needs consistency, social media needs availability).</li>
-</ol>
-<h2>Load Balancers</h2>
-<p>A load balancer is a dedicated hardware appliance or software service that acts as a reverse proxy, distributing incoming network traffic across multiple servers. It maximizes application reliability, prevents server overloads, and minimizes latency by ensuring no single machine is overwhelmed.</p>
-<p>See <a href="/posts/networking.html">Networking</a> and <a href="/posts/system-design-scalability.html">Scalability</a> for deeper coverage.</p>
-<h3>Key Benefits</h3>
+<p>In distributed systems, SQL tends toward <strong>CP</strong> (consistency + partition tolerance). NoSQL often chooses <strong>AP</strong> or BASE (availability over immediate consistency).</p>
+<h3>CAP theorem</h3>
+<p>You can guarantee at most two of three:</p>
 <ul>
-<li><strong>High Availability:</strong> If a backend server goes offline, the load balancer automatically reroutes traffic to healthy servers, preventing downtime.</li>
-<li><strong>Scalability:</strong> It allows administrators to seamlessly add or remove servers from the backend pool without interrupting user access.</li>
-<li><strong>Security:</strong> Acting as an intermediary, it hides backend server identities and can help mitigate Distributed Denial of Service (DDoS) attacks.</li>
+<li><strong>Consistency</strong> — every request receives the latest write</li>
+<li><strong>Availability</strong> — every request receives a response</li>
+<li><strong>Partition tolerance</strong> — system functions despite network failures</li>
 </ul>
-<h3>Common Load Balancing Algorithms</h3>
-<p>Different methods are used to determine which server receives the next incoming request:</p>
+<p>Modern architectures often use <strong>polyglot persistence</strong> — the right database for each service.</p>
+<h2>Scaling databases</h2>
+<h3>Vertical scaling</h3>
+<p>Increase capacity of a single machine.</p>
+<p><strong>Pros:</strong> simple architecture, strong consistency.</p>
+<p><strong>Cons:</strong> limited by hardware, cost grows non-linearly, single point of failure.</p>
+<h3>Horizontal scaling</h3>
+<p>Add more database nodes to distribute data and load.</p>
+<p><strong>Pros:</strong> elastic scalability, handles large traffic, better fault tolerance.</p>
+<p><strong>Cons:</strong> complex architecture, often weaker consistency (eventual).</p>
+<h2>Sharding</h2>
+<p>Splitting data across multiple nodes when a single node reaches its limits.</p>
+<h3>Strategies</h3>
 <ul>
-<li><strong>Round Robin:</strong> Distributes requests sequentially across the server pool in a revolving loop.</li>
-<li><strong>Least Connections:</strong> Routes traffic to the server with the fewest active connections, making it ideal if requests vary greatly in processing time.</li>
-<li><strong>IP Hash:</strong> Uses the client's IP address to consistently route them to the same server, preserving session data.</li>
+<li><strong>Range-based</strong> — e.g. users 1–1000 on shard A, 1001–2000 on shard B</li>
+<li><strong>Hash-based</strong> — hash a key like user ID; reduces hotspots but harder for range queries; consistent hashing minimizes remapping when nodes change</li>
+<li><strong>Geo-based</strong> — shard by region for lower latency</li>
 </ul>
-<h3>Load Balancer Tiers</h3>
-<p>Load balancing generally operates at two primary network levels:</p>
+<h3>Vertical sharding</h3>
+<p>Split by function (users table on one shard, orders on another). Adds complexity.</p>
+<h2>Replication</h2>
+<p>Copying data from one database node to another.</p>
+<p><strong>Benefits:</strong> fault tolerance, improved read performance, data availability.</p>
+<p><strong>Trade-offs:</strong> CAP theorem applies — replication may favor availability; strong consistency may sacrifice availability during lag.</p>
+<h3>Leader–follower replication</h3>
 <ul>
-<li><strong>Layer 4 (Transport Layer):</strong> Routes traffic based on IP addresses and TCP/UDP ports without inspecting the actual content of the packets. It is highly performant.</li>
-<li><strong>Layer 7 (Application Layer):</strong> Makes highly intelligent routing decisions based on request attributes like HTTP headers, cookies, or URL paths, making it ideal for microservices.</li>
+<li>Writes go to the leader</li>
+<li>Reads can come from followers</li>
+<li>Async replication means possible read lag</li>
 </ul>
+<h3>Read replicas</h3>
+<p>Scale read-heavy workloads. Not involved in writes. Load-balance read traffic across replicas. Replication lag still applies.</p>
+<h2>Object storage</h2>
+<p>Manages data as objects in buckets with metadata (MIME type, timestamps, custom tags). Scalable, searchable, and cost-effective.</p>
+<p><strong>Providers:</strong> Amazon S3, Google Cloud Storage, Azure Blob Storage.</p>
+<p><strong>Use cases:</strong> media storage, backups and archives, data lakes, static website hosting, IoT and ML pipelines.</p>
+<p><strong>Considerations:</strong></p>
+<ul>
+<li>Latency and throughput — design for massive parallel access</li>
+<li>Eventual consistency on some platforms (e.g. S3)</li>
+<li>Write-once, read-many access patterns</li>
+<li>Storage class tiers (Standard, Infrequent Access, Archive) and lifecycle rules</li>
+</ul>
+<h2>Distributed file systems</h2>
+<p>Traditional file systems (ext4, NTFS, xfs) are limited to single-node scale.</p>
+<p><strong>Distributed file systems (DFS)</strong> store and access files across multiple nodes but appear as a single system.</p>
+<p>Example: <strong>HDFS</strong> (Hadoop) — NameNode manages metadata, DataNodes store replicated blocks.</p>
+<p><strong>Benefits:</strong> horizontal growth, automatic rebalancing, high throughput via parallelism, built-in failure recovery.</p>
+<p><strong>Use cases:</strong> big data processing, log aggregation.</p>
+<h2>Big data fundamentals</h2>
+<p>Datasets too large, fast, or complex for traditional processing tools.</p>
+<p><strong>The 6 Vs:</strong> Volume, Velocity, Variety, Veracity, Value, Variability.</p>
+<p><strong>Limitations of traditional systems:</strong> vertical scaling only, not optimized for parallel access, cost inefficiencies, lack of fault tolerance.</p>
+<p><strong>Processing patterns:</strong></p>
+<ul>
+<li><strong>Batch</strong> — large chunks at once (reports, ETL)</li>
+<li><strong>Stream</strong> — real-time (alerts, live dashboards)</li>
+<li><strong>Hybrid</strong> — common in production</li>
+</ul>
+<h2>Choosing storage</h2>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Question</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Durability</td>
+<td>Does data persist after failure?</td>
+</tr>
+<tr>
+<td>Availability</td>
+<td>Does it work during partial outages?</td>
+</tr>
+<tr>
+<td>Consistency</td>
+<td>Do reads always return the latest write?</td>
+</tr>
+<tr>
+<td>Atomicity</td>
+<td>Do multi-record operations succeed or fail as a unit?</td>
+</tr>
+</tbody>
+</table>
+<p>No perfect solution — make trade-offs based on what matters most.</p>
+<p><strong>Examples:</strong></p>
+<ul>
+<li>E-commerce — structured DB + object storage for images</li>
+<li>Streaming — unstructured media in object storage, user data in NoSQL</li>
+<li>Log aggregation — time-series/columnar DB + object storage</li>
+</ul>
+<p>Real-world systems combine multiple storage types.</p>
+<p>Back to <a href="/posts/system-design.html">System Design</a>.</p>
 
     </div>
     <span class="sr-only">End of article</span>

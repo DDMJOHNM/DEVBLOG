@@ -8,7 +8,24 @@ date: '2026-07-15 01:48'
 
 ## Overview
 
-Course notes to be added.
+Course notes covering networking, protocols, architecture, storage, performance, reliability, security, and a practical project. Use the [interview framework](/posts/system-design-interview-framework.html) for structured problem-solving.
+
+## Course sections
+
+- [Networking](/posts/networking.html) — IP, DNS, TCP/UDP, HTTP, TLS, CDNs, load balancers
+- [Protocols](/posts/system-design-protocols.html) — REST, WebSockets, gRPC, GraphQL, autoscaling
+- [Architectural Patterns](/posts/system-design-architectural-patterns.html) — monoliths, microservices, event-driven, N-tier
+- [Web Concepts](/posts/system-design-web-concepts.html) — sessions, auth, serialization, CORS
+- [Scalability](/posts/system-design-scalability.html) — vertical, horizontal, diagonal scaling
+- [Database and Storage](/posts/system-design-database-storage.html) — SQL vs NoSQL, sharding, replication, object storage
+- [Performance](/posts/system-design-performance.html) — caching, messaging, concurrency, DB optimization
+- [Reliability and Availability](/posts/system-design-reliability.html) — redundancy, backup, disaster recovery
+- [Security](/posts/system-design-security.html) — threat modeling, encryption, cloud security
+- [Interview Framework](/posts/system-design-interview-framework.html) — four-step approach to design problems
+
+## Project
+
+- [Observability Dashboard](/posts/system-design-project-observability.html) — logging system for OpenAI and AWS project monitoring
 
 ## System Design Trade-offs
 
@@ -29,9 +46,12 @@ System design trade-offs are essential engineering decisions, where improving on
 1. **Understand requirements:** Define if the system is read-heavy or write-heavy.
 2. **Highlight trade-offs:** Always explain what is gained and what is lost when choosing a technology.
 3. **Justify decisions:** Base decisions on specific product needs (e.g. banking needs consistency, social media needs availability).
+
 ## Load Balancers
 
 A load balancer is a dedicated hardware appliance or software service that acts as a reverse proxy, distributing incoming network traffic across multiple servers. It maximizes application reliability, prevents server overloads, and minimizes latency by ensuring no single machine is overwhelmed.
+
+See [Networking](/posts/networking.html) and [Scalability](/posts/system-design-scalability.html) for deeper coverage.
 
 ### Key Benefits
 

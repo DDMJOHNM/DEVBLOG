@@ -3,17 +3,17 @@
 <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DevBlog - System Design</title>
+<title>DevBlog - System Security</title>
 
 
 
-<meta name="description" content="Course notes and framework">
-<meta name="twitter:title" content="DevBlog - System Design">
+<meta name="description" content="Threat modeling, authentication, encryption, and cloud security">
+<meta name="twitter:title" content="DevBlog - System Security">
 <meta name="author" content="John Mason">
 <meta name="keywords" content="System Design">
-<meta property="og:description" content="Course notes and framework">
-<meta property="og:title" content="DevBlog - System Design">
-<meta property="og:article:published_time" content="2026-07-15T01:48:00+00:00">
+<meta property="og:description" content="Threat modeling, authentication, encryption, and cloud security">
+<meta property="og:title" content="DevBlog - System Security">
+<meta property="og:article:published_time" content="2026-08-19T16:00:00+00:00">
 <meta property="og:type" content="article">
 
 
@@ -93,78 +93,238 @@
     <section>
         
     <main id="content" class="mx-auto max-w-7xl py-16 px-8">
-        <article aria-label="Article" id="system-design" itemscope itemtype="https://schema.org/BlogPosting"
+        <article aria-label="Article" id="system-design-security" itemscope itemtype="https://schema.org/BlogPosting"
     class="post-article mx-auto prose dark:prose-invert">
-    <meta itemprop="identifier" content="system-design">
+    <meta itemprop="identifier" content="system-design-security">
     
     <header aria-label="Header section" role="doc-pageheader">
-        <h1 itemprop="headline" class="mb-4">System Design</h1>
+        <h1 itemprop="headline" class="mb-4">System Security</h1>
         <div id="byline" aria-label="About the post" role="doc-introduction">
-            Posted <time itemprop="dateCreated datePublished" datetime="2026-07-15T01:48:00+00:00" title="Wednesday Jul 15th, 2026, at 1:48am">Jul 15th, 2026</time>            by author
+            Posted <time itemprop="dateCreated datePublished" datetime="2026-08-19T16:00:00+00:00" title="Wednesday Aug 19th, 2026, at 4:00pm">Aug 19th, 2026</time>            by author
 <address itemprop="author" itemscope itemtype="https://schema.org/Person" aria-label="The post author" style="display: inline;">
                 <span itemprop="name" aria-label="The author's name" title=@john_mason>John Mason</span>
             </address>            in the category "System Design"        </div>
     </header>
         <div aria-label="Article body" itemprop="articleBody">
-        <h2>Overview</h2>
-<p>Course notes covering networking, protocols, architecture, storage, performance, reliability, security, and a practical project. Use the <a href="/posts/system-design-interview-framework.html">interview framework</a> for structured problem-solving.</p>
-<h2>Course sections</h2>
+        <p>Security is a non-functional requirement that becomes more complicated in distributed systems. It covers data in transit and at rest, authentication, secure APIs, and network-level protection.</p>
+<h2>CIA triad</h2>
 <ul>
-<li><a href="/posts/networking.html">Networking</a> — IP, DNS, TCP/UDP, HTTP, TLS, CDNs, load balancers</li>
-<li><a href="/posts/system-design-protocols.html">Protocols</a> — REST, WebSockets, gRPC, GraphQL, autoscaling</li>
-<li><a href="/posts/system-design-architectural-patterns.html">Architectural Patterns</a> — monoliths, microservices, event-driven, N-tier</li>
-<li><a href="/posts/system-design-web-concepts.html">Web Concepts</a> — sessions, auth, serialization, CORS</li>
-<li><a href="/posts/system-design-scalability.html">Scalability</a> — vertical, horizontal, diagonal scaling</li>
-<li><a href="/posts/system-design-database-storage.html">Database and Storage</a> — SQL vs NoSQL, sharding, replication, object storage</li>
-<li><a href="/posts/system-design-performance.html">Performance</a> — caching, messaging, concurrency, DB optimization</li>
-<li><a href="/posts/system-design-reliability.html">Reliability and Availability</a> — redundancy, backup, disaster recovery</li>
-<li><a href="/posts/system-design-security.html">Security</a> — threat modeling, encryption, cloud security</li>
-<li><a href="/posts/system-design-interview-framework.html">Interview Framework</a> — four-step approach to design problems</li>
+<li><strong>Confidentiality</strong> — data accessible only to authorized parties</li>
+<li><strong>Integrity</strong> — data is accurate and unmodified</li>
+<li><strong>Availability</strong> — systems and data accessible when needed</li>
 </ul>
-<h2>Project</h2>
+<h2>Threat modeling</h2>
+<p>Identify what to protect before building defenses.</p>
 <ul>
-<li><a href="/posts/system-design-project-observability.html">Observability Dashboard</a> — logging system for OpenAI and AWS project monitoring</li>
+<li><strong>Attack surface</strong> — all entry points</li>
+<li><strong>Assets</strong> — data, credentials, infrastructure worth protecting</li>
 </ul>
-<h2>System Design Trade-offs</h2>
-<p>System design trade-offs are essential engineering decisions, where improving one attribute—such as latency, scalability, or availability—inevitably sacrifices another. Common trade-offs include choosing between strong consistency (accuracy) and high availability (speed), or choosing between denormalization (faster reads) and normalization (better integrity).</p>
-<h3>Key Trade-offs</h3>
+<h3>STRIDE model</h3>
+<table>
+<thead>
+<tr>
+<th>Threat</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Spoofing</td>
+<td>Impersonating a user or system</td>
+</tr>
+<tr>
+<td>Tampering</td>
+<td>Modifying data or code</td>
+</tr>
+<tr>
+<td>Repudiation</td>
+<td>Denying an action took place</td>
+</tr>
+<tr>
+<td>Information disclosure</td>
+<td>Exposing data to unauthorized parties</td>
+</tr>
+<tr>
+<td>Denial of service</td>
+<td>Making the system unavailable</td>
+</tr>
+<tr>
+<td>Elevation of privilege</td>
+<td>Gaining unauthorized access</td>
+</tr>
+</tbody>
+</table>
+<h3>Common attack vectors</h3>
 <ul>
-<li><strong>Consistency vs. Availability (CAP Theorem):</strong> In a distributed system, you can prioritize either immediate data consistency (all nodes see the same data simultaneously) or high availability (the system stays functional even if nodes fail or network issues occur).</li>
-<li><strong>Latency vs. Throughput:</strong> Optimizing for low latency reduces the time to process a single request, whereas high throughput increases the total amount of data processed per second.</li>
-<li><strong>Stateful vs. Stateless:</strong> Stateful systems remember past interactions, making them better for personalization but harder to scale. Stateless systems are easier to scale horizontally but require external storage to maintain session data.</li>
-<li><strong>SQL (Normalized) vs. NoSQL (Denormalized):</strong> SQL ensures data integrity and reduces redundancy. NoSQL databases (e.g. Cassandra) are better at scaling horizontally and handling high-volume write traffic, often sacrificing strict consistency.</li>
-<li><strong>Sync vs. Async Processing:</strong> Synchronous calls (e.g. HTTP) are simpler but create dependencies. Asynchronous processing (e.g. messaging queues) decouples services for better performance, but increases complexity.</li>
-<li><strong>Monolith vs. Microservices:</strong> Monoliths are simpler to develop and deploy initially. Microservices offer better scalability and flexibility but are much harder to manage and debug.</li>
-<li><strong>Caching (Performance) vs. Memory (Cost):</strong> Adding cache (e.g. Redis) improves read speeds (lowers latency) but increases cost, complexity, and the risk of data inconsistency.</li>
+<li>Insecure APIs</li>
+<li>Misconfigured servers</li>
+<li>Poor authentication</li>
+<li>Open ports and services</li>
 </ul>
-<h3>How to Approach Trade-offs in Interviews</h3>
+<h3>Common attacks and mitigations</h3>
+<table>
+<thead>
+<tr>
+<th>Attack</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DDoS</td>
+<td>Rate limiting, CDN absorption</td>
+</tr>
+<tr>
+<td>Man in the middle</td>
+<td>HTTPS/TLS</td>
+</tr>
+<tr>
+<td>Injection</td>
+<td>Input validation, parameterized queries, WAF</td>
+</tr>
+<tr>
+<td>Spoofing</td>
+<td>MFA, token-based auth, IP whitelisting</td>
+</tr>
+</tbody>
+</table>
+<h2>Secure SDLC — shift left</h2>
+<p>Integrate security early in the development lifecycle:</p>
 <ol>
-<li><strong>Understand requirements:</strong> Define if the system is read-heavy or write-heavy.</li>
-<li><strong>Highlight trade-offs:</strong> Always explain what is gained and what is lost when choosing a technology.</li>
-<li><strong>Justify decisions:</strong> Base decisions on specific product needs (e.g. banking needs consistency, social media needs availability).</li>
+<li><strong>Requirements</strong> — threat modeling</li>
+<li><strong>Design</strong> — secure architecture</li>
+<li><strong>Development</strong> — secure coding practices</li>
+<li><strong>Testing</strong> — fuzzing, penetration testing</li>
+<li><strong>Deployment</strong> — secrets management</li>
+<li><strong>Maintenance</strong> — patch management</li>
 </ol>
-<h2>Load Balancers</h2>
-<p>A load balancer is a dedicated hardware appliance or software service that acts as a reverse proxy, distributing incoming network traffic across multiple servers. It maximizes application reliability, prevents server overloads, and minimizes latency by ensuring no single machine is overwhelmed.</p>
-<p>See <a href="/posts/networking.html">Networking</a> and <a href="/posts/system-design-scalability.html">Scalability</a> for deeper coverage.</p>
-<h3>Key Benefits</h3>
+<h3>Best practices</h3>
 <ul>
-<li><strong>High Availability:</strong> If a backend server goes offline, the load balancer automatically reroutes traffic to healthy servers, preventing downtime.</li>
-<li><strong>Scalability:</strong> It allows administrators to seamlessly add or remove servers from the backend pool without interrupting user access.</li>
-<li><strong>Security:</strong> Acting as an intermediary, it hides backend server identities and can help mitigate Distributed Denial of Service (DDoS) attacks.</li>
+<li>Security by design</li>
+<li>Use encryption at rest and in transit</li>
+<li>Harden infrastructure (firewalls, VPCs)</li>
+<li>Validate inputs and sanitize outputs</li>
+<li>Monitor and log activity (stored securely)</li>
 </ul>
-<h3>Common Load Balancing Algorithms</h3>
-<p>Different methods are used to determine which server receives the next incoming request:</p>
+<h2>Authentication and authorization</h2>
 <ul>
-<li><strong>Round Robin:</strong> Distributes requests sequentially across the server pool in a revolving loop.</li>
-<li><strong>Least Connections:</strong> Routes traffic to the server with the fewest active connections, making it ideal if requests vary greatly in processing time.</li>
-<li><strong>IP Hash:</strong> Uses the client's IP address to consistently route them to the same server, preserving session data.</li>
+<li><strong>Authentication</strong> — verify who the user is</li>
+<li><strong>Authorization</strong> — determine what the authenticated user is allowed to do</li>
 </ul>
-<h3>Load Balancer Tiers</h3>
-<p>Load balancing generally operates at two primary network levels:</p>
+<h3>Approaches</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Pros</th>
+<th>Cons</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Basic auth</td>
+<td>Simple</td>
+<td>Insecure without HTTPS</td>
+</tr>
+<tr>
+<td>Session-based</td>
+<td>Easy to implement</td>
+<td>Hard to scale in distributed systems</td>
+</tr>
+<tr>
+<td>Token-based (JWT)</td>
+<td>Stateless, scales easily</td>
+<td>Requires secure token storage</td>
+</tr>
+<tr>
+<td>OAuth 2.0</td>
+<td>Delegated access without exposing credentials</td>
+<td>Complexity</td>
+</tr>
+<tr>
+<td>OpenID Connect</td>
+<td>Identity layer on OAuth (SSO)</td>
+<td>Complexity</td>
+</tr>
+</tbody>
+</table>
+<h3>Access control models</h3>
 <ul>
-<li><strong>Layer 4 (Transport Layer):</strong> Routes traffic based on IP addresses and TCP/UDP ports without inspecting the actual content of the packets. It is highly performant.</li>
-<li><strong>Layer 7 (Application Layer):</strong> Makes highly intelligent routing decisions based on request attributes like HTTP headers, cookies, or URL paths, making it ideal for microservices.</li>
+<li><strong>RBAC</strong> — role-based; simple and scalable, less granular</li>
+<li><strong>ABAC</strong> — attribute-based; fine-grained but complex</li>
+<li><strong>DAC</strong> — resource owner decides access</li>
+<li><strong>MAC</strong> — central authority based on security policies</li>
 </ul>
+<h3>Single sign-on and identity federation</h3>
+<p>SSO lets users authenticate once across multiple systems. Identity federation uses external identity providers (e.g. Google, Okta) for seamless access.</p>
+<h2>Data protection</h2>
+<p>Breaches and man-in-the-middle attacks threaten user trust. Regulations like GDPR require proper data handling.</p>
+<h3>Encryption</h3>
+<p>Plaintext → ciphertext → decryption using a secret key.</p>
+<ul>
+<li><strong>At rest</strong> — protects stored data (cloud storage, databases)</li>
+<li><strong>In transit</strong> — TLS/SSL secures data during transmission</li>
+</ul>
+<p><strong>Symmetric</strong> — one shared key (fast). <strong>Asymmetric</strong> — public/private key pair (secure key exchange). Often used together in TLS handshakes.</p>
+<h3>TLS/SSL and HTTPS</h3>
+<p>HTTPS = HTTP over TLS. Ensures confidentiality, integrity, and authenticity.</p>
+<p>TLS handshake: client and server negotiate ciphers, exchange keys asymmetrically, then use symmetric encryption for data transfer.</p>
+<h3>Hashing</h3>
+<p>One-way transformation for storing passwords. <strong>Salting</strong> adds random data to prevent rainbow table attacks. Use bcrypt or Argon2.</p>
+<h3>PKI (Public Key Infrastructure)</h3>
+<p>Manages digital certificates. Certificate Authorities (CAs) sign certificates to establish trust chains.</p>
+<h2>Secure API communication</h2>
+<ul>
+<li>HTTPS everywhere</li>
+<li>Auth tokens (JWT, OAuth)</li>
+<li>Rate limiting</li>
+<li>IP whitelisting</li>
+<li>Mutual TLS (mTLS) for service-to-service</li>
+</ul>
+<h2>Network and infrastructure security</h2>
+<h3>External threats</h3>
+<p>DDoS, intrusion, IP spoofing.</p>
+<h3>Internal risks</h3>
+<p>Misconfigured firewalls, lateral movement within the network.</p>
+<p>Cloud-native adoption increases attack surface — reliability and user trust depend on proper security.</p>
+<h3>Firewalls and reverse proxies</h3>
+<ul>
+<li><strong>Firewalls</strong> — filter traffic by IP, port, protocol (network, host, cloud)</li>
+<li><strong>Reverse proxies</strong> — route traffic, mask backend identity, rate limiting (Nginx, AWS ALB)</li>
+</ul>
+<h3>Network segmentation</h3>
+<p>DMZ, internal network, database zone. Limit lateral movement with firewalls, subnets, and private VLANs. In cloud: VPCs, security groups, NACLs.</p>
+<h3>Zero trust</h3>
+<p>Never trust, always verify — even within the network. Mutual TLS, least privilege, continuous verification.</p>
+<h2>Cloud security</h2>
+<p><strong>Shared responsibility model</strong> — the cloud provider secures the infrastructure; you secure your data and configuration.</p>
+<ul>
+<li>IAM with least privilege and MFA</li>
+<li>Encryption (EBS, S3, RDS)</li>
+<li>Audit logging</li>
+<li>CSPM tools for posture management</li>
+</ul>
+<h3>Serverless and containers</h3>
+<ul>
+<li><strong>Serverless:</strong> IAM per function, timeouts, API Gateway access control</li>
+<li><strong>Containers:</strong> regular image scanning, no root user, minimal privileges</li>
+</ul>
+<h3>Microservices security</h3>
+<ul>
+<li>JWT and mTLS for service-to-service communication</li>
+<li>API gateway for validation, auth, and rate limiting</li>
+<li>Service mesh for fine-grained TLS policies</li>
+</ul>
+<h2>OWASP Top 10</h2>
+<p>Common vulnerabilities to be aware of and mitigate:</p>
+<ul>
+<li>Injection</li>
+<li>Broken authentication</li>
+<li>Sensitive data exposure</li>
+<li>Security misconfiguration</li>
+<li>XSS, CSRF, SSRF</li>
+</ul>
+<p>Back to <a href="/posts/system-design.html">System Design</a>.</p>
 
     </div>
     <span class="sr-only">End of article</span>

@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DevBlog - Project: Observability Dashboard</title>
+
+
+
+<meta name="description" content="System design for a project management logging and cost monitoring tool">
+<meta name="twitter:title" content="DevBlog - Project: Observability Dashboard">
+<meta name="author" content="John Mason">
+<meta name="keywords" content="System Design">
+<meta property="og:description" content="System design for a project management logging and cost monitoring tool">
+<meta property="og:title" content="DevBlog - Project: Observability Dashboard">
+<meta property="og:article:published_time" content="2026-08-19T16:00:00+00:00">
+<meta property="og:type" content="article">
+
+
+<meta name="generator" content="HydePHP v2.0.3">
+<meta property="og:site_name" content="HydePHP">
+
+
+
+
+<style>[x-cloak] {display: none!important}</style>
+
+
+            <link rel="stylesheet" href="../media/app.css?v=9450b0e0">
+    
+
+    
+    
+
+
+    
+    <meta id="meta-color-scheme" name="color-scheme" content="light">
+    <script>if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); document.getElementById('meta-color-scheme').setAttribute('content', 'dark');} else { document.documentElement.classList.remove('dark') } </script>
+
+
+
+
+
+
+</head>
+<body id="app" class="flex flex-col min-h-screen overflow-x-hidden dark:bg-gray-900 dark:text-white" x-data="{ navigationOpen: false }" x-on:keydown.escape="navigationOpen = false;">
+    <a href="#content" id="skip-to-content" class="sr-only focus:not-sr-only bg-black border-4 border-yellow-400 focus:absolute focus:mt-2 focus:mx-auto focus:p-2 focus:w-64 h-auto left-0 overflow-auto right-0 rounded-md text-center text-lg text-white top-auto z-50 ">Skip to content</a>    <nav aria-label="Main navigation" id="main-navigation" class="flex flex-wrap items-center justify-between p-4 shadow-lg sm:shadow-xl md:shadow-none dark:bg-gray-800">
+    <div id="main-navigation-brand" class="flex grow items-center shrink-0 text-gray-700 dark:text-gray-200">
+        <a href="../index.html" class="font-bold px-4" aria-label="Home page">
+    DevBlog
+</a>
+        <div class="ml-auto">
+            <button @click="toggleTheme" class="theme-toggle-button flex items-center px-2 py-1 hover:text-gray-700 dark:text-gray-200" title="Toggle theme">
+        <span class="sr-only">Toggle dark theme</span>
+        <svg width="1.25rem" height="1.25rem" class="w-5 h-5 hidden dark:block" fill="#FFFFFF" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+        <svg width="1.25rem" height="1.25rem" class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+    </button>
+        </div>
+    </div>
+
+    <div class="block md:hidden">
+        <button id="navigation-toggle-button" class="flex items-center px-3 py-1 hover:text-gray-700 dark:text-gray-200"
+                aria-label="Toggle navigation menu" @click="navigationOpen = ! navigationOpen">
+            <svg x-show="! navigationOpen" title="Open Navigation Menu" class="dark:fill-gray-200"
+                 style="display: block;"
+                 id="open-main-navigation-menu-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24"
+                 width="24">
+                <title>Open Menu</title>
+                <path d="M0 0h24v24H0z" fill="none"/>
+                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+            </svg>
+            <svg x-show="navigationOpen" title="Close Navigation Menu" class="dark:fill-gray-200" style="display: none;"
+                 id="close-main-navigation-menu-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24"
+                 width="24">
+                <title>Close Menu</title>
+                <path d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+            </svg>
+        </button>
+    </div>
+
+    <div id="main-navigation-links" 
+         class="w-full hidden md:flex grow md:grow-0 md:items-center md:w-auto px-6 -mx-4 border-t mt-3 pt-3 md:border-none md:mt-0 md:py-0 border-gray-200 dark:border-gray-700"
+         :class="navigationOpen ? 'block!' : ''">
+        <ul aria-label="Navigation links" class="md:grow md:flex justify-end">
+                            <li class="md:mx-2">
+                                            <a href="../index.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Home</a>                                    </li>
+                            <li class="md:mx-2">
+                                            <a href="../projects.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Projects</a>                                    </li>
+                    </ul>
+    </div>
+</nav>
+    <section>
+        
+    <main id="content" class="mx-auto max-w-7xl py-16 px-8">
+        <article aria-label="Article" id="system-design-project-observability" itemscope itemtype="https://schema.org/BlogPosting"
+    class="post-article mx-auto prose dark:prose-invert">
+    <meta itemprop="identifier" content="system-design-project-observability">
+    
+    <header aria-label="Header section" role="doc-pageheader">
+        <h1 itemprop="headline" class="mb-4">Project: Observability Dashboard</h1>
+        <div id="byline" aria-label="About the post" role="doc-introduction">
+            Posted <time itemprop="dateCreated datePublished" datetime="2026-08-19T16:00:00+00:00" title="Wednesday Aug 19th, 2026, at 4:00pm">Aug 19th, 2026</time>            by author
+<address itemprop="author" itemscope itemtype="https://schema.org/Person" aria-label="The post author" style="display: inline;">
+                <span itemprop="name" aria-label="The author's name" title=@john_mason>John Mason</span>
+            </address>            in the category "System Design"        </div>
+    </header>
+        <div aria-label="Article body" itemprop="articleBody">
+        <p>A system to monitor errors, manage project costs, and track separate systems that use OpenAI and AWS.</p>
+<h2>Architecture options</h2>
+<p>Three transport options for ingest and OpenAI integration. All share the same core backend (SQS → Laravel → RDS + S3).</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>A. HTTPS-only</strong></th>
+<th><strong>B. WebSocket ingest</strong></th>
+<th><strong>C. OpenAI Realtime</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Role</strong></td>
+<td>Default: <code>POST</code> logs, <code>GET</code> dashboard + polling</td>
+<td>Add <code>wss://</code> to your API for server push</td>
+<td>Add OpenAI Realtime for voice sessions</td>
+</tr>
+<tr>
+<td><strong>OpenAI (product)</strong></td>
+<td>HTTPS chat/embeddings only</td>
+<td>Same — no Realtime unless <strong>C</strong> added</td>
+<td>Realtime token/session charges</td>
+</tr>
+<tr>
+<td><strong>AWS edge</strong></td>
+<td>API Gateway HTTP API only</td>
+<td>HTTP + WebSocket routes</td>
+<td>Same as A or B for your API</td>
+</tr>
+<tr>
+<td><strong>Trade-off</strong></td>
+<td>Simplest ops; polling overhead</td>
+<td>Live updates; WS connection billing</td>
+<td>Extra OpenAI cost; keep ingest WS separate from Realtime WS</td>
+</tr>
+<tr>
+<td><strong>Est. AWS/month (POC)</strong></td>
+<td>~$35–110</td>
+<td>~$40–120</td>
+<td>Same AWS as A or B; Realtime billed by OpenAI</td>
+</tr>
+</tbody>
+</table>
+<h3>A. Original — HTTPS-only ingest (default)</h3>
+<ul>
+<li>Ingest via <code>POST /ingest/...</code> with API key auth</li>
+<li>Admin dashboard via <code>GET /api/projects/.../events</code> with polling or refresh</li>
+<li>OpenAI via HTTPS chat completions / embeddings only</li>
+<li>API Gateway HTTP API (REST) only</li>
+</ul>
+<pre><code class="language-mermaid">flowchart TB
+  subgraph Clients[&quot;Clients&quot;]
+    App[&quot;Node app\n(POST log batches)&quot;]
+    UI[&quot;Admin UI\n(GET + poll / refresh)&quot;]
+  end
+
+  subgraph OpenAIREST[&quot;OpenAI — HTTPS only\n(unless optional C)&quot;]
+    Chat[&quot;Chat Completions /\nembeddings REST&quot;]
+  end
+
+  subgraph AWS[&quot;AWS — REST at edge only&quot;]
+    GW[&quot;API Gateway\nHTTP API only&quot;]
+    Ing[&quot;Ingestor\nLambda or container\nPOST → validate → SQS&quot;]
+    Q[&quot;SQS&quot;]
+    Lar[&quot;Laravel\nworkers + dashboard API&quot;]
+    Data[&quot;RDS + S3&quot;]
+  end
+
+  App --&gt;|&quot;HTTPS POST\ningest_https&quot;| GW
+  UI --&gt;|&quot;HTTPS GET\ndashboard / cursor&quot;| GW
+  GW --&gt; Ing
+  Ing --&gt; Q
+  Q --&gt; Lar
+  Lar --&gt; Data
+  GW --&gt; Lar
+  App --&gt;|&quot;HTTPS&quot;| Chat
+</code></pre>
+<p>Tag transport as <code>ingest_https</code> in metrics.</p>
+<h3>B. Optional — WebSocket ingest</h3>
+<p>Browser/Node connects via <code>wss://</code> to <strong>your API</strong> only. Never confuse with <code>wss://api.openai.com/v1/realtime</code> (that is <strong>C</strong>).</p>
+<pre><code class="language-mermaid">flowchart LR
+  subgraph Clients[&quot;Clients&quot;]
+    App[&quot;Node app\n(logs + business calls)&quot;]
+    UI[&quot;Admin UI&quot;]
+  end
+
+  subgraph OpenAIREST[&quot;OpenAI — HTTPS only\n(unless optional C)&quot;]
+    Chat[&quot;Chat Completions /\nembeddings REST&quot;]
+  end
+
+  subgraph AWS[&quot;AWS — optional WS edge&quot;]
+    GW[&quot;API Gateway\nHTTP + WebSocket&quot;]
+    L[&quot;Lambda ingestor\nvalidate → SQS&quot;]
+    Q[&quot;SQS&quot;]
+    LV[&quot;Laravel + tiny RDS\n(+ optional S3)&quot;]
+  end
+
+  App --&gt;|&quot;wss ingest only&quot;| GW
+  UI --&gt; GW
+  GW --&gt; L
+  L --&gt; Q
+  Q --&gt; LV
+  App --&gt;|&quot;HTTPS&quot;| Chat
+</code></pre>
+<p>Tag transport as <code>ingest_websocket</code>.</p>
+<h3>C. Optional — OpenAI Realtime API</h3>
+<p>Separate WebSocket to OpenAI for voice/low-latency product flows. Observability ingest stays A or B.</p>
+<pre><code class="language-mermaid">flowchart TB
+  subgraph Internet[&quot;Internet&quot;]
+    NodeApp[&quot;Node.js application\n(log stream → your API:\nHTTPS A or WebSocket B)&quot;]
+    AdminUI[&quot;Web admin UI&quot;]
+  end
+
+  subgraph External[&quot;External — optional C only&quot;]
+    OpenAI[&quot;OpenAI Realtime API\nwss://api.openai.com/v1/realtime&quot;]
+    FutureBilling[&quot;Future: Cost Explorer,\nOpenAI Usage API&quot;]
+  end
+
+  subgraph Region[&quot;AWS region (POC; multi-region later)&quot;]
+    subgraph Edge[&quot;Edge &amp; access&quot;]
+      APIGW[&quot;API Gateway\nHTTPS / WebSocket, rate limits&quot;]
+    end
+
+    subgraph Core[&quot;Ingestion &amp; application&quot;]
+      Ingestor[&quot;Ingestor service\nvalidate, enrich, classify, route&quot;]
+      SQS[&quot;SQS&quot;]
+      Laravel[&quot;Laravel backend\nAPI, workers, RBAC&quot;]
+    end
+
+    subgraph Data[&quot;Data plane&quot;]
+      DB[(&quot;Relational DB project / user / service_type,critical &amp; persistent events&quot;)]
+      S3[(&quot;S3 bulk / non-critical logs,~7 day lifecycle&quot;)]
+      Cache[(&quot;Cache dashboard &amp; hot reads&quot;)]
+      DLQ[&quot;DLQ + replay&quot;]
+    end
+  end
+
+  NodeApp -.-&gt;|&quot;optional C:\nRealtime if product needs it&quot;| OpenAI
+  NodeApp --&gt; APIGW
+  AdminUI --&gt; APIGW
+  APIGW --&gt; Ingestor
+  Ingestor --&gt; SQS
+  SQS --&gt; Laravel
+  Laravel --&gt; DB
+  Laravel --&gt; Cache
+  Laravel --&gt; S3
+  Ingestor -.-&gt; DLQ
+  SQS -.-&gt; DLQ
+  FutureBilling -.-&gt;|&quot;future&quot;| Ingestor
+</code></pre>
+<p>Name Realtime connections <code>openai_realtime_ws</code> in code so they never mix with <code>ingest_websocket</code>.</p>
+<h2>Functional requirements</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Requirement</th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F1</td>
+<td>Ingest observability events via HTTPS <code>ingest_https</code></td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>F2</td>
+<td>Optional WebSocket ingest <code>ingest_websocket</code></td>
+<td>No</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>F3</td>
+<td>Super-admin UI: dashboard per project with persistent messages</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>F4</td>
+<td>Log identity: per project, per user, per service type</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>F5</td>
+<td>Capture text-to-voice and onboarding correction counts</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>F6</td>
+<td>Toggle logging on/off per project at ingestor</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>F7</td>
+<td>Supplemental metrics: latency, token usage, outcomes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>F8</td>
+<td>Integrate AWS Cost Explorer (later)</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>F9</td>
+<td>Integrate OpenAI Usage API (later)</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>F10</td>
+<td>Optional OpenAI Realtime sessions</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<h2>Non-functional requirements</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Requirement</th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NF1</td>
+<td>Scalability: design for growth; POC starts small</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>NF2</td>
+<td>Horizontal scaling path</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>NF3</td>
+<td>Regional placement (start single region)</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>NF4</td>
+<td>API Gateway rate limiting</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>NF5</td>
+<td>Acceptable latency for OpenAI and cross-component calls</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>NF6</td>
+<td>Cache for dashboard / hot reads</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>NF7</td>
+<td>DLQ + replay for failed ingest</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>NF8</td>
+<td>TLS (HTTPS / WSS) for client ↔ API</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>NF9</td>
+<td>RBAC: least-privilege admin</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>NF10</td>
+<td>Logging hygiene: <code>x-request-id</code>; no confidential prompt bodies</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>NF11</td>
+<td>Sensitive/token data per security policy</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>NF12</td>
+<td>Authentication on admin and ingest paths</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>NF13</td>
+<td>Live dashboard updates without aggressive polling</td>
+<td>Partial</td>
+<td>Yes</td>
+<td>Partial</td>
+</tr>
+</tbody>
+</table>
+<h2>Constraints</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Constraint</th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C1</td>
+<td>Respect OpenAI API limits</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>AWS POC: low cost, single region, scale-out design</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>C3</td>
+<td>Message broker — Amazon SQS</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>C4</td>
+<td>Laravel for persistence and APIs</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>C5</td>
+<td>Critical events → relational DB</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>C6</td>
+<td>Non-critical logs → S3 (~7-day retention)</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>C7</td>
+<td>Observability does not require OpenAI Realtime</td>
+<td>Satisfied</td>
+<td>Satisfied</td>
+<td>Additive only</td>
+</tr>
+</tbody>
+</table>
+<h2>Event schema</h2>
+<pre><code class="language-json">{
+  &quot;schema_version&quot;: &quot;1.0&quot;,
+  &quot;event_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,
+  &quot;event_type&quot;: &quot;observability.log.v1&quot;,
+  &quot;severity&quot;: &quot;info&quot;,
+  &quot;occurred_at&quot;: &quot;2026-04-08T12:34:56.789Z&quot;,
+  &quot;project_id&quot;: &quot;proj_123&quot;,
+  &quot;user_id&quot;: &quot;usr_456&quot;,
+  &quot;service_type&quot;: &quot;counsellor&quot;,
+  &quot;request_id&quot;: &quot;req-abc-789&quot;,
+  &quot;tokens_used&quot;: 142,
+  &quot;latency_ms&quot;: 380,
+  &quot;has_correction&quot;: false,
+  &quot;has_recommended&quot;: false,
+  &quot;has_appointment&quot;: false,
+  &quot;provider&quot;: &quot;openai&quot;,
+  &quot;model&quot;: &quot;gpt-4o-realtime-preview&quot;
+}
+</code></pre>
+<h2>Load balancing and scaling</h2>
+<p>When latency rises from growing usage:</p>
+<ul>
+<li><strong>API Gateway</strong> scales the edge automatically</li>
+<li>Add <strong>multiple ingestor instances</strong> behind the gateway</li>
+<li>Add <strong>multiple Laravel API instances</strong> for dashboard reads</li>
+<li><strong>Per region:</strong> deploy replicas where customer data lives</li>
+<li><strong>SQS workers:</strong> scale consumer count rather than load-balancing the queue itself</li>
+<li><strong>Data layer:</strong> read replicas, RDS Proxy, cached dashboard reads, tenant/region partitioning before expecting load balancers to fix DB-bound latency</li>
+</ul>
+<p>Back to <a href="/posts/system-design.html">System Design</a>.</p>
+
+    </div>
+    <span class="sr-only">End of article</span>
+</article>    </main>
+
+    </section>
+
+    <footer aria-label="Page footer" class="flex py-4 px-6 w-full text-center mt-auto bg-slate-100 dark:bg-gray-800">
+        <div class="prose dark:prose-invert text-center mx-auto">
+            <p>Site proudly built with <a href="https://github.com/hydephp/hyde">HydePHP</a> 🎩</p>
+        </div>
+                    <a href="#app" aria-label="Go to top of page" class="float-right" @click.prevent="document.querySelector('#app').scrollIntoView({ behavior: 'smooth' })">
+                <button title="Scroll to top">
+                    <svg width="1.5rem" height="1.5rem" role="presentation" class="fill-current text-gray-500 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+                    </svg>
+                </button>
+            </a>
+            </footer>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.3/dist/cdn.min.js" integrity="sha256-gOkV4d9/FmMNEkjOzVlyM2eNAWSUXisT+1RbMTTIgXI=" crossorigin="anonymous"></script>
+
+<script>
+    function toggleTheme() {
+        if (localStorage.getItem('color-theme') === 'dark' || !('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem('color-theme', 'light');
+            document.getElementById('meta-color-scheme').setAttribute('content', 'light');
+        } else {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem('color-theme', 'dark');
+            document.getElementById('meta-color-scheme').setAttribute('content', 'dark');
+        }
+    }
+</script>
+
+
+
+
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+  const isDark =
+    document.documentElement.classList.contains('dark') ||
+    (!('color-theme' in localStorage) &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches) ||
+    localStorage.getItem('color-theme') === 'dark';
+
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: isDark ? 'dark' : 'default',
+    securityLevel: 'loose',
+  });
+
+  document.querySelectorAll('pre code.language-mermaid').forEach((code) => {
+    const pre = code.closest('pre');
+    if (!pre) return;
+
+    const container = document.createElement('div');
+    container.className = 'mermaid';
+    container.textContent = code.textContent;
+    pre.replaceWith(container);
+  });
+
+  await mermaid.run({ querySelector: '.mermaid' });
+</script>
+
+</body>
+</html>

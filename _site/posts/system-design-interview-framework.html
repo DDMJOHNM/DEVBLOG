@@ -3,17 +3,17 @@
 <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DevBlog - System Design</title>
+<title>DevBlog - System Design Interview Framework</title>
 
 
 
-<meta name="description" content="Course notes and framework">
-<meta name="twitter:title" content="DevBlog - System Design">
+<meta name="description" content="Four-step approach to system design problems">
+<meta name="twitter:title" content="DevBlog - System Design Interview Framework">
 <meta name="author" content="John Mason">
 <meta name="keywords" content="System Design">
-<meta property="og:description" content="Course notes and framework">
-<meta property="og:title" content="DevBlog - System Design">
-<meta property="og:article:published_time" content="2026-07-15T01:48:00+00:00">
+<meta property="og:description" content="Four-step approach to system design problems">
+<meta property="og:title" content="DevBlog - System Design Interview Framework">
+<meta property="og:article:published_time" content="2026-08-19T16:00:00+00:00">
 <meta property="og:type" content="article">
 
 
@@ -93,78 +93,93 @@
     <section>
         
     <main id="content" class="mx-auto max-w-7xl py-16 px-8">
-        <article aria-label="Article" id="system-design" itemscope itemtype="https://schema.org/BlogPosting"
+        <article aria-label="Article" id="system-design-interview-framework" itemscope itemtype="https://schema.org/BlogPosting"
     class="post-article mx-auto prose dark:prose-invert">
-    <meta itemprop="identifier" content="system-design">
+    <meta itemprop="identifier" content="system-design-interview-framework">
     
     <header aria-label="Header section" role="doc-pageheader">
-        <h1 itemprop="headline" class="mb-4">System Design</h1>
+        <h1 itemprop="headline" class="mb-4">System Design Interview Framework</h1>
         <div id="byline" aria-label="About the post" role="doc-introduction">
-            Posted <time itemprop="dateCreated datePublished" datetime="2026-07-15T01:48:00+00:00" title="Wednesday Jul 15th, 2026, at 1:48am">Jul 15th, 2026</time>            by author
+            Posted <time itemprop="dateCreated datePublished" datetime="2026-08-19T16:00:00+00:00" title="Wednesday Aug 19th, 2026, at 4:00pm">Aug 19th, 2026</time>            by author
 <address itemprop="author" itemscope itemtype="https://schema.org/Person" aria-label="The post author" style="display: inline;">
                 <span itemprop="name" aria-label="The author's name" title=@john_mason>John Mason</span>
             </address>            in the category "System Design"        </div>
     </header>
         <div aria-label="Article body" itemprop="articleBody">
-        <h2>Overview</h2>
-<p>Course notes covering networking, protocols, architecture, storage, performance, reliability, security, and a practical project. Use the <a href="/posts/system-design-interview-framework.html">interview framework</a> for structured problem-solving.</p>
-<h2>Course sections</h2>
+        <p>System design defines the architecture, components, and interactions of a system to meet its requirements — practically, accurately, efficiently, reliably, and at scale.</p>
+<p>The goal is to build scalable and maintainable systems while balancing trade-offs between performance, cost, and complexity.</p>
+<h2>What good system design looks like</h2>
 <ul>
-<li><a href="/posts/networking.html">Networking</a> — IP, DNS, TCP/UDP, HTTP, TLS, CDNs, load balancers</li>
-<li><a href="/posts/system-design-protocols.html">Protocols</a> — REST, WebSockets, gRPC, GraphQL, autoscaling</li>
-<li><a href="/posts/system-design-architectural-patterns.html">Architectural Patterns</a> — monoliths, microservices, event-driven, N-tier</li>
-<li><a href="/posts/system-design-web-concepts.html">Web Concepts</a> — sessions, auth, serialization, CORS</li>
-<li><a href="/posts/system-design-scalability.html">Scalability</a> — vertical, horizontal, diagonal scaling</li>
-<li><a href="/posts/system-design-database-storage.html">Database and Storage</a> — SQL vs NoSQL, sharding, replication, object storage</li>
-<li><a href="/posts/system-design-performance.html">Performance</a> — caching, messaging, concurrency, DB optimization</li>
-<li><a href="/posts/system-design-reliability.html">Reliability and Availability</a> — redundancy, backup, disaster recovery</li>
-<li><a href="/posts/system-design-security.html">Security</a> — threat modeling, encryption, cloud security</li>
-<li><a href="/posts/system-design-interview-framework.html">Interview Framework</a> — four-step approach to design problems</li>
+<li>Practical and accurate</li>
+<li>Efficient and reliable</li>
+<li>Optimized for the use case</li>
+<li>Scalable over time</li>
+<li>Clear architecture with thoughtful planning</li>
 </ul>
-<h2>Project</h2>
+<h2>Step 1 — Understand the problem and define scope</h2>
+<p>Before drawing boxes, clarify what you are building.</p>
 <ul>
-<li><a href="/posts/system-design-project-observability.html">Observability Dashboard</a> — logging system for OpenAI and AWS project monitoring</li>
+<li><strong>Functional requirements</strong> — what the system must do</li>
+<li><strong>Non-functional requirements</strong> — performance, availability, security, scalability</li>
+<li><strong>Constraints</strong> — budget, timeline, team size, existing tech stack</li>
 </ul>
-<h2>System Design Trade-offs</h2>
-<p>System design trade-offs are essential engineering decisions, where improving one attribute—such as latency, scalability, or availability—inevitably sacrifices another. Common trade-offs include choosing between strong consistency (accuracy) and high availability (speed), or choosing between denormalization (faster reads) and normalization (better integrity).</p>
-<h3>Key Trade-offs</h3>
+<p>Ask clarifying questions. Do not assume requirements the interviewer has not stated.</p>
+<h2>Step 2 — Estimate scale and identify bottlenecks</h2>
+<p>Back-of-the-envelope calculations guide architectural decisions.</p>
 <ul>
-<li><strong>Consistency vs. Availability (CAP Theorem):</strong> In a distributed system, you can prioritize either immediate data consistency (all nodes see the same data simultaneously) or high availability (the system stays functional even if nodes fail or network issues occur).</li>
-<li><strong>Latency vs. Throughput:</strong> Optimizing for low latency reduces the time to process a single request, whereas high throughput increases the total amount of data processed per second.</li>
-<li><strong>Stateful vs. Stateless:</strong> Stateful systems remember past interactions, making them better for personalization but harder to scale. Stateless systems are easier to scale horizontally but require external storage to maintain session data.</li>
-<li><strong>SQL (Normalized) vs. NoSQL (Denormalized):</strong> SQL ensures data integrity and reduces redundancy. NoSQL databases (e.g. Cassandra) are better at scaling horizontally and handling high-volume write traffic, often sacrificing strict consistency.</li>
-<li><strong>Sync vs. Async Processing:</strong> Synchronous calls (e.g. HTTP) are simpler but create dependencies. Asynchronous processing (e.g. messaging queues) decouples services for better performance, but increases complexity.</li>
-<li><strong>Monolith vs. Microservices:</strong> Monoliths are simpler to develop and deploy initially. Microservices offer better scalability and flexibility but are much harder to manage and debug.</li>
-<li><strong>Caching (Performance) vs. Memory (Cost):</strong> Adding cache (e.g. Redis) improves read speeds (lowers latency) but increases cost, complexity, and the risk of data inconsistency.</li>
+<li>Estimate traffic (requests per second, data volume, storage growth)</li>
+<li>Identify bottlenecks (database, network, single points of failure)</li>
+<li>Plan capacity (how many servers, how much storage, bandwidth needs)</li>
 </ul>
-<h3>How to Approach Trade-offs in Interviews</h3>
+<p>Rough numbers are fine — the reasoning matters more than precision.</p>
+<h2>Step 3 — High-level design</h2>
+<p>Define the core building blocks before diving into implementation details.</p>
+<ul>
+<li><strong>Core services</strong> — what major components exist and what each does</li>
+<li><strong>API design</strong> — endpoints, request/response formats, authentication</li>
+<li><strong>Communication patterns</strong> — sync (REST/gRPC) vs async (queues, events)</li>
+<li><strong>Service interaction</strong> — how components talk to each other</li>
+</ul>
+<p>Consider design patterns where they fit. See <a href="https://dev.to/udara_dananjaya/gang-of-four-gof-design-patterns-in-c-a-comprehensive-guide-105i">Gang of Four design patterns</a> for reusable solutions.</p>
+<h2>Step 4 — Make tech and infrastructure decisions strategically</h2>
+<p>Choose technologies based on requirements, not familiarity alone.</p>
+<ul>
+<li><strong>Tech stack</strong> — languages, frameworks, databases</li>
+<li><strong>Scalability and availability</strong> — load balancing, replication, failover</li>
+<li><strong>Performance</strong> — caching, CDN, async processing</li>
+<li><strong>Trade-offs</strong> — justify every choice with what you gain and what you sacrifice</li>
+</ul>
+<h2>Summary</h2>
 <ol>
-<li><strong>Understand requirements:</strong> Define if the system is read-heavy or write-heavy.</li>
-<li><strong>Highlight trade-offs:</strong> Always explain what is gained and what is lost when choosing a technology.</li>
-<li><strong>Justify decisions:</strong> Base decisions on specific product needs (e.g. banking needs consistency, social media needs availability).</li>
+<li>Clear understanding of requirements and constraints</li>
+<li>Scale and bottleneck analysis to guide architecture</li>
+<li>High-level design that balances performance, cost, and complexity</li>
+<li>Informed infrastructure and tech choices for scalability and availability</li>
 </ol>
-<h2>Load Balancers</h2>
-<p>A load balancer is a dedicated hardware appliance or software service that acts as a reverse proxy, distributing incoming network traffic across multiple servers. It maximizes application reliability, prevents server overloads, and minimizes latency by ensuring no single machine is overwhelmed.</p>
-<p>See <a href="/posts/networking.html">Networking</a> and <a href="/posts/system-design-scalability.html">Scalability</a> for deeper coverage.</p>
-<h3>Key Benefits</h3>
-<ul>
-<li><strong>High Availability:</strong> If a backend server goes offline, the load balancer automatically reroutes traffic to healthy servers, preventing downtime.</li>
-<li><strong>Scalability:</strong> It allows administrators to seamlessly add or remove servers from the backend pool without interrupting user access.</li>
-<li><strong>Security:</strong> Acting as an intermediary, it hides backend server identities and can help mitigate Distributed Denial of Service (DDoS) attacks.</li>
-</ul>
-<h3>Common Load Balancing Algorithms</h3>
-<p>Different methods are used to determine which server receives the next incoming request:</p>
-<ul>
-<li><strong>Round Robin:</strong> Distributes requests sequentially across the server pool in a revolving loop.</li>
-<li><strong>Least Connections:</strong> Routes traffic to the server with the fewest active connections, making it ideal if requests vary greatly in processing time.</li>
-<li><strong>IP Hash:</strong> Uses the client's IP address to consistently route them to the same server, preserving session data.</li>
-</ul>
-<h3>Load Balancer Tiers</h3>
-<p>Load balancing generally operates at two primary network levels:</p>
-<ul>
-<li><strong>Layer 4 (Transport Layer):</strong> Routes traffic based on IP addresses and TCP/UDP ports without inspecting the actual content of the packets. It is highly performant.</li>
-<li><strong>Layer 7 (Application Layer):</strong> Makes highly intelligent routing decisions based on request attributes like HTTP headers, cookies, or URL paths, making it ideal for microservices.</li>
-</ul>
+<h2>Diagrams for different audiences</h2>
+<table>
+<thead>
+<tr>
+<th>Audience</th>
+<th>Diagram type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stakeholders</td>
+<td>High-level architectural or C4 Context diagrams</td>
+</tr>
+<tr>
+<td>Developers</td>
+<td>Component diagrams, sequence diagrams, ERDs</td>
+</tr>
+<tr>
+<td>DevOps</td>
+<td>Deployment diagrams, CI/CD pipeline diagrams</td>
+</tr>
+</tbody>
+</table>
+<p>Back to <a href="/posts/system-design.html">System Design</a>.</p>
 
     </div>
     <span class="sr-only">End of article</span>
