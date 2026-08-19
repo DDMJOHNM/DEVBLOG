@@ -1,26 +1,25 @@
 ---
 title: 'Positive Thought Counselling'
-description: 'Voice-first client onboarding and counsellor matching'
-category: Projects
-author: 'John Mason'
-date: '2026-08-19 17:30'
+description: 'Voice-first client onboarding and counsellor matching, with a Go/DynamoDB backend'
+stack: 'Next.js, AWS Amplify, OpenAI, Pinecone, Go, DynamoDB, API Gateway, EC2'
+date: '2026-08-19'
 ---
 
 A voice-first client onboarding and counsellor-matching app for a New Zealand counselling practice. A staff member (or client) signs in, speaks their name and email, reviews what the model extracted, then describes why they are seeking help so the system can recommend a matching practitioner and persist the intake on a client record.
 
-This frontend is a Next.js 14 App Router application. It talks to OpenAI for speech and language, a vector store for practitioner search, and a separate Go backend (DynamoDB behind API Gateway) for auth and client persistence. Production hosting is AWS Amplify.
+The product is two repositories. The **frontend** (`WhatsTheScore`) is a Next.js 14 App Router app on AWS Amplify: it talks to OpenAI for speech and language, a vector store for practitioner search, and a BFF layer that proxies auth and client persistence. The **backend** (`john_ai_project`) is a Go HTTP API on EC2 behind API Gateway, with DynamoDB for users and clients. JWT login and client CRUD live there.
+
+Calendar booking and the dental image-screening service mentioned in the frontend README are not part of the running product.
 
 ## What it does
 
 The product is an **intake workflow**, not a full practice-management suite.
 
-1. **Sign in.** Credentials go to the Go backend; this app stores an HTTP-only session cookie.
+1. **Sign in.** Credentials go to the Go backend; the Next.js app stores an HTTP-only session cookie.
 2. **Create account by voice.** The browser records audio (WebM), Whisper transcribes it, and GPT-4o extracts first name, last name, and email. The user can edit before save.
 3. **Persist the client.** A BFF route (`/api/client`) proxies create/read/update to the Go API.
 4. **Match a counsellor.** The client describes their concerns in free text. Semantic search over seven seeded practitioners returns ranked matches plus a keyword-based urgency level. Choosing a counsellor writes `requested_counsellor` and `urgency` back to the profile. The intake text is stored as initial consult notes.
 5. **Resume after refresh.** The saved email is kept in `localStorage` so the profile can be reloaded without repeating voice onboarding.
-
-What is **not** in this frontend repo: calendar booking, the Go/DynamoDB backend itself, and the dental image-screening service mentioned in the README.
 
 ## Architecture
 
@@ -59,17 +58,21 @@ flowchart TB
     Pinecone["Pinecone production"]
   end
 
-  subgraph Backend["Go backend"]
+  subgraph Backend["Go backend john_ai_project"]
+    APIGW["API Gateway HTTP API"]
+    EC2["EC2 systemd :8080"]
     Auth["POST /api/auth/login"]
     Clients["/api/clients"]
-    DDB["DynamoDB"]
+    Users["users table"]
+    DDB["DynamoDB clients table"]
   end
 
   subgraph Ops["Ops"]
     SQS["SQS inference log queue"]
+    CW["CloudWatch logs"]
   end
 
-  Login --> API_LOGIN --> Auth
+  Login --> API_LOGIN --> APIGW --> EC2 --> Auth --> Users
   API_LOGIN --> Home
   MW -.-> Home
   Home --> VA
@@ -87,7 +90,9 @@ flowchart TB
   API_REC -.-> GPT4t
   Rec --> API_CLIENT
   VA --> Profile
-  API_CLIENT --> Clients --> DDB
+  API_CLIENT --> APIGW
+  EC2 --> Clients --> DDB
+  EC2 --> CW
 ```
 
 ### Request path in practice
@@ -126,7 +131,9 @@ sequenceDiagram
 
 The Next.js app is a **BFF**: the browser never calls OpenAI or the Go API directly (except that `NEXT_PUBLIC_BACKEND_URL` is also available on the client). Secrets stay in Amplify env vars / server routes. Vector search is switched with `USE_LOCAL_VECTOR_DB`: Chroma locally, Pinecone in production. Both use the same OpenAI embedding model so indexes stay compatible.
 
-## Directory and file structure
+Production traffic to the Go API goes **Amplify → API Gateway HTTP API (`$default` proxy) → EC2 `:8080`**. Local frontend work typically points `BACKEND_URL` at `http://localhost:8080` (or `8081`) and skips the gateway.
+
+## Frontend directory and file structure
 
 ```
 WhatsTheScore/
@@ -194,32 +201,138 @@ WhatsTheScore/
 └── README.md                     Deployment, env, and local-dev guide.
 ```
 
-## Trade-offs
+## Backend
 
-These are choices visible in the current code, not a wish list.
+The Go service is the system of record for **staff users** and **client intake records**. It does not run Whisper, embeddings, or counsellor matching — those stay in the Next.js BFF. Layers are handler → service → repository → DynamoDB, with `net/http` `ServeMux` (no Gin/Echo). Auth is JWT (HS256, 24 hours) after bcrypt password check.
 
-**BFF Next.js vs calling vendors from the browser.** API keys stay on the server, and the Go backend can keep a single CORS origin. The cost is an extra hop, Amplify function timeouts (~30s on recommend), and a second service to operate.
+### What the API does
 
-**Amplify SSR vs S3 plus CloudFront.** Static export cannot host `/api/*`. The repo still contains Terraform and a GitHub deploy workflow for that older path; they are disabled. Amplify buys API routes and Git-push deploys at the price of vendor lock-in, 30s limits, and less IaC for the frontend.
+**Public**
 
-**Chroma locally, Pinecone in production.** Same embedding model (`text-embedding-ada-002`, 1536 dims) so indexes are interchangeable, and local work can run free or in-memory. Drift is real: two operational modes, a LangChain/Pinecone SDK mismatch with a hand-written v7 upsert, and seed data that must be loaded separately in prod.
+- `GET /health` — liveness for the load path and systemd health.
+- `POST /api/auth/register` — create a user (`username`, `email`, `password` ≥ 8 chars, `first_name`, `last_name`). Returns a JWT plus the user (password hash omitted).
+- `POST /api/auth/login` — `login` may be email or username. Returns `{ token, user }`.
 
-**Prompted JSON extraction vs structured outputs / a real agent.** `/api/agent` uses gpt-4o with "return only JSON" and a regex fallback. `@openai/agents` is in `package.json` but unused. This is simpler and cheaper than a multi-turn agent, and weaker when the model wraps JSON in prose or drops a field — which is why the UI has an Edit step.
+**Protected** (`Authorization: Bearer <token>`)
 
-**Structured keyword matching vs the LangGraph agent.** The UI calls `format: "structured"`, which embeds the concern, takes top-3 cosine matches, and sets urgency from keyword lists (`suicide`, `panic`, `anxious`, …). The ReAct agent in `agent.ts` (gpt-4-turbo-preview plus `search_practitioners` tool) exists but is not on the happy path. Matching is faster and more deterministic; urgency is brittle compared with an LLM clinical assessment.
+- `GET /api/auth/me` — current user from the token.
+- `GET /api/clients` — scan all clients.
+- `GET /api/clients/{id}` — get by primary key.
+- `GET /api/clients/by-email?email=` — GSI lookup; email is normalised to lowercase.
+- `GET /api/clients/active` / `GET /api/clients/inactive` — status GSI.
+- `POST /api/clients/add` — create. Required: `first_name`, `last_name`, `email`. Duplicate email → 409.
+- `PUT`/`PATCH /api/clients/{id}` and `/api/clients/update/{id}` — partial update. The frontend writes notes, `requested_counsellor`, and `urgency` here. The handler accepts camelCase and other JS aliases so the BFF payload does not have to match Go field names exactly.
 
-**Voice for identity, text for clinical intake.** Whisper plus gpt-4o is a good fit for three short fields. Concerns stay in a textarea (with canned example chips). That avoids sending a long clinical recording through Whisper, and it also means the "voice-first" story stops after account creation.
+JSON responses add display helpers `name` (first + last) and `initial_consult_notes` (first note body) without storing those as DynamoDB attributes.
 
-**Cookies for session, localStorage for onboarding resume.** `authToken` is httpOnly, 30 minutes, marked "FOR TESTING". The client email is in `localStorage` so refresh can reload the profile. Middleware currently does **not** redirect unauthenticated users; `page.tsx` does. Logout clears cookies only — the backend is not notified. Session security is good enough for a prototype, not for production PHI.
+A request middleware strips `/prod`, `/dev`, and `/staging` prefixes so API Gateway stage paths still hit the same handlers, recovers panics to JSON 500s, and optionally writes each request to CloudWatch.
 
-**Human confirm before write.** Extracted name/email are shown before POST. Counsellor choice is an explicit click before PUT. That absorbs model error at the cost of extra steps.
+### Data model
 
-**Hardcoded seven practitioners vs a live roster.** Seed data is in-repo TypeScript. Fine for a demo; the index is not a staff directory, and `getPractitionerById` searches up to 100 vectors instead of a keyed lookup.
+**`clients`** — partition key `id` (UUID). Pay-per-request in AWS.
 
-**SQS logging that can no-op.** Inference events go to SQS when `SQS_QUEUE_URL` is set; otherwise they warn and continue. Payload still uses placeholder `project_id` / `user_id` and zeroed token/latency fields. Observability is optional, and the schema is ahead of the instrumentation.
+| Attribute | Role |
+| --- | --- |
+| `first_name`, `last_name`, `email` | Identity; email unique via `email-index` |
+| `phone`, `date_of_birth`, `address`, emergency contacts | Optional demographics |
+| `status` | `active` / `inactive` / `archived`; `status-index` |
+| `requested_counsellor`, `urgency`, `next_appointment` | Matching outcome from the frontend |
+| `notes[]` | `{ date, client_id, note }`; first entry is the initial consult |
+| `created_at`, `updated_at` | RFC3339 |
 
-**`next.config.mjs` `env` block.** OpenAI, Pinecone, and AWS keys are copied into the Next config `env` map so Amplify Lambdas see them. That pattern can leak server secrets into the client bundle if a variable is ever read from client code. The safer Amplify-only runtime env is the alternative that was not fully used.
+**`users`** — partition key `id`. GSIs: `email-index`, `username-index` (local `create-db` also builds `role-index`). Passwords are bcrypt hashes (`password_hash` is omitted from JSON). Roles are `user` or `admin`; `is_active` gates login.
 
-**Jest always, Playwright `continue-on-error`.** Unit tests gate CI and Amplify builds. E2E covers the real onboarding path but is allowed to fail, so the UI contract is documented more than enforced.
+### Backend request path
 
-**Dependencies that outlive features.** `chromadb`, LangGraph, `@openai/agents`, Terraform, and README sections on dental screening / calendar booking sit beside a smaller implemented surface. The architecture is ready to grow; the running product is still onboarding, match, and persist.
+```mermaid
+sequenceDiagram
+  participant BFF as Next.js /api/login or /api/client
+  participant GW as API Gateway HTTP API
+  participant Svc as Go on EC2
+  participant SSM as SSM Parameter Store
+  participant DDB as DynamoDB
+
+  Note over Svc,SSM: Process start reads JWT_SECRET from SSM
+  BFF->>GW: HTTPS plus Bearer token after login
+  GW->>Svc: HTTP_PROXY ANY to :8080
+  Svc->>Svc: Strip /prod prefix, auth middleware
+  alt POST /api/auth/login
+    Svc->>DDB: Query users email-index or username-index
+    DDB-->>Svc: user row
+    Svc-->>BFF: JWT 24h plus user
+  else POST /api/clients/add
+    Svc->>DDB: PutItem clients (reject duplicate email)
+    DDB-->>Svc: ok
+    Svc-->>BFF: 201 client
+  else PUT /api/clients/update/:id
+    Svc->>DDB: UpdateItem notes, counsellor, urgency
+    Svc-->>BFF: updated client
+  end
+```
+
+### Backend directory and file structure
+
+```
+john_ai_project/
+├── cmd/
+│   ├── server/main.go            API process: construct router, graceful shutdown.
+│   ├── create-db/main.go         Create clients and users tables (local DynamoDB or AWS).
+│   ├── seed-db/main.go           Seed test clients and users.
+│   └── example/main.go           Example client-service usage.
+├── internal/
+│   ├── db/connection.go          DynamoDB client: DYNAMODB_ENDPOINT for local, IAM role on EC2.
+│   ├── repository/
+│   │   ├── client_repository.go  Client struct, Scan/Query/Put/Update on `clients`.
+│   │   └── user_repository.go    User struct, GSI lookups on `users`.
+│   ├── service/
+│   │   ├── client_service.go     Validation, UUID, email uniqueness, partial updates.
+│   │   ├── client_service_test.go
+│   │   ├── auth_service.go       Register/login, bcrypt, JWT HS256 (issuer john-ai-project).
+│   │   └── auth_service_test.go
+│   ├── handler/
+│   │   ├── client_handler.go     REST mapping; JS alias unmarshalling on updates.
+│   │   ├── client_handler_test.go
+│   │   ├── auth_handler.go       Register, login, me, Bearer middleware.
+│   │   ├── auth_handler_test.go
+│   │   └── response.go           JSON helpers.
+│   ├── router/router.go          ServeMux routes, stage-prefix strip, request logging.
+│   └── logger/cloudwatch.go      PutLogEvents for API requests.
+├── infra/
+│   ├── terraform/
+│   │   ├── main.tf               Wires IAM, DynamoDB, EC2, API Gateway; S3 remote state.
+│   │   ├── modules/dynamodb/     `clients` and `users` tables plus GSIs.
+│   │   ├── modules/ec2/          Instance, SG (8080 + SSH), IAM profile, user_data systemd unit.
+│   │   ├── modules/api-gateway/  HTTP API, CORS *, $default proxy to EC2, access logs.
+│   │   └── modules/iam/          Deploy and admin IAM users/groups.
+│   └── cloudformation-archive/   Former CFN templates kept for reference.
+├── .github/workflows/
+│   ├── ci.yml                    go build and go vet on push/PR to main.
+│   ├── deploy-backend.yml        Version-tag Linux binary, upload to S3, SSM copy/restart on EC2.
+│   └── terraform.yml             Version-tag terraform plan/apply on infra/terraform.
+├── scripts/                      JWT SSM setup, CloudWatch/API Gateway log helpers, OIDC setup.
+├── docs/                         Auth, JWT, EC2, CloudWatch, Postman, GitHub OIDC.
+├── docker-compose.yaml           DynamoDB Local plus optional Delve debug backend container.
+├── Dockerfile / Dockerfile.debug
+├── Makefile                      Local setup, build, tests, terraform, API Gateway helpers.
+├── go.mod
+└── README.md                     Local and AWS runbook.
+```
+
+### Local development
+
+```bash
+make setup        # DynamoDB Local in Docker, create tables, seed
+make run-server   # API on HTTP_PORT (Makefile default 8081; docker-compose uses 8080)
+```
+
+`DYNAMODB_ENDPOINT=http://localhost:8000` selects DynamoDB Local. Unset it in AWS so the SDK uses the regional endpoint and the instance role.
+
+### Production deploy
+
+Terraform (state in `duskaotearoa-terraform-state`, key `john-ai-project-backend/terraform.tfstate`) provisions:
+
+- **DynamoDB** `clients` and `users` (on-demand).
+- **EC2** Amazon Linux 2, systemd unit `john-ai-backend.service` at `/opt/john-ai-project/server`, port 8080. `JWT_SECRET` is read from SSM `/john-ai-project/jwt-secret` at process start. CloudWatch agent tails application logs.
+- **API Gateway HTTP API** with `$default` `HTTP_PROXY` to the instance URL, CORS allow-all, throttling, access logs.
+
+Pushing a `v*.*.*` tag runs tests, builds a linux/amd64 binary, and restarts the service over SSM. Infra changes on the same tag pattern go through the Terraform workflow.

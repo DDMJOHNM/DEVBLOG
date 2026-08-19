@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DevBlog - Positive Thought Counselling</title>
+
+
+
+<meta name="description" content="Voice-first client onboarding and counsellor matching, with a Go/DynamoDB backend">
+<meta name="twitter:title" content="DevBlog - Positive Thought Counselling">
+<meta property="og:description" content="Voice-first client onboarding and counsellor matching, with a Go/DynamoDB backend">
+<meta property="og:title" content="DevBlog - Positive Thought Counselling">
+
+
+<meta name="generator" content="HydePHP v2.0.3">
+<meta property="og:site_name" content="HydePHP">
+
+
+
+
+<style>[x-cloak] {display: none!important}</style>
+
+
+            <link rel="stylesheet" href="../media/app.css?v=9450b0e0">
+    
+
+    
+    
+
+
+    
+    <meta id="meta-color-scheme" name="color-scheme" content="light">
+    <script>if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); document.getElementById('meta-color-scheme').setAttribute('content', 'dark');} else { document.documentElement.classList.remove('dark') } </script>
+
+
+
+
+
+
+</head>
+<body id="app" class="flex flex-col min-h-screen overflow-x-hidden dark:bg-gray-900 dark:text-white" x-data="{ navigationOpen: false }" x-on:keydown.escape="navigationOpen = false;">
+    <a href="#content" id="skip-to-content" class="sr-only focus:not-sr-only bg-black border-4 border-yellow-400 focus:absolute focus:mt-2 focus:mx-auto focus:p-2 focus:w-64 h-auto left-0 overflow-auto right-0 rounded-md text-center text-lg text-white top-auto z-50 ">Skip to content</a>    <nav aria-label="Main navigation" id="main-navigation" class="flex flex-wrap items-center justify-between p-4 shadow-lg sm:shadow-xl md:shadow-none dark:bg-gray-800">
+    <div id="main-navigation-brand" class="flex grow items-center shrink-0 text-gray-700 dark:text-gray-200">
+        <a href="../index.html" class="font-bold px-4" aria-label="Home page">
+    DevBlog
+</a>
+        <div class="ml-auto">
+            <button @click="toggleTheme" class="theme-toggle-button flex items-center px-2 py-1 hover:text-gray-700 dark:text-gray-200" title="Toggle theme">
+        <span class="sr-only">Toggle dark theme</span>
+        <svg width="1.25rem" height="1.25rem" class="w-5 h-5 hidden dark:block" fill="#FFFFFF" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+        <svg width="1.25rem" height="1.25rem" class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+    </button>
+        </div>
+    </div>
+
+    <div class="block md:hidden">
+        <button id="navigation-toggle-button" class="flex items-center px-3 py-1 hover:text-gray-700 dark:text-gray-200"
+                aria-label="Toggle navigation menu" @click="navigationOpen = ! navigationOpen">
+            <svg x-show="! navigationOpen" title="Open Navigation Menu" class="dark:fill-gray-200"
+                 style="display: block;"
+                 id="open-main-navigation-menu-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24"
+                 width="24">
+                <title>Open Menu</title>
+                <path d="M0 0h24v24H0z" fill="none"/>
+                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+            </svg>
+            <svg x-show="navigationOpen" title="Close Navigation Menu" class="dark:fill-gray-200" style="display: none;"
+                 id="close-main-navigation-menu-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24"
+                 width="24">
+                <title>Close Menu</title>
+                <path d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+            </svg>
+        </button>
+    </div>
+
+    <div id="main-navigation-links" 
+         class="w-full hidden md:flex grow md:grow-0 md:items-center md:w-auto px-6 -mx-4 border-t mt-3 pt-3 md:border-none md:mt-0 md:py-0 border-gray-200 dark:border-gray-700"
+         :class="navigationOpen ? 'block!' : ''">
+        <ul aria-label="Navigation links" class="md:grow md:flex justify-end">
+                            <li class="md:mx-2">
+                                            <a href="../index.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Home</a>                                    </li>
+                            <li class="md:mx-2">
+                                            <a href="../projects.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Projects</a>                                    </li>
+                    </ul>
+    </div>
+</nav>
+    <section>
+        
+    <main id="content" class="mx-auto max-w-7xl py-16 px-8">
+        <article aria-label="Project" id="positive-thought-counselling" itemscope itemtype="https://schema.org/CreativeWork"
+            class="project-article mx-auto prose dark:prose-invert">
+            <p class="not-prose mb-8">
+                <a href="../projects.html" class="text-indigo-500 hover:underline font-medium">
+                    &larr; Projects
+                </a>
+            </p>
+
+            <header aria-label="Header section" role="doc-pageheader">
+                <h1 itemprop="headline" class="mb-4">Positive Thought Counselling</h1>
+                                    <p class="opacity-75 text-sm">Next.js, AWS Amplify, OpenAI, Pinecone, Go, DynamoDB, API Gateway, EC2</p>
+                            </header>
+
+            <div aria-label="Article body" itemprop="text">
+                <p>A voice-first client onboarding and counsellor-matching app for a New Zealand counselling practice. A staff member (or client) signs in, speaks their name and email, reviews what the model extracted, then describes why they are seeking help so the system can recommend a matching practitioner and persist the intake on a client record.</p>
+<p>The product is two repositories. The <strong>frontend</strong> (<code>WhatsTheScore</code>) is a Next.js 14 App Router app on AWS Amplify: it talks to OpenAI for speech and language, a vector store for practitioner search, and a BFF layer that proxies auth and client persistence. The <strong>backend</strong> (<code>john_ai_project</code>) is a Go HTTP API on EC2 behind API Gateway, with DynamoDB for users and clients. JWT login and client CRUD live there.</p>
+<p>Calendar booking and the dental image-screening service mentioned in the frontend README are not part of the running product.</p>
+<h2>What it does</h2>
+<p>The product is an <strong>intake workflow</strong>, not a full practice-management suite.</p>
+<ol>
+<li><strong>Sign in.</strong> Credentials go to the Go backend; the Next.js app stores an HTTP-only session cookie.</li>
+<li><strong>Create account by voice.</strong> The browser records audio (WebM), Whisper transcribes it, and GPT-4o extracts first name, last name, and email. The user can edit before save.</li>
+<li><strong>Persist the client.</strong> A BFF route (<code>/api/client</code>) proxies create/read/update to the Go API.</li>
+<li><strong>Match a counsellor.</strong> The client describes their concerns in free text. Semantic search over seven seeded practitioners returns ranked matches plus a keyword-based urgency level. Choosing a counsellor writes <code>requested_counsellor</code> and <code>urgency</code> back to the profile. The intake text is stored as initial consult notes.</li>
+<li><strong>Resume after refresh.</strong> The saved email is kept in <code>localStorage</code> so the profile can be reloaded without repeating voice onboarding.</li>
+</ol>
+<h2>Architecture</h2>
+<pre><code class="language-mermaid">flowchart TB
+  subgraph Client[&quot;Browser&quot;]
+    Login[&quot;Login page&quot;]
+    VA[&quot;VoiceAgent&quot;]
+    Rec[&quot;CounsellingRecommendation&quot;]
+    Profile[&quot;Client profile&quot;]
+    LS[&quot;localStorage onboarding email&quot;]
+  end
+
+  subgraph Next[&quot;Next.js on AWS Amplify&quot;]
+    MW[&quot;middleware.ts&quot;]
+    Home[&quot;page.tsx cookie plus 30 min session&quot;]
+    API_LOGIN[&quot;POST /api/login&quot;]
+    API_LOGOUT[&quot;POST /api/logout&quot;]
+    API_TX[&quot;POST /api/transcribe&quot;]
+    API_AGENT[&quot;POST /api/agent&quot;]
+    API_CLIENT[&quot;GET/POST/PUT /api/client&quot;]
+    API_REC[&quot;POST /api/counselling/recommend&quot;]
+    VS[&quot;vector-store.ts&quot;]
+    LOG[&quot;SQS logger&quot;]
+  end
+
+  subgraph AI[&quot;OpenAI&quot;]
+    Whisper[&quot;whisper-1&quot;]
+    GPT4o[&quot;gpt-4o field extraction&quot;]
+    Embed[&quot;text-embedding-ada-002&quot;]
+    GPT4t[&quot;gpt-4-turbo-preview LangGraph ReAct agent&quot;]
+  end
+
+  subgraph Vectors[&quot;Vector store&quot;]
+    Chroma[&quot;Chroma local / in-memory&quot;]
+    Pinecone[&quot;Pinecone production&quot;]
+  end
+
+  subgraph Backend[&quot;Go backend john_ai_project&quot;]
+    APIGW[&quot;API Gateway HTTP API&quot;]
+    EC2[&quot;EC2 systemd :8080&quot;]
+    Auth[&quot;POST /api/auth/login&quot;]
+    Clients[&quot;/api/clients&quot;]
+    Users[&quot;users table&quot;]
+    DDB[&quot;DynamoDB clients table&quot;]
+  end
+
+  subgraph Ops[&quot;Ops&quot;]
+    SQS[&quot;SQS inference log queue&quot;]
+    CW[&quot;CloudWatch logs&quot;]
+  end
+
+  Login --&gt; API_LOGIN --&gt; APIGW --&gt; EC2 --&gt; Auth --&gt; Users
+  API_LOGIN --&gt; Home
+  MW -.-&gt; Home
+  Home --&gt; VA
+  VA --&gt; API_TX --&gt; Whisper
+  VA --&gt; API_AGENT --&gt; GPT4o
+  GPT4o --&gt; LOG --&gt; SQS
+  VA --&gt; API_CLIENT
+  VA --&gt; LS
+  VA --&gt; Rec
+  Rec --&gt; API_REC
+  API_REC --&gt; Embed
+  API_REC --&gt; VS
+  VS --&gt; Chroma
+  VS --&gt; Pinecone
+  API_REC -.-&gt; GPT4t
+  Rec --&gt; API_CLIENT
+  VA --&gt; Profile
+  API_CLIENT --&gt; APIGW
+  EC2 --&gt; Clients --&gt; DDB
+  EC2 --&gt; CW
+</code></pre>
+<h3>Request path in practice</h3>
+<pre><code class="language-mermaid">sequenceDiagram
+  actor User
+  participant UI as VoiceAgent
+  participant TX as /api/transcribe
+  participant AG as /api/agent
+  participant CL as /api/client
+  participant REC as /api/counselling/recommend
+  participant OAI as OpenAI
+  participant Vec as Chroma or Pinecone
+  participant Go as Go backend
+
+  User-&gt;&gt;UI: Speak name and email
+  UI-&gt;&gt;TX: audio/webm
+  TX-&gt;&gt;OAI: Whisper
+  OAI--&gt;&gt;UI: transcript
+  UI-&gt;&gt;AG: transcript
+  AG-&gt;&gt;OAI: gpt-4o JSON extraction
+  OAI--&gt;&gt;UI: first_name, last_name, email
+  User-&gt;&gt;UI: Confirm or edit, then Save
+  UI-&gt;&gt;CL: POST client
+  CL-&gt;&gt;Go: POST /api/clients/add
+  Go--&gt;&gt;UI: client_id
+  User-&gt;&gt;UI: Describe concerns
+  UI-&gt;&gt;REC: structured format
+  REC-&gt;&gt;Vec: embed query plus similarity search
+  Vec--&gt;&gt;REC: top 3 practitioners
+  REC--&gt;&gt;UI: matches plus keyword urgency
+  UI-&gt;&gt;CL: PUT notes and counsellor
+  CL-&gt;&gt;Go: PUT /api/clients/update/:id
+</code></pre>
+<p>The Next.js app is a <strong>BFF</strong>: the browser never calls OpenAI or the Go API directly (except that <code>NEXT_PUBLIC_BACKEND_URL</code> is also available on the client). Secrets stay in Amplify env vars / server routes. Vector search is switched with <code>USE_LOCAL_VECTOR_DB</code>: Chroma locally, Pinecone in production. Both use the same OpenAI embedding model so indexes stay compatible.</p>
+<p>Production traffic to the Go API goes <strong>Amplify → API Gateway HTTP API (<code>$default</code> proxy) → EC2 <code>:8080</code></strong>. Local frontend work typically points <code>BACKEND_URL</code> at <code>http://localhost:8080</code> (or <code>8081</code>) and skips the gateway.</p>
+<h2>Frontend directory and file structure</h2>
+<pre><code>WhatsTheScore/
+├── app/                          Next.js App Router UI and API routes.
+│   ├── layout.tsx                Root layout: Unsplash background and page chrome.
+│   ├── page.tsx                  Authenticated home. Checks auth cookies, enforces a 30-minute session, renders VoiceAgent.
+│   ├── globals.css               Global Tailwind / CSS entry.
+│   ├── login/
+│   │   └── page.tsx              Sign-in form. Posts email/password to /api/login, then redirects home.
+│   ├── components/
+│   │   ├── VoiceAgent.tsx        Main onboarding UI: mic recording, transcript review, save client, counsellor finder, profile.
+│   │   ├── CounsellingRecommendation.tsx  Concern textarea, match request, persist notes and chosen counsellor.
+│   │   ├── Client.tsx            ClientData type plus read-only profile fields.
+│   │   ├── Client.test.tsx       Jest tests for the profile component.
+│   │   ├── Logo.tsx              positive THOUGHT Counselling wordmark.
+│   │   └── ResetOnboardingButton.tsx  Clears localStorage and resets VoiceAgent without logging out.
+│   └── api/
+│       ├── login/route.ts        Proxies login to the Go backend and sets httpOnly authToken plus loginTime cookies.
+│       ├── logout/route.ts       Deletes auth cookies locally (does not call the backend yet).
+│       ├── transcribe/route.ts   Accepts recorded audio and returns a Whisper transcript.
+│       ├── agent/route.ts        Asks gpt-4o to extract first_name, last_name, email as JSON; logs to SQS.
+│       ├── client/route.ts       BFF for GET-by-email, POST create, and PUT notes/counsellor against the Go API.
+│       ├── client/route.test.ts  Jest tests for client proxy create/update behaviour.
+│       └── counselling/
+│           └── recommend/route.ts  Runs practitioner matching; GET returns vector-store health/config.
+├── lib/
+│   ├── counselling/
+│   │   ├── types.ts              Practitioner, issue input, and recommendation TypeScript types.
+│   │   ├── sample-practitioners.ts  Seven hardcoded counsellors used to seed the vector index.
+│   │   ├── embeddings.ts         OpenAI embeddings helper, document mapping, seed and search helpers.
+│   │   ├── vector-store.ts       Chroma vs Pinecone switch, plus a Pinecone v7 upsert fallback.
+│   │   ├── pinecone-client.ts    Pinecone client singleton and serverless index bootstrap.
+│   │   └── agent.ts              LangGraph ReAct agent (text) and keyword-urgency structured matcher (what the UI uses).
+│   ├── logging/logging.ts        Fire-and-forget SQS logger for model inference events.
+│   ├── onboardingStorage.ts      localStorage helpers so onboarding survives a refresh.
+│   └── onboardingStorage.test.ts Jest tests for those helpers.
+├── scripts/
+│   └── seed-practitioners.ts     CLI to embed sample practitioners into Chroma or Pinecone.
+├── e2e/
+│   ├── login.spec.ts             Playwright: login form and invalid-credentials error.
+│   └── clientonboard.spec.ts     Playwright: mocked full onboarding plus counsellor selection.
+├── terraform/                    Former S3/CloudFront stack; hosting resources are commented out. State backend remains.
+│   ├── main.tf                   Disabled static-hosting resources (Amplify replaced them).
+│   ├── backend.tf                S3 plus DynamoDB remote state config.
+│   ├── backend.tf.example        Example remote-state config.
+│   ├── state-bucket.tf           Terraform state bucket / lock table definitions.
+│   ├── bootstrap-state.sh        One-shot script to create the state backend.
+│   └── README.md                 Explains why frontend infra moved to Amplify.
+├── .github/workflows/
+│   ├── test.yml                  Jest on every push/PR; Playwright allowed to fail until stable.
+│   └── deploy.yml                Old S3/CloudFront deploy; manual trigger only, Amplify is the live path.
+├── middleware.ts                 Intended auth gate; currently allows unauthenticated page requests through.
+├── middleware.ts.disabled        Previous middleware variant kept alongside the active file.
+├── amplify.yml                   Amplify build: pnpm install, Jest, Next build, cache headers.
+├── next.config.mjs               standalone output for Amplify SSR; injects env into the server bundle; chroma externals.
+├── playwright.config.ts          E2E config; starts the Next server automatically.
+├── jest.config.js                Next-aware Jest, jsdom, ignores e2e/.
+├── jest.setup.ts                 Testing Library / jest-dom setup.
+├── tailwind.config.ts            Tailwind content paths and theme tweaks.
+├── postcss.config.mjs            PostCSS pipeline for Tailwind.
+├── tsconfig.json                 TypeScript compiler options and path aliases.
+├── package.json                  Scripts and dependencies (Next, OpenAI, LangChain, Pinecone, Playwright).
+├── pnpm-workspace.yaml           Single-package pnpm workspace.
+├── .env.example                  Documented env vars (OpenAI, Chroma/Pinecone, backend URL).
+└── README.md                     Deployment, env, and local-dev guide.
+</code></pre>
+<h2>Backend</h2>
+<p>The Go service is the system of record for <strong>staff users</strong> and <strong>client intake records</strong>. It does not run Whisper, embeddings, or counsellor matching — those stay in the Next.js BFF. Layers are handler → service → repository → DynamoDB, with <code>net/http</code> <code>ServeMux</code> (no Gin/Echo). Auth is JWT (HS256, 24 hours) after bcrypt password check.</p>
+<h3>What the API does</h3>
+<p><strong>Public</strong></p>
+<ul>
+<li><code>GET /health</code> — liveness for the load path and systemd health.</li>
+<li><code>POST /api/auth/register</code> — create a user (<code>username</code>, <code>email</code>, <code>password</code> ≥ 8 chars, <code>first_name</code>, <code>last_name</code>). Returns a JWT plus the user (password hash omitted).</li>
+<li><code>POST /api/auth/login</code> — <code>login</code> may be email or username. Returns <code>{ token, user }</code>.</li>
+</ul>
+<p><strong>Protected</strong> (<code>Authorization: Bearer &lt;token&gt;</code>)</p>
+<ul>
+<li><code>GET /api/auth/me</code> — current user from the token.</li>
+<li><code>GET /api/clients</code> — scan all clients.</li>
+<li><code>GET /api/clients/{id}</code> — get by primary key.</li>
+<li><code>GET /api/clients/by-email?email=</code> — GSI lookup; email is normalised to lowercase.</li>
+<li><code>GET /api/clients/active</code> / <code>GET /api/clients/inactive</code> — status GSI.</li>
+<li><code>POST /api/clients/add</code> — create. Required: <code>first_name</code>, <code>last_name</code>, <code>email</code>. Duplicate email → 409.</li>
+<li><code>PUT</code>/<code>PATCH /api/clients/{id}</code> and <code>/api/clients/update/{id}</code> — partial update. The frontend writes notes, <code>requested_counsellor</code>, and <code>urgency</code> here. The handler accepts camelCase and other JS aliases so the BFF payload does not have to match Go field names exactly.</li>
+</ul>
+<p>JSON responses add display helpers <code>name</code> (first + last) and <code>initial_consult_notes</code> (first note body) without storing those as DynamoDB attributes.</p>
+<p>A request middleware strips <code>/prod</code>, <code>/dev</code>, and <code>/staging</code> prefixes so API Gateway stage paths still hit the same handlers, recovers panics to JSON 500s, and optionally writes each request to CloudWatch.</p>
+<h3>Data model</h3>
+<p><strong><code>clients</code></strong> — partition key <code>id</code> (UUID). Pay-per-request in AWS.</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>first_name</code>, <code>last_name</code>, <code>email</code></td>
+<td>Identity; email unique via <code>email-index</code></td>
+</tr>
+<tr>
+<td><code>phone</code>, <code>date_of_birth</code>, <code>address</code>, emergency contacts</td>
+<td>Optional demographics</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>active</code> / <code>inactive</code> / <code>archived</code>; <code>status-index</code></td>
+</tr>
+<tr>
+<td><code>requested_counsellor</code>, <code>urgency</code>, <code>next_appointment</code></td>
+<td>Matching outcome from the frontend</td>
+</tr>
+<tr>
+<td><code>notes[]</code></td>
+<td><code>{ date, client_id, note }</code>; first entry is the initial consult</td>
+</tr>
+<tr>
+<td><code>created_at</code>, <code>updated_at</code></td>
+<td>RFC3339</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>users</code></strong> — partition key <code>id</code>. GSIs: <code>email-index</code>, <code>username-index</code> (local <code>create-db</code> also builds <code>role-index</code>). Passwords are bcrypt hashes (<code>password_hash</code> is omitted from JSON). Roles are <code>user</code> or <code>admin</code>; <code>is_active</code> gates login.</p>
+<h3>Backend request path</h3>
+<pre><code class="language-mermaid">sequenceDiagram
+  participant BFF as Next.js /api/login or /api/client
+  participant GW as API Gateway HTTP API
+  participant Svc as Go on EC2
+  participant SSM as SSM Parameter Store
+  participant DDB as DynamoDB
+
+  Note over Svc,SSM: Process start reads JWT_SECRET from SSM
+  BFF-&gt;&gt;GW: HTTPS plus Bearer token after login
+  GW-&gt;&gt;Svc: HTTP_PROXY ANY to :8080
+  Svc-&gt;&gt;Svc: Strip /prod prefix, auth middleware
+  alt POST /api/auth/login
+    Svc-&gt;&gt;DDB: Query users email-index or username-index
+    DDB--&gt;&gt;Svc: user row
+    Svc--&gt;&gt;BFF: JWT 24h plus user
+  else POST /api/clients/add
+    Svc-&gt;&gt;DDB: PutItem clients (reject duplicate email)
+    DDB--&gt;&gt;Svc: ok
+    Svc--&gt;&gt;BFF: 201 client
+  else PUT /api/clients/update/:id
+    Svc-&gt;&gt;DDB: UpdateItem notes, counsellor, urgency
+    Svc--&gt;&gt;BFF: updated client
+  end
+</code></pre>
+<h3>Backend directory and file structure</h3>
+<pre><code>john_ai_project/
+├── cmd/
+│   ├── server/main.go            API process: construct router, graceful shutdown.
+│   ├── create-db/main.go         Create clients and users tables (local DynamoDB or AWS).
+│   ├── seed-db/main.go           Seed test clients and users.
+│   └── example/main.go           Example client-service usage.
+├── internal/
+│   ├── db/connection.go          DynamoDB client: DYNAMODB_ENDPOINT for local, IAM role on EC2.
+│   ├── repository/
+│   │   ├── client_repository.go  Client struct, Scan/Query/Put/Update on `clients`.
+│   │   └── user_repository.go    User struct, GSI lookups on `users`.
+│   ├── service/
+│   │   ├── client_service.go     Validation, UUID, email uniqueness, partial updates.
+│   │   ├── client_service_test.go
+│   │   ├── auth_service.go       Register/login, bcrypt, JWT HS256 (issuer john-ai-project).
+│   │   └── auth_service_test.go
+│   ├── handler/
+│   │   ├── client_handler.go     REST mapping; JS alias unmarshalling on updates.
+│   │   ├── client_handler_test.go
+│   │   ├── auth_handler.go       Register, login, me, Bearer middleware.
+│   │   ├── auth_handler_test.go
+│   │   └── response.go           JSON helpers.
+│   ├── router/router.go          ServeMux routes, stage-prefix strip, request logging.
+│   └── logger/cloudwatch.go      PutLogEvents for API requests.
+├── infra/
+│   ├── terraform/
+│   │   ├── main.tf               Wires IAM, DynamoDB, EC2, API Gateway; S3 remote state.
+│   │   ├── modules/dynamodb/     `clients` and `users` tables plus GSIs.
+│   │   ├── modules/ec2/          Instance, SG (8080 + SSH), IAM profile, user_data systemd unit.
+│   │   ├── modules/api-gateway/  HTTP API, CORS *, $default proxy to EC2, access logs.
+│   │   └── modules/iam/          Deploy and admin IAM users/groups.
+│   └── cloudformation-archive/   Former CFN templates kept for reference.
+├── .github/workflows/
+│   ├── ci.yml                    go build and go vet on push/PR to main.
+│   ├── deploy-backend.yml        Version-tag Linux binary, upload to S3, SSM copy/restart on EC2.
+│   └── terraform.yml             Version-tag terraform plan/apply on infra/terraform.
+├── scripts/                      JWT SSM setup, CloudWatch/API Gateway log helpers, OIDC setup.
+├── docs/                         Auth, JWT, EC2, CloudWatch, Postman, GitHub OIDC.
+├── docker-compose.yaml           DynamoDB Local plus optional Delve debug backend container.
+├── Dockerfile / Dockerfile.debug
+├── Makefile                      Local setup, build, tests, terraform, API Gateway helpers.
+├── go.mod
+└── README.md                     Local and AWS runbook.
+</code></pre>
+<h3>Local development</h3>
+<pre><code class="language-bash">make setup        # DynamoDB Local in Docker, create tables, seed
+make run-server   # API on HTTP_PORT (Makefile default 8081; docker-compose uses 8080)
+</code></pre>
+<p><code>DYNAMODB_ENDPOINT=http://localhost:8000</code> selects DynamoDB Local. Unset it in AWS so the SDK uses the regional endpoint and the instance role.</p>
+<h3>Production deploy</h3>
+<p>Terraform (state in <code>duskaotearoa-terraform-state</code>, key <code>john-ai-project-backend/terraform.tfstate</code>) provisions:</p>
+<ul>
+<li><strong>DynamoDB</strong> <code>clients</code> and <code>users</code> (on-demand).</li>
+<li><strong>EC2</strong> Amazon Linux 2, systemd unit <code>john-ai-backend.service</code> at <code>/opt/john-ai-project/server</code>, port 8080. <code>JWT_SECRET</code> is read from SSM <code>/john-ai-project/jwt-secret</code> at process start. CloudWatch agent tails application logs.</li>
+<li><strong>API Gateway HTTP API</strong> with <code>$default</code> <code>HTTP_PROXY</code> to the instance URL, CORS allow-all, throttling, access logs.</li>
+</ul>
+<p>Pushing a <code>v*.*.*</code> tag runs tests, builds a linux/amd64 binary, and restarts the service over SSM. Infra changes on the same tag pattern go through the Terraform workflow.</p>
+
+            </div>
+            <span class="sr-only">End of article</span>
+        </article>
+    </main>
+
+    </section>
+
+    <footer aria-label="Page footer" class="flex py-4 px-6 w-full text-center mt-auto bg-slate-100 dark:bg-gray-800">
+        <div class="prose dark:prose-invert text-center mx-auto">
+            <p>Site proudly built with <a href="https://github.com/hydephp/hyde">HydePHP</a> 🎩</p>
+        </div>
+                    <a href="#app" aria-label="Go to top of page" class="float-right" @click.prevent="document.querySelector('#app').scrollIntoView({ behavior: 'smooth' })">
+                <button title="Scroll to top">
+                    <svg width="1.5rem" height="1.5rem" role="presentation" class="fill-current text-gray-500 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+                    </svg>
+                </button>
+            </a>
+            </footer>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.3/dist/cdn.min.js" integrity="sha256-gOkV4d9/FmMNEkjOzVlyM2eNAWSUXisT+1RbMTTIgXI=" crossorigin="anonymous"></script>
+
+<script>
+    function toggleTheme() {
+        if (localStorage.getItem('color-theme') === 'dark' || !('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem('color-theme', 'light');
+            document.getElementById('meta-color-scheme').setAttribute('content', 'light');
+        } else {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem('color-theme', 'dark');
+            document.getElementById('meta-color-scheme').setAttribute('content', 'dark');
+        }
+    }
+</script>
+
+
+
+
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+  const isDark =
+    document.documentElement.classList.contains('dark') ||
+    (!('color-theme' in localStorage) &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches) ||
+    localStorage.getItem('color-theme') === 'dark';
+
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: isDark ? 'dark' : 'default',
+    securityLevel: 'loose',
+  });
+
+  document.querySelectorAll('pre code.language-mermaid').forEach((code) => {
+    const pre = code.closest('pre');
+    if (!pre) return;
+
+    const container = document.createElement('div');
+    container.className = 'mermaid';
+    container.textContent = code.textContent;
+    pre.replaceWith(container);
+  });
+
+  await mermaid.run({ querySelector: '.mermaid' });
+</script>
+
+</body>
+</html>

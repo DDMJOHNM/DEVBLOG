@@ -164,6 +164,7 @@ return [
         \Hyde\Pages\MarkdownPage::class => '_pages',
         \Hyde\Pages\MarkdownPost::class => '_posts',
         \Hyde\Pages\DocumentationPage::class => '_docs',
+        \App\Pages\MarkdownProject::class => '_projects',
     ],
 
     /*
@@ -186,6 +187,7 @@ return [
         \Hyde\Pages\MarkdownPage::class => '',
         \Hyde\Pages\MarkdownPost::class => 'posts',
         \Hyde\Pages\DocumentationPage::class => 'docs',
+        \App\Pages\MarkdownProject::class => 'projects',
     ],
 
     /*
@@ -340,6 +342,7 @@ return [
         'order' => [
             'index' => 0,
             'posts' => 10,
+            'projects' => 20,
             'docs/index' => 100,
         ],
 

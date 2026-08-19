@@ -105,6 +105,7 @@ return [
         'BladePage' => \Hyde\Pages\BladePage::class,
         'MarkdownPage' => \Hyde\Pages\MarkdownPage::class,
         'MarkdownPost' => \Hyde\Pages\MarkdownPost::class,
+        'MarkdownProject' => \App\Pages\MarkdownProject::class,
         'DocumentationPage' => \Hyde\Pages\DocumentationPage::class,
         'MediaFile' => \Hyde\Support\Filesystem\MediaFile::class,
         'DataCollection' => \Hyde\Support\DataCollection::class,
