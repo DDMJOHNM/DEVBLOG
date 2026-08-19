@@ -92,9 +92,17 @@
         <article class="mx-auto prose dark:prose-invert">
             <h1>Projects</h1>
 <h2>Positive Thought Counselling Onboarding Module</h2>
+<p>Voice-first client onboarding and counsellor matching. Staff sign in, a client speaks name and email, GPT-4o extracts those fields for review, then free-text concerns are matched to a practitioner and saved on the client record.</p>
+<p>Next.js BFF on AWS Amplify, OpenAI (Whisper + gpt-4o + embeddings), Chroma locally / Pinecone in production, Go backend with DynamoDB.</p>
+<p><a href="posts/positive-thought-counselling.html">Full write-up: architecture, file map, and trade-offs</a></p>
 <pre><code class="language-mermaid">flowchart LR
-  A[Idea] --&gt; B[Build]
-  B --&gt; C[Ship]
+  User[&quot;User&quot;] --&gt; UI[&quot;Next.js VoiceAgent&quot;]
+  UI --&gt; Whisper[&quot;Whisper&quot;]
+  UI --&gt; GPT[&quot;gpt-4o extract&quot;]
+  UI --&gt; Rec[&quot;Vector match&quot;]
+  Rec --&gt; Store[&quot;Chroma or Pinecone&quot;]
+  UI --&gt; Go[&quot;Go API&quot;]
+  Go --&gt; DDB[&quot;DynamoDB&quot;]
 </code></pre>
 <h2>Positive Thought Counselling Dental Module</h2>
 <pre><code class="language-mermaid">flowchart LR
