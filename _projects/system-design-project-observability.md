@@ -1,9 +1,8 @@
 ---
-title: 'Project: Observability Dashboard'
+title: 'Observability Dashboard'
 description: 'System design for a project management logging and cost monitoring tool'
-category: 'System Design'
-author: 'John Mason'
-date: '2026-08-19 16:00'
+stack: 'Laravel, SQS, RDS, S3, API Gateway, OpenAI, Node.js'
+date: '2026-08-19'
 ---
 
 A system to monitor errors, manage project costs, and track separate systems that use OpenAI and AWS.

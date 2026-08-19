@@ -25,7 +25,7 @@ Course notes covering networking, protocols, architecture, storage, performance,
 
 ## Project
 
-- [Observability Dashboard](/posts/system-design-project-observability.html) — logging system for OpenAI and AWS project monitoring
+- [Observability Dashboard](/projects/system-design-project-observability.html) — logging system for OpenAI and AWS project monitoring
 
 ## System Design Trade-offs
 

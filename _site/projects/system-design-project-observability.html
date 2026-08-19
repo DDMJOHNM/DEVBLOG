@@ -3,18 +3,14 @@
 <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DevBlog - Project: Observability Dashboard</title>
+<title>DevBlog - Observability Dashboard</title>
 
 
 
 <meta name="description" content="System design for a project management logging and cost monitoring tool">
-<meta name="twitter:title" content="DevBlog - Project: Observability Dashboard">
-<meta name="author" content="John Mason">
-<meta name="keywords" content="System Design">
+<meta name="twitter:title" content="DevBlog - Observability Dashboard">
 <meta property="og:description" content="System design for a project management logging and cost monitoring tool">
-<meta property="og:title" content="DevBlog - Project: Observability Dashboard">
-<meta property="og:article:published_time" content="2026-08-19T16:00:00+00:00">
-<meta property="og:type" content="article">
+<meta property="og:title" content="DevBlog - Observability Dashboard">
 
 
 <meta name="generator" content="HydePHP v2.0.3">
@@ -93,20 +89,21 @@
     <section>
         
     <main id="content" class="mx-auto max-w-7xl py-16 px-8">
-        <article aria-label="Article" id="system-design-project-observability" itemscope itemtype="https://schema.org/BlogPosting"
-    class="post-article mx-auto prose dark:prose-invert">
-    <meta itemprop="identifier" content="system-design-project-observability">
-    
-    <header aria-label="Header section" role="doc-pageheader">
-        <h1 itemprop="headline" class="mb-4">Project: Observability Dashboard</h1>
-        <div id="byline" aria-label="About the post" role="doc-introduction">
-            Posted <time itemprop="dateCreated datePublished" datetime="2026-08-19T16:00:00+00:00" title="Wednesday Aug 19th, 2026, at 4:00pm">Aug 19th, 2026</time>            by author
-<address itemprop="author" itemscope itemtype="https://schema.org/Person" aria-label="The post author" style="display: inline;">
-                <span itemprop="name" aria-label="The author's name" title=@john_mason>John Mason</span>
-            </address>            in the category "System Design"        </div>
-    </header>
-        <div aria-label="Article body" itemprop="articleBody">
-        <p>A system to monitor errors, manage project costs, and track separate systems that use OpenAI and AWS.</p>
+        <article aria-label="Project" id="system-design-project-observability" itemscope itemtype="https://schema.org/CreativeWork"
+            class="project-article mx-auto prose dark:prose-invert">
+            <p class="not-prose mb-8">
+                <a href="../projects.html" class="text-indigo-500 hover:underline font-medium">
+                    &larr; Projects
+                </a>
+            </p>
+
+            <header aria-label="Header section" role="doc-pageheader">
+                <h1 itemprop="headline" class="mb-4">Observability Dashboard</h1>
+                                    <p class="opacity-75 text-sm">Laravel, SQS, RDS, S3, API Gateway, OpenAI, Node.js</p>
+                            </header>
+
+            <div aria-label="Article body" itemprop="text">
+                <p>A system to monitor errors, manage project costs, and track separate systems that use OpenAI and AWS.</p>
 <h2>Architecture options</h2>
 <p>Three transport options for ingest and OpenAI integration. All share the same core backend (SQS → Laravel → RDS + S3).</p>
 <table>
@@ -543,9 +540,10 @@
 </ul>
 <p>Back to <a href="/posts/system-design.html">System Design</a>.</p>
 
-    </div>
-    <span class="sr-only">End of article</span>
-</article>    </main>
+            </div>
+            <span class="sr-only">End of article</span>
+        </article>
+    </main>
 
     </section>
 
