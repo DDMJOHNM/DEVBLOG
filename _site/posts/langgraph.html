@@ -3,14 +3,18 @@
 <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DevBlog - Projects</title>
+<title>DevBlog - LangGraph</title>
 
 
 
-<meta name="description" content="Selected project write-ups">
-<meta name="twitter:title" content="DevBlog - Projects">
-<meta property="og:description" content="Selected project write-ups">
-<meta property="og:title" content="DevBlog - Projects">
+<meta name="description" content="Stateful multi-agent workflows as graphs">
+<meta name="twitter:title" content="DevBlog - LangGraph">
+<meta name="author" content="John Mason">
+<meta name="keywords" content="Agentic AI">
+<meta property="og:description" content="Stateful multi-agent workflows as graphs">
+<meta property="og:title" content="DevBlog - LangGraph">
+<meta property="og:article:published_time" content="2026-08-19T12:00:00+00:00">
+<meta property="og:type" content="article">
 
 
 <meta name="generator" content="HydePHP v2.0.3">
@@ -22,7 +26,7 @@
 <style>[x-cloak] {display: none!important}</style>
 
 
-            <link rel="stylesheet" href="media/app.css?v=9450b0e0">
+            <link rel="stylesheet" href="../media/app.css?v=9450b0e0">
     
 
     
@@ -42,7 +46,7 @@
 <body id="app" class="flex flex-col min-h-screen overflow-x-hidden dark:bg-gray-900 dark:text-white" x-data="{ navigationOpen: false }" x-on:keydown.escape="navigationOpen = false;">
     <a href="#content" id="skip-to-content" class="sr-only focus:not-sr-only bg-black border-4 border-yellow-400 focus:absolute focus:mt-2 focus:mx-auto focus:p-2 focus:w-64 h-auto left-0 overflow-auto right-0 rounded-md text-center text-lg text-white top-auto z-50 ">Skip to content</a>    <nav aria-label="Main navigation" id="main-navigation" class="flex flex-wrap items-center justify-between p-4 shadow-lg sm:shadow-xl md:shadow-none dark:bg-gray-800">
     <div id="main-navigation-brand" class="flex grow items-center shrink-0 text-gray-700 dark:text-gray-200">
-        <a href="index.html" class="font-bold px-4" aria-label="Home page">
+        <a href="../index.html" class="font-bold px-4" aria-label="Home page">
     DevBlog
 </a>
         <div class="ml-auto">
@@ -80,40 +84,43 @@
          :class="navigationOpen ? 'block!' : ''">
         <ul aria-label="Navigation links" class="md:grow md:flex justify-end">
                             <li class="md:mx-2">
-                                            <a href="index.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Home</a>                                    </li>
+                                            <a href="../index.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Home</a>                                    </li>
                             <li class="md:mx-2">
-                                            <a href="projects.html" aria-current="page" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100 navigation-link-active border-l-4 border-indigo-500 md:border-none font-medium -ml-6 pl-5 md:ml-0 md:pl-0 bg-gray-100 dark:bg-gray-800 md:bg-transparent dark:md:bg-transparent">Projects</a>                                    </li>
+                                            <a href="../projects.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Projects</a>                                    </li>
                     </ul>
     </div>
 </nav>
     <section>
         
     <main id="content" class="mx-auto max-w-7xl py-16 px-8">
-        <article class="mx-auto prose dark:prose-invert">
-            <h1>Projects</h1>
-<h2>Positive Thought Counselling Onboarding Module</h2>
-<pre><code class="language-mermaid">flowchart LR
-  A[Idea] --&gt; B[Build]
-  B --&gt; C[Ship]
-</code></pre>
-<h2>Positive Thought Counselling Dental Module</h2>
-<pre><code class="language-mermaid">flowchart LR
-  A[Idea] --&gt; B[Build]
-  B --&gt; C[Ship]
-</code></pre>
-<h2>Logging and Subscription System</h2>
-<pre><code class="language-mermaid">flowchart LR
-  A[Idea] --&gt; B[Build]
-  B --&gt; C[Ship]
-</code></pre>
-<h2>Serverless Online Shopping Cart</h2>
-<pre><code class="language-mermaid">flowchart LR
-  A[Idea] --&gt; B[Build]
-  B --&gt; C[Ship]
-</code></pre>
+        <article aria-label="Article" id="langgraph" itemscope itemtype="https://schema.org/BlogPosting"
+    class="post-article mx-auto prose dark:prose-invert">
+    <meta itemprop="identifier" content="langgraph">
+    
+    <header aria-label="Header section" role="doc-pageheader">
+        <h1 itemprop="headline" class="mb-4">LangGraph</h1>
+        <div id="byline" aria-label="About the post" role="doc-introduction">
+            Posted <time itemprop="dateCreated datePublished" datetime="2026-08-19T12:00:00+00:00" title="Wednesday Aug 19th, 2026, at 12:00pm">Aug 19th, 2026</time>            by author
+<address itemprop="author" itemscope itemtype="https://schema.org/Person" aria-label="The post author" style="display: inline;">
+                <span itemprop="name" aria-label="The author's name" title=@john_mason>John Mason</span>
+            </address>            in the category "Agentic AI"        </div>
+    </header>
+        <div aria-label="Article body" itemprop="articleBody">
+        <p>LangGraph is an open-source framework by LangChain used to build stateful, multi-agent AI systems. It models AI workflows as graphs where each task is a <strong>node</strong> (an agent or a tool) and the control flow is represented by <strong>edges</strong> (routing logic or loops).</p>
+<p>LangGraph gives developers fine-grained control to build complex AI applications that go beyond simple question-and-answer chatbots.</p>
+<h2>What it does</h2>
+<ul>
+<li><strong>Cyclic workflows (loops):</strong> Unlike traditional linear code, LangGraph allows agents to loop back, review mistakes, and refine answers until a condition is met (e.g. a ReAct prompt loop where an LLM calls a tool, processes the output, and repeats).</li>
+<li><strong>State management:</strong> It acts as shared memory, carrying application context, variables, and previous steps forward so agents remain aware of the ongoing conversation or task.</li>
+<li><strong>Multi-agent coordination:</strong> Orchestrate multiple specialized AI agents (e.g. a research agent, a database agent, and an approval agent) that collaborate to solve larger problems.</li>
+<li><strong>Human-in-the-loop:</strong> Pause workflows for human approval or edits, so you can review an agent's proposed action before it executes a critical or high-cost task.</li>
+<li><strong>Persistence and resumability:</strong> Save the exact state of an agent so that if a system crashes or pauses, it can resume from exactly where it left off.</li>
+</ul>
+<p>You can use LangGraph with or without LangChain. It is favored by developers who need transparent, production-ready control over their LLM applications.</p>
 
-        </article>
-    </main>
+    </div>
+    <span class="sr-only">End of article</span>
+</article>    </main>
 
     </section>
 

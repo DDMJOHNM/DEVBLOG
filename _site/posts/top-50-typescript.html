@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DevBlog - Top 50 TypeScript</title>
+
+
+
+<meta name="description" content="TypeScript interview questions covering types, interfaces, classes, and the compiler">
+<meta name="twitter:title" content="DevBlog - Top 50 TypeScript">
+<meta name="author" content="John Mason">
+<meta name="keywords" content="Interviewing">
+<meta property="og:description" content="TypeScript interview questions covering types, interfaces, classes, and the compiler">
+<meta property="og:title" content="DevBlog - Top 50 TypeScript">
+<meta property="og:article:published_time" content="2026-08-19T15:42:00+00:00">
+<meta property="og:type" content="article">
+
+
+<meta name="generator" content="HydePHP v2.0.3">
+<meta property="og:site_name" content="HydePHP">
+
+
+
+
+<style>[x-cloak] {display: none!important}</style>
+
+
+            <link rel="stylesheet" href="../media/app.css?v=9450b0e0">
+    
+
+    
+    
+
+
+    
+    <meta id="meta-color-scheme" name="color-scheme" content="light">
+    <script>if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); document.getElementById('meta-color-scheme').setAttribute('content', 'dark');} else { document.documentElement.classList.remove('dark') } </script>
+
+
+
+
+
+
+</head>
+<body id="app" class="flex flex-col min-h-screen overflow-x-hidden dark:bg-gray-900 dark:text-white" x-data="{ navigationOpen: false }" x-on:keydown.escape="navigationOpen = false;">
+    <a href="#content" id="skip-to-content" class="sr-only focus:not-sr-only bg-black border-4 border-yellow-400 focus:absolute focus:mt-2 focus:mx-auto focus:p-2 focus:w-64 h-auto left-0 overflow-auto right-0 rounded-md text-center text-lg text-white top-auto z-50 ">Skip to content</a>    <nav aria-label="Main navigation" id="main-navigation" class="flex flex-wrap items-center justify-between p-4 shadow-lg sm:shadow-xl md:shadow-none dark:bg-gray-800">
+    <div id="main-navigation-brand" class="flex grow items-center shrink-0 text-gray-700 dark:text-gray-200">
+        <a href="../index.html" class="font-bold px-4" aria-label="Home page">
+    DevBlog
+</a>
+        <div class="ml-auto">
+            <button @click="toggleTheme" class="theme-toggle-button flex items-center px-2 py-1 hover:text-gray-700 dark:text-gray-200" title="Toggle theme">
+        <span class="sr-only">Toggle dark theme</span>
+        <svg width="1.25rem" height="1.25rem" class="w-5 h-5 hidden dark:block" fill="#FFFFFF" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+        <svg width="1.25rem" height="1.25rem" class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+    </button>
+        </div>
+    </div>
+
+    <div class="block md:hidden">
+        <button id="navigation-toggle-button" class="flex items-center px-3 py-1 hover:text-gray-700 dark:text-gray-200"
+                aria-label="Toggle navigation menu" @click="navigationOpen = ! navigationOpen">
+            <svg x-show="! navigationOpen" title="Open Navigation Menu" class="dark:fill-gray-200"
+                 style="display: block;"
+                 id="open-main-navigation-menu-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24"
+                 width="24">
+                <title>Open Menu</title>
+                <path d="M0 0h24v24H0z" fill="none"/>
+                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+            </svg>
+            <svg x-show="navigationOpen" title="Close Navigation Menu" class="dark:fill-gray-200" style="display: none;"
+                 id="close-main-navigation-menu-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24"
+                 width="24">
+                <title>Close Menu</title>
+                <path d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+            </svg>
+        </button>
+    </div>
+
+    <div id="main-navigation-links" 
+         class="w-full hidden md:flex grow md:grow-0 md:items-center md:w-auto px-6 -mx-4 border-t mt-3 pt-3 md:border-none md:mt-0 md:py-0 border-gray-200 dark:border-gray-700"
+         :class="navigationOpen ? 'block!' : ''">
+        <ul aria-label="Navigation links" class="md:grow md:flex justify-end">
+                            <li class="md:mx-2">
+                                            <a href="../index.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Home</a>                                    </li>
+                            <li class="md:mx-2">
+                                            <a href="../projects.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Projects</a>                                    </li>
+                    </ul>
+    </div>
+</nav>
+    <section>
+        
+    <main id="content" class="mx-auto max-w-7xl py-16 px-8">
+        <article aria-label="Article" id="top-50-typescript" itemscope itemtype="https://schema.org/BlogPosting"
+    class="post-article mx-auto prose dark:prose-invert">
+    <meta itemprop="identifier" content="top-50-typescript">
+    
+    <header aria-label="Header section" role="doc-pageheader">
+        <h1 itemprop="headline" class="mb-4">Top 50 TypeScript</h1>
+        <div id="byline" aria-label="About the post" role="doc-introduction">
+            Posted <time itemprop="dateCreated datePublished" datetime="2026-08-19T15:42:00+00:00" title="Wednesday Aug 19th, 2026, at 3:42pm">Aug 19th, 2026</time>            by author
+<address itemprop="author" itemscope itemtype="https://schema.org/Person" aria-label="The post author" style="display: inline;">
+                <span itemprop="name" aria-label="The author's name" title=@john_mason>John Mason</span>
+            </address>            in the category "Interviewing"        </div>
+    </header>
+        <div aria-label="Article body" itemprop="articleBody">
+        <p>Interview notes for TypeScript. Numbered questions with short answers and examples.</p>
+<h2>1. What is TypeScript and how does it differ from JavaScript?</h2>
+<p>TypeScript is a statically-typed superset of JavaScript, developed and maintained by Microsoft. It enables enhanced code maintainability and predictability.
+After compiling, TypeScript code is transpiled into standard, browser-compatible JavaScript.</p>
+<ul>
+<li>Offers static typing</li>
+<li>Incorporates modern ECMAScript syntax</li>
+<li>TypeScript brings functional programming patterns, classes, and access modifiers (such as public and private)</li>
+<li>Compatibility with JavaScript</li>
+<li>Tooling and Extra Safety</li>
+<li>ECMAScript Compatibility:</li>
+<li>Code Structure &amp; Readability</li>
+</ul>
+<h2>2. Can you explain what is meant by &quot;TypeScript is a superset of JavaScript&quot;?</h2>
+<p>TypeScript is often described as a &quot;superset of JavaScript&quot; because every valid JavaScript code is also a valid TypeScript code.</p>
+<ul>
+<li>Type Definitions</li>
+<li>Newer JavaScript Features</li>
+<li>Tooling and Error Detection: TypeScript offers robust type-checking, increased code readability, and stronger compile-time error detection</li>
+</ul>
+<h2>3. What are the basic types available in TypeScript?</h2>
+<p>Boolean: Represents true/false values.</p>
+<p>Number: Applies to both integer and floating-point numbers.</p>
+<p>String: Refers to textual data.</p>
+<p>Array: Offers a flexible way to work with structured data.</p>
+<p>Tuple: Enables the definition of arrays with a fixed number of elements, each potentially of a different data type.</p>
+<p>Enum: Provides a set of named constants such as days or colors.</p>
+<p>Any: Offers a dynamic type, which can be used to bypass type-checking. It's typically best to be avoided, as it defeats the purpose of using TypeScript, which is primarily focused on static typing. However, there are certain use cases where it becomes necessary.</p>
+<p>Void: Typically used as the return type for functions that don't return a value.</p>
+<p>Null and Undefined: Allow for the assignment of null and undefined values, respectively. However, this isn’t enabled by default, and these are probably better handled using the strict mode settings in TypeScript.</p>
+<p>Never: Represents the type of values that never occur. For instance, the return type of a function that doesn't reach its end or always throws an error.</p>
+<p>Object: Any JavaScript object.</p>
+<p>Function: Denotes a function type.</p>
+<pre><code class="language-ts">// Boolean
+let isActive: boolean = true;
+
+// Number
+let age: number = 30;
+
+// String
+let title: string = &quot;Manager&quot;;
+
+// Array
+let scores: number[] = [85, 90, 78];
+// or use a compact form: let scores: Array&lt;number&gt; = [85, 90, 78];
+
+// Tuple
+let employee: [string, number, boolean] = ['John', 35, true];
+
+// Enum
+enum WeekDays { Monday, Tuesday, Wednesday, Thursday, Friday }
+let today: WeekDays = WeekDays.Wednesday;
+
+// Any
+let dynamicData: any = 20;
+
+// Void
+function greet(): void {
+  console.log(&quot;Hello!&quot;);
+}
+
+// Null and Undefined
+let data: null = null;
+let user: undefined = undefined;
+
+// Never
+function errorMessage(message: string): never {
+  throw new Error(message);
+}
+
+// Object
+let person: object = {
+  name: 'John',
+  age: 30
+};
+
+// Function
+let calculate: Function;
+calculate = function (x: number, y: number): number {
+  return x + y;
+};
+</code></pre>
+<h2>4. How do you declare variables in TypeScript?</h2>
+<p>In TypeScript, variable declarations support different methodologies for declaring variables and their associated types.</p>
+<p>Variable and Type Declaration Methods</p>
+<ol>
+<li>
+<p>var</p>
+<p>var score: number = 100;</p>
+<p>This declaration can lead to variable hoisting and has global scope or function-level scope.</p>
+</li>
+<li>
+<p>let</p>
+<p>Use let when you want to define variables within a block scope. This is the recommended default choice:</p>
+<p>let playerName: string = &quot;John&quot;;</p>
+</li>
+<li>
+<p>const
+const allows you to declare constants and is especially useful for maintaining data integrity:</p>
+<p>const apiKey: string = &quot;your-api-key-here&quot;;</p>
+</li>
+<li>
+<p>Function Scope
+All three methods (var, let, and const) are confined to their immediate function scope:</p>
+</li>
+</ol>
+<pre><code class="language-ts">function doSomething() {
+  let tempValue: number = 42;
+  var result: boolean = true;
+}
+</code></pre>
+<h2>Rules for Variable Declaration and Initialization</h2>
+<ul>
+<li>Order Matters: In TypeScript, a variable must be declared before being used. This is not a requirement in JavaScript, but good JavaScript practice is to declare a variable before using it.</li>
+</ul>
+<p>If you're dealing with complex or interconnected codes, it's a good practice to use the let and const declarations that ensure the block-level scoping, thus helping with potential hoisting issues.</p>
+<ul>
+<li>Static Types: TypeScript requires that you declare the data type of a variable (or let the system infer it) and then initialize it with a value of exactly the same type:</li>
+</ul>
+<p>let count: number;  // Declaration
+count = 42;  // Allowed
+count = &quot;42&quot;;  // Error! Type 'string' is not assignable to type 'number'.</p>
+<ul>
+<li>Type Inference: TypeScript can often infer the variable's type based on its initialization value. This reduces the need to specify a type explicitly.</li>
+</ul>
+<p>let word = &quot;hello!&quot;;  // TypeScript infers the type as 'string' because of the initialization.</p>
+<p>Best Practices for Variable Declarations
+Use const Where You Can: This approach isn't always possible, especially when dealing with object properties. However, favor const for better code readability and to prevent accidental data mutations.</p>
+<p>Prefer let over var: let adheres better to block-level scoping and offers more predictability in the code.</p>
+<p>Initialize at Declaration: Although TypeScript allows initializations after declarations, it's best to declare and initialize variables simultaneously to improve code clarity and type safety.</p>
+<p>Prefer Type Annotations: Explicitly specifying variable types can improve code readability. However, when the variable type is obvious from the initialization, type inference should suffice.</p>
+<h2>5. What are Interfaces in TypeScript and how do they work?</h2>
+<p>In TypeScript, an interface defines the structure and types of its members. It acts as a contract for the required properties and methods, ensuring that implementing classes or objects match this structure.</p>
+<p>Key Features of Interfaces</p>
+<ul>
+<li>Type Consistency: Objects that adhere to an interface's structure are considered compatible with it.</li>
+<li>Optional and Readonly Members: Interfaces allow for optional attributes and readonly members with the ? and readonly keywords respectively.</li>
+<li>Call Signatures: Interfaces can define method types, specifying function parameter and return types.</li>
+<li>Index Signatures: Useful for specifying that an object can have any number of properties, all of a certain type.</li>
+</ul>
+<p>Core Use-Cases</p>
+<ul>
+<li>Standardizing Objects: Ensuring that disparate objects share a common structure for increased cohesiveness and ease of use.</li>
+<li>Contract Enforcement: Enforcing property and method requirements on classes to reduce errors and improve maintainability.
+Code Example: Basic Interface</li>
+</ul>
+<pre><code class="language-ts">interface Point {
+    x: number;
+    y: number;
+}
+
+function printPoint(p: Point) {
+    console.log(`Point coordinates: (${p.x}, ${p.y})`);
+}
+
+let pointA = { x: 3, y: 7 }; // This object matches Point's structure
+let pointB = { x: 8 }; // This object is missing the 'y' property
+
+printPoint(pointA); // Output: Point coordinates: (3, 7)
+printPoint(pointB); // Compile-time error due to incorrect structure
+</code></pre>
+<h2>6. Describe the Enum type and when you might use it.</h2>
+<p>The Enum is a data type that simplifies the representation and management of discrete, named values. It's a foundational tool to ensure type safety in TypeScript and a number of vital use-cases:</p>
+<p>Reducing 'Magic Values': When ensuring readability and preventing repetitive literal values, such as 1, 2, or 'red'.</p>
+<p>Configuring Behaviour: influencing functionalities sets of associated values, such as HTTP methods, ordering or customer types.</p>
+<p>Ensuring Type Safety and Efficiency: The predefined set of valid members and a clear data type ensures that value assignments and operations are unequivocal and consistent.</p>
+<p>Core Components</p>
+<p>Key: a unique identifier, typically a number or string.</p>
+<p>Value: Data associated with the key. If not provided, the key is used as the value.</p>
+<p>Standard, String, and Heterogeneous Enums</p>
+<p>Standard Enum: Every key and value are of the same data type, typically numbers.</p>
+<p>String Enum: All keys and values must be strings, ensuring consistent data representation.</p>
+<p>Heterogeneous Enum: Defines keys with both number or string values. However, due to the mixed-type nature of
+these enums, it's best to steer clear of them in most cases.</p>
+<pre><code class="language-ts">enum HttpMethods {
+  GET,
+  POST,
+  PUT,
+  DELETE
+}
+
+const requestType: HttpMethods = HttpMethods.GET;
+
+// ❌ This is not allowed due to type safety
+// const requestType2: HttpMethods = 'GET';
+
+enum MediaTypes {
+  Image = 'image',
+  Video = 'video',
+  Audio = 'audio'
+}
+
+const selectedType: MediaTypes = MediaTypes.Image;
+
+// ✅ Accessing the value
+const associatedText: string = MediaTypes.Image;
+
+// ❌ This is not allowed due to type safety
+// const invalidType: MediaTypes = 'image';
+</code></pre>
+<p>While Enums are a powerful tool for maintaining type safety, simplify associating related sets of values.</p>
+<p>However, a consideration is that an Enum value can be inferred or forced to be of any key and underlying value type.</p>
+<pre><code class="language-ts">Potential Downsides of Enums
+</code></pre>
+<p>Compilation Impact: When used in a broader context, or in data structures like arrays or maps, TypeScript generates additional code to convert Enum keys to their associated values.
+Memory Usage: Every usage of an Enum requires memory allocation for its value.
+When a simple constant would suffice or if there's a need for a more dynamic relationship between keys and values, detailed types would be a better alternative.</p>
+<h2>7. How do you define and use a function in TypeScript?</h2>
+<p>When defining a function in TypeScript, you have the following fundamental components to consider:</p>
+<ul>
+<li>Function Signature: Comprising the function's purpose, parameters, type, and return value.</li>
+<li>Function Body: Containing the actual operation or series of steps the function will execute.</li>
+</ul>
+<p>Key Concepts</p>
+<ul>
+<li>
+<ol>
+<li>Function Declaration
+To declare a function, you specify its name, its parameter list, and its return type. If the function doesn't return a value, you set the return type to void.</li>
+</ol>
+</li>
+</ul>
+<p>Here is a code example:</p>
+<pre><code class="language-ts">function greet(name: string): void {
+    console.log(`Hello, ${name}!`);
+}
+</code></pre>
+<ul>
+<li>
+<ol start="2">
+<li>Function Expression
+You can also declare functions using expressions, which involve assigning functions to variables as values. This approach allows you to be more flexible, such as when you're using callbacks.</li>
+</ol>
+</li>
+</ul>
+<p>Here is an example:</p>
+<pre><code class="language-ts">let greet: (name: string) =&gt; void;
+greet = function(name: string): void {
+    console.log(`Hello, ${name}!`);
+};
+</code></pre>
+<ul>
+<li>
+<ol start="3">
+<li>Optional and Default Parameters
+TypeScript supports both optional and default function parameters, enhancing the flexibility of your functions.</li>
+</ol>
+</li>
+</ul>
+<p>Optional Parameters are denoted by a ? symbol after the parameter name.</p>
+<p>Here is the code example:</p>
+<pre><code class="language-ts">function greet(name: string, title?: string) {
+    if (title) {
+        console.log(`Hello, ${title} ${name}!`);
+    } else {
+        console.log(`Hello, ${name}!`);
+    }
+}
+</code></pre>
+<p>Default Parameters are when you assign a default value to a parameter:</p>
+<p>Here is the code example:</p>
+<pre><code class="language-ts">function greet(name = &quot;Stranger&quot;) {
+    console.log(`Hello, ${name}!`);
+}
+</code></pre>
+<ul>
+<li>
+<ol start="4">
+<li>Use Rest Parameters
+You can define a parameter as a &quot;rest&quot; parameter, which means the function can accept any number of arguments for that parameter.</li>
+</ol>
+</li>
+</ul>
+<p>Here is the code example:</p>
+<pre><code class="language-ts">function introduce(greeting: string, ...names: string[]) {
+    console.log(`${greeting}, ${names.join(&quot;, &quot;)}!`);
+}
+
+introduce(&quot;Hello&quot;, &quot;Alice&quot;, &quot;Bob&quot;, &quot;Carol&quot;);
+</code></pre>
+<ul>
+<li>
+<ol start="5">
+<li>Function Overloads
+You can declare multiple function overloads to define a set of parameters and their return types for a single function. This feature is especially beneficial when the function's behavior logically varies based on different input types.</li>
+</ol>
+</li>
+</ul>
+<p>Here is the code example:</p>
+<pre><code class="language-ts">function specialGreet(name: string): void;
+function specialGreet(title: string, name: string): void;
+
+function specialGreet(a: any, b?: any): void {
+    if (b) {
+        console.log(`Hello, ${a}, ${b}`);
+    } else {
+        console.log(`Hello, ${a}`);
+    }
+}
+</code></pre>
+<ul>
+<li>
+<ol start="6">
+<li>Call Signature
+When using objects in TypeScript, you have the call signature to define the expected function structure for a specific method within the object.</li>
+</ol>
+</li>
+</ul>
+<p>Here is a code example:</p>
+<pre><code class="language-ts">type Greeter = {
+    (name: string): void
+};
+
+let welcome: Greeter;
+welcome = function(name: string): void {
+    console.log(`Welcome, ${name}!`);
+};
+</code></pre>
+<h2>8. What does &quot;type inference&quot; mean in the context of TypeScript?</h2>
+<p>In TypeScript, type inference is a core feature that allows the type of a variable to be automatically determined from its value. This provides the benefits of static typing without the need for explicit type annotations.</p>
+<p>How It Works
+TypeScript employs a best common type algorithm to infer a variable's type. When TypeScript encounters multiple types for a variable during assignment or an array literal, it computes the union of these types and selects the best common type for the variable.</p>
+<p>Code Example: Type Inference
+Consider the following code:</p>
+<pre><code class="language-ts">let value = 10; // Type 'number' inferred
+let message = &quot;Hello, TypeScript!&quot;; // Type 'string' inferred
+
+function add(a: number, b: number) {
+    return a + b;
+}
+
+let sum = add(5, 7); // Type 'number' inferred
+</code></pre>
+<p>TypeScript can infer the most likely type from the context, such as:</p>
+<p>When a value is assigned immediately, TypeScript assigns the value's type to the variable.</p>
+<p>Type information from adjacent types is used to determine the best common type. If all values are of a compatible type, that type is used.</p>
+<p>Benefits of Type Inference</p>
+<ul>
+<li>Conciseness: Eliminates the need for explicit type declarations, leading to more compact and readable code.</li>
+<li>Adaptability: Codebase types align naturally with values, enhancing maintainability when values change.</li>
+<li>Error Reduction: Reduces the risk of inconsistencies between the declared type and the actual value.</li>
+</ul>
+<h2>9. Explain the use of 'let' and 'const' in TypeScript.</h2>
+<p>TypeScript makes use of const and let for variable declaration. These two keywords offer explicitness, scoping, and immutability for efficient code maintenance.</p>
+<p>Core Distinctions</p>
+<ul>
+<li>
+<p>const: Designates constants that remain unchanged once declared. It's important to note that this makes the reference immutable but doesn't actively prevent alteration of the internal state for complex objects like arrays.</p>
+</li>
+<li>
+<p>let: Initiates variables with standard mutable behavior.</p>
+</li>
+</ul>
+<pre><code class="language-ts">const productId: number = 5;
+let productName: string = 'Tesla';
+
+const getProductDetails = (id: number): string =&gt; {
+  return `Product ID: ${id}`;
+};
+
+// Attempting to modify will result in a compilation error
+// productId = 6;
+
+// Reference is still immutable
+const anotherProductId: number = 10;
+// This will throw a compilation error since it's a constant
+// anotherProductId = 12;
+
+// Modifying internal state of an object is allowed for a const
+const myArray: number[] = [1, 2, 3];
+myArray.push(4);
+</code></pre>
+<pre><code class="language-ts">let vehicleType: string = 'Car';
+
+if (true) {
+  let vehicleType: string = 'Motorcycle';
+  console.log(vehicleType);  // Output: Motorcycle
+}
+
+console.log(vehicleType);  // Output: Car
+</code></pre>
+<h2>10. How do you compile TypeScript files into JavaScript?</h2>
+<p>Compiling TypeScript (.ts) into JavaScript (.js) involves integrating a TypeScript compiler (tsc). You can customize the compilation process using tsconfig.json and even adopt more advanced methods to suit project needs:</p>
+<p>Workflow Steps
+File Creation: Write TypeScript files (.ts).</p>
+<p>Compiler Config: Set up a tsconfig.json file with compilation options.</p>
+<p>Compile: Execute the tsc command to initiate the compilation process.</p>
+<p>Output Verification: Review the generated JavaScript files.</p>
+<p>TypeScript Configuration (tsconfig.json)
+Here is the tsconfig.json file. The full configuration guide is available here.</p>
+<pre><code class="language-ts">{
+  &quot;compilerOptions&quot;: {
+    &quot;target&quot;: &quot;ES5&quot;,
+    &quot;module&quot;: &quot;commonjs&quot;,
+    &quot;strict&quot;: true,
+    &quot;outDir&quot;: &quot;dist&quot;,
+    &quot;rootDir&quot;: &quot;src&quot;
+  },
+  &quot;include&quot;: [
+    &quot;src/**/*.ts&quot;
+  ],
+  &quot;exclude&quot;: [
+    &quot;node_modules&quot;,
+    &quot;**/*.spec.ts&quot;
+  ]
+}
+</code></pre>
+<p>Advanced Configuration</p>
+<p>Project Reference: Useful for code splitting in large projects.
+Custom Transformers: Employ custom logic during the compilation process.
+Programmatic API: Provides flexibility in managing compiler settings and execution.</p>
+<h2>11. Explain classes in TypeScript. How are they different from ES6 classes?</h2>
+<p>While TypeScript and ES6 classes share many similarities, TypeScript's classes offer additional features and strong typing to make your code more robust.</p>
+<p>Key Shared Class Features</p>
+<ul>
+<li>Inheritance: Subclasses (children) can extend parent classes, inheriting their methods and properties.</li>
+<li>Polymorphism: Derived classes can define methods with the same name as their parent.</li>
+<li>Encapsulation: Data hiding is supported through access modifiers, such as public, private, and protected.</li>
+<li>Constructor: Instantiation starts with a constructor method, if defined.</li>
+</ul>
+<p>Unique TypeScript Class Features</p>
+<h3>Field Declaration</h3>
+<p>In TypeScript, you can specify fields directly in the class without initializing them. Automatic initialization to undefined occurs during object creation. ES6 requires initializing fields in the constructor or within their declaration.</p>
+<pre><code class="language-ts">class Example {
+    // Field is automatically initialized to undefined upon object creation
+    someField: string;
+}
+</code></pre>
+<h3>Abstract Classes</h3>
+<p>TypeScript supports abstract classes to serve as a blueprint for other classes. They cannot be instantiated on their own but can provide some implementation that derived classes can override.</p>
+<pre><code class="language-ts">abstract class AbstractExample {
+    abstract someMethod(): void;  // Method has no implementation (abstract)
+}
+</code></pre>
+<h3>Readonly properties</h3>
+<p>You can mark class properties as readonly, ensuring they are only set upon declaration or within the class constructor.</p>
+<pre><code class="language-ts">class Example {
+    readonly id: number;
+    constructor(id: number) {
+        this.id = id;  // Readonly can only be assigned in the constructor or declaration
+    }
+}
+</code></pre>
+<h3>Static Members</h3>
+<p>Classes in TypeScript support static members, such as properties and methods that belong to the class itself, rather than to instances of the class.</p>
+<pre><code class="language-ts">class Example {
+    static count = 0;  // Static property
+    static incrementCount() {
+        Example.count++;
+    }
+}
+</code></pre>
+<h3>Accessor Functions</h3>
+<p>You can define get and set functions in TypeScript, known as accessor functions, to control how class properties are accessed and modified.</p>
+<pre><code class="language-ts">class Example {
+    private _name: string;
+
+    get name(): string {
+        return this._name;
+    }
+
+    set name(newName: string) {
+        this._name = newName.trim();
+    }
+}
+</code></pre>
+<h3>Parameter Properties</h3>
+<p>TypeScript provides a shortcut to declare a property and initialize it from the constructor parameter. This method can make code more concise, especially when a constructor parameter corresponds directly to a class property.</p>
+<pre><code class="language-ts">class Example {
+    constructor(private _name: string, public age: number) {
+        // Private _name property created and initialized from constructor parameter
+        // Public age property created and initialized from constructor parameter
+    }
+}
+</code></pre>
+<h2>ES6 Additional Features not Present in TypeScript</h2>
+<h3>Intersection Types for Classes</h3>
+<p>In TypeScript, when you define a base class and then later extend it, you are creating an intersection type. This means the child class will inherit all the properties and methods from both its parent(s) and itself.</p>
+<h3>Class Expressions</h3>
+<p>Both ES6 and TypeScript support class expressions, which allows you to define a class without a class name.</p>
+<p>In ES6:</p>
+<pre><code class="language-ts">const Animal = class {
+    // Class methods and properties defined here
+};
+</code></pre>
+<h3>Iterator Protocol</h3>
+<p>ES6 classes support the Iterator protocol, making it easier to iterate over objects.</p>
+<pre><code class="language-ts">class IterableExample implements Iterable&lt;string&gt; {
+    // Implement iterator function for strings
+    [Symbol.iterator]() {
+        let index = 0;
+        const data = ['one', 'two', 'three'];
+        return {
+            next: () =&gt; {
+                if (index &lt; data.length) {
+                    return { value: data[index++], done: false };
+                }
+                return { value: undefined, done: true };
+            }
+        };
+    }
+}
+</code></pre>
+<h2>12. How do you implement Inheritance in TypeScript?</h2>
+<p>Let's look at how you can use inheritance in TypeScript using both ES6 classes and prototypal inheritance.</p>
+<h3>Inheritance with ES6 class syntax</h3>
+<p>With the advent of ES6, a more familiar class-based inheritance method was introduced. This method is usually easier to read and understand.</p>
+<pre><code class="language-ts">class Animal {
+  private name: string;
+
+  constructor(theName: string) {
+    this.name = theName;
+  }
+
+  move(distanceInMeters: number = 0) {
+    console.log(`${this.name} moved ${distanceInMeters}m.`);
+  }
+}
+
+class Snake extends Animal {
+  constructor(name: string) {
+    super(name);
+  }
+
+  move(distanceInMeters = 5) {
+    console.log(&quot;Slithering...&quot;);
+    super.move(distanceInMeters);
+  }
+}
+
+const mySnake = new Snake(&quot;Cobra&quot;);
+mySnake.move();  // Output: Slithering... Cobra moved 5m.
+</code></pre>
+<h3>Inheritance with prototypal methodology</h3>
+<p>Prior to ES6, TypeScript, like JavaScript, used a prototypal inheritance approach.</p>
+<p>The prototypal mechanism can be useful when developing complex object structures, but it is important to be aware of the nuances in order to avoid unexpected behavior.</p>
+<p>Code Example: Prototypal Inheritance in TypeScript</p>
+<pre><code class="language-ts">// Define the Parent Class
+function Animal(this: Animal, name: string) {
+  this.name = name;
+}
+
+Animal.prototype.move = function(distanceInMeters: number = 0) {
+  console.log(`${this.name} moved ${distanceInMeters}m.`);
+};
+
+// Define the Child Class
+function Snake(name: string) {
+  Animal.call(this, name);
+}
+
+// Set up the Inheritance
+Snake.prototype = Object.create(Animal.prototype);
+Snake.prototype.constructor = Snake;
+
+// Override the Base Type's Method
+Snake.prototype.move = function(distanceInMeters = 5) {
+  console.log(&quot;Slithering...&quot;);
+  Animal.prototype.move.call(this, distanceInMeters);
+};
+
+const mySnake = new Snake(&quot;Cobra&quot;);
+mySnake.move();  // Output: Slithering... Cobra moved 5m.
+</code></pre>
+<h3>Simplified Methods</h3>
+<p>Using the prototypal construct can be perplexing at first, but its strength lies in its flexibility.</p>
+<p>You can avoid the complexities of direct prototype assignments using ES5 derived constructions, as seen next:</p>
+<pre><code class="language-ts">function Animal(name: string) {
+  this.name = name;
+}
+
+Animal.prototype.move = function(distanceInMeters: number = 0) {
+  console.log(`${this.name} moved ${distanceInMeters}m.`);
+};
+
+function Snake(name: string) {
+  Animal.call(this, name);
+}
+
+// Utilize `Object.create` for simplified prototype delegation
+Snake.prototype = Object.create(Animal.prototype);
+Snake.prototype.constructor = Snake;
+
+Snake.prototype.move = function(distanceInMeters = 5) {
+  console.log(&quot;Slithering...&quot;);
+  Animal.prototype.move.call(this, distanceInMeters);
+};
+</code></pre>
+<h2>13. What are access modifiers and how do they work in TypeScript?</h2>
+<p>Access modifiers are TypeScript's way of controlling class member visibility and mutability. They enforce encapsulation and are especially useful for object-oriented design.</p>
+<p>Key Modifiers</p>
+<ul>
+<li>
+<p>Public: Default for class members. They are accessible from both inside and outside the class.</p>
+</li>
+<li>
+<p>Protected: Members can be accessed within the class and its subclasses. They help establish the &quot;is-a&quot; relationship.</p>
+</li>
+<li>
+<p>Private: Marks members as accessible only within the declaring class. This ensures they're not modified or accessed externally.</p>
+</li>
+</ul>
+<pre><code class="language-ts">class Person {
+    public name: string;
+    private age: number;
+    protected contact: string;
+
+    constructor(name: string, age: number, contact: string) {
+        this.name = name;
+        this.age = age;
+        this.contact = contact;
+    }
+}
+
+class Employee extends Person {
+    private employeeId: string;
+
+    constructor(name: string, age: number, contact: string, employeeId: string) {
+        super(name, age, contact);
+        this.employeeId = employeeId;
+    }
+
+    public displayDetails(): void {
+        console.log(`${this.name} - ${this.age} - ${this.contact} - ${this.employeeId}`);
+    }
+}
+
+// Somewhere in your code
+const person = new Person(&quot;John Doe&quot;, 30, &quot;1234567&quot;);
+console.log(person.name);  // Accessible
+console.log(person.age);   // ERROR: 'age' is private
+
+const employee = new Employee(&quot;Jane Doe&quot;, 25, &quot;2345678&quot;, &quot;E123&quot;);
+console.log(employee.contact);  // ERROR: 'contact' is protected
+employee.displayDetails();     // Correctly displays details
+
+employee.age = 35;    // ERROR: 'age' is private
+employee.contact = &quot;3456789&quot;;  // ERROR: 'contact' is protected
+</code></pre>
+<h2>14. Discuss Abstract classes and their purposes in TypeScript.</h2>
+<p>In TypeScript, abstract classes serve as blueprints that guide derived classes, essentially laying out the structure without necessarily providing complete implementations of methods.</p>
+<p>Core Features of Abstract Classes</p>
+<ul>
+<li>
+<p>Method Signatures
+Abstract classes define method signatures without specifying their functionality. This feature provides a comprehensive form for derived classes to work from.</p>
+</li>
+<li>
+<p>Specific Method Definitions
+In addition to method signatures, abstract classes can contain completely implemented methods. These methods either support the abstract methods or serve as independent functionalities.</p>
+</li>
+<li>
+<p>Abstract and Non-Abstract Members Separation
+Abstract classes clearly demarcate between methods that require implementation by derived classes and those that are either fully implemented or optional.</p>
+</li>
+</ul>
+<h3>Common Use-Cases for Abstract Classes</h3>
+<ul>
+<li>
+<p>Facilitate Reusability: Abstract classes help in consolidating common or shared functionalities among several derived classes.</p>
+</li>
+<li>
+<p>Contract Enforcement: They ensure that derived classes conform to a shared structure, guaranteeing a defined set of methods that must be implemented.</p>
+</li>
+<li>
+<p>Partial Implementations: Abstract classes allow for a mix of fully implemented methods alongside those requiring concrete implementations in derived classes.</p>
+</li>
+</ul>
+<h3>TypeScript Utility: Static Properties</h3>
+<p>Abstract classes in TypeScript can have static members, which belong to the class itself and not to any specific instance. This feature provides a convenient way to define properties or methods that are accessible without the need for class instantiation.</p>
+<pre><code class="language-ts">abstract class Shape {
+    abstract getArea(): number;
+    abstract getPerimeter(): number;
+    color: string;
+
+    constructor(color: string) {
+        this.color = color;
+    }
+
+    static defaultColor: string = 'red';
+
+    describe() {
+        return `This shape is ${this.color}.`;
+    }
+}
+
+// This will throw an error because the derived class does not provide concrete implementations for abstract methods.
+class Circle extends Shape {
+    constructor(public radius: number, color: string) {
+        super(color);
+    }
+
+    // The 'Circle' class inherited the following properties from 'Shape', but neither implements nor specifies them in the derived class: 'getArea' and 'getPerimeter'.
+    getArea(): number {
+        return Math.PI * this.radius ** 2;
+    }
+
+    getPerimeter(): number {
+        return 2 * Math.PI * this.radius;
+    }
+}
+
+const myCircle = new Circle(5, 'blue');
+console.log(myCircle.getArea()); // Outputs: 78.54
+console.log(myCircle.describe()); // Outputs: This shape is blue.
+console.log(Shape.defaultColor); // Outputs: red
+</code></pre>
+<h2>15. Can you describe the use of Constructors within TypeScript classes?</h2>
+<p>TypeScript provides a convenient way to define constructors for classes using the constructor keyword. A constructor method allows you to initialize class members and can have access specifiers. They are useful for setting up an object's initial state.</p>
+<p>Key Features</p>
+<ul>
+<li>Automatic Invocation: The constructor is automatically called when an object of the class is instantiated.</li>
+<li>Single Unique Constructor: A class can only have one constructor, providing a centralized place for initialization.</li>
+<li>Overload Capabilities: You can overload a constructor to define multiple ways of object initialization.</li>
+</ul>
+<pre><code class="language-ts">class Person {
+  // Member variables
+  name: string;
+  age: number;
+
+  // Constructor
+  constructor(name: string, age: number) {
+    this.name = name;
+    this.age = age;
+  }
+}
+</code></pre>
+<h3>Constructor Access Modifiers</h3>
+<p>TypeScript supports access modifiers on constructor parameters, enabling concise and safe class initialization.</p>
+<ul>
+<li>Public: Parameters without a modifier are public by default.</li>
+<li>Private: Adding the private keyword makes them accessible within the class only.</li>
+<li>Read-Only: Combining readonly with parameter and the private or public access modifier ensures the parameter is assigned a value just once, in the constructor.</li>
+</ul>
+<h2>References</h2>
+<ul>
+<li><a href="https://github.com/Devinterview-io/typescript-interview-questions">https://github.com/Devinterview-io/typescript-interview-questions</a></li>
+</ul>
+
+    </div>
+    <span class="sr-only">End of article</span>
+</article>    </main>
+
+    </section>
+
+    <footer aria-label="Page footer" class="flex py-4 px-6 w-full text-center mt-auto bg-slate-100 dark:bg-gray-800">
+        <div class="prose dark:prose-invert text-center mx-auto">
+            <p>Site proudly built with <a href="https://github.com/hydephp/hyde">HydePHP</a> 🎩</p>
+        </div>
+                    <a href="#app" aria-label="Go to top of page" class="float-right" @click.prevent="document.querySelector('#app').scrollIntoView({ behavior: 'smooth' })">
+                <button title="Scroll to top">
+                    <svg width="1.5rem" height="1.5rem" role="presentation" class="fill-current text-gray-500 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+                    </svg>
+                </button>
+            </a>
+            </footer>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.3/dist/cdn.min.js" integrity="sha256-gOkV4d9/FmMNEkjOzVlyM2eNAWSUXisT+1RbMTTIgXI=" crossorigin="anonymous"></script>
+
+<script>
+    function toggleTheme() {
+        if (localStorage.getItem('color-theme') === 'dark' || !('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem('color-theme', 'light');
+            document.getElementById('meta-color-scheme').setAttribute('content', 'light');
+        } else {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem('color-theme', 'dark');
+            document.getElementById('meta-color-scheme').setAttribute('content', 'dark');
+        }
+    }
+</script>
+
+
+
+
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+  const isDark =
+    document.documentElement.classList.contains('dark') ||
+    (!('color-theme' in localStorage) &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches) ||
+    localStorage.getItem('color-theme') === 'dark';
+
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: isDark ? 'dark' : 'default',
+    securityLevel: 'loose',
+  });
+
+  document.querySelectorAll('pre code.language-mermaid').forEach((code) => {
+    const pre = code.closest('pre');
+    if (!pre) return;
+
+    const container = document.createElement('div');
+    container.className = 'mermaid';
+    container.textContent = code.textContent;
+    pre.replaceWith(container);
+  });
+
+  await mermaid.run({ querySelector: '.mermaid' });
+</script>
+
+</body>
+</html>

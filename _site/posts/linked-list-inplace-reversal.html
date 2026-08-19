@@ -3,14 +3,18 @@
 <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DevBlog - Projects</title>
+<title>DevBlog - Linked List In-Place Reversal</title>
 
 
 
-<meta name="description" content="Selected project write-ups">
-<meta name="twitter:title" content="DevBlog - Projects">
-<meta property="og:description" content="Selected project write-ups">
-<meta property="og:title" content="DevBlog - Projects">
+<meta name="description" content="Reverse a singly linked list with three pointers and O(1) extra space">
+<meta name="twitter:title" content="DevBlog - Linked List In-Place Reversal">
+<meta name="author" content="John Mason">
+<meta name="keywords" content="Data Structures and Algorithms">
+<meta property="og:description" content="Reverse a singly linked list with three pointers and O(1) extra space">
+<meta property="og:title" content="DevBlog - Linked List In-Place Reversal">
+<meta property="og:article:published_time" content="2026-08-19T16:14:00+00:00">
+<meta property="og:type" content="article">
 
 
 <meta name="generator" content="HydePHP v2.0.3">
@@ -22,7 +26,7 @@
 <style>[x-cloak] {display: none!important}</style>
 
 
-            <link rel="stylesheet" href="media/app.css?v=9450b0e0">
+            <link rel="stylesheet" href="../media/app.css?v=9450b0e0">
     
 
     
@@ -42,7 +46,7 @@
 <body id="app" class="flex flex-col min-h-screen overflow-x-hidden dark:bg-gray-900 dark:text-white" x-data="{ navigationOpen: false }" x-on:keydown.escape="navigationOpen = false;">
     <a href="#content" id="skip-to-content" class="sr-only focus:not-sr-only bg-black border-4 border-yellow-400 focus:absolute focus:mt-2 focus:mx-auto focus:p-2 focus:w-64 h-auto left-0 overflow-auto right-0 rounded-md text-center text-lg text-white top-auto z-50 ">Skip to content</a>    <nav aria-label="Main navigation" id="main-navigation" class="flex flex-wrap items-center justify-between p-4 shadow-lg sm:shadow-xl md:shadow-none dark:bg-gray-800">
     <div id="main-navigation-brand" class="flex grow items-center shrink-0 text-gray-700 dark:text-gray-200">
-        <a href="index.html" class="font-bold px-4" aria-label="Home page">
+        <a href="../index.html" class="font-bold px-4" aria-label="Home page">
     DevBlog
 </a>
         <div class="ml-auto">
@@ -80,40 +84,72 @@
          :class="navigationOpen ? 'block!' : ''">
         <ul aria-label="Navigation links" class="md:grow md:flex justify-end">
                             <li class="md:mx-2">
-                                            <a href="index.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Home</a>                                    </li>
+                                            <a href="../index.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Home</a>                                    </li>
                             <li class="md:mx-2">
-                                            <a href="projects.html" aria-current="page" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100 navigation-link-active border-l-4 border-indigo-500 md:border-none font-medium -ml-6 pl-5 md:ml-0 md:pl-0 bg-gray-100 dark:bg-gray-800 md:bg-transparent dark:md:bg-transparent">Projects</a>                                    </li>
+                                            <a href="../projects.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Projects</a>                                    </li>
                     </ul>
     </div>
 </nav>
     <section>
         
     <main id="content" class="mx-auto max-w-7xl py-16 px-8">
-        <article class="mx-auto prose dark:prose-invert">
-            <h1>Projects</h1>
-<h2>Positive Thought Counselling Onboarding Module</h2>
-<pre><code class="language-mermaid">flowchart LR
-  A[Idea] --&gt; B[Build]
-  B --&gt; C[Ship]
-</code></pre>
-<h2>Positive Thought Counselling Dental Module</h2>
-<pre><code class="language-mermaid">flowchart LR
-  A[Idea] --&gt; B[Build]
-  B --&gt; C[Ship]
-</code></pre>
-<h2>Logging and Subscription System</h2>
-<pre><code class="language-mermaid">flowchart LR
-  A[Idea] --&gt; B[Build]
-  B --&gt; C[Ship]
-</code></pre>
-<h2>Serverless Online Shopping Cart</h2>
-<pre><code class="language-mermaid">flowchart LR
-  A[Idea] --&gt; B[Build]
-  B --&gt; C[Ship]
-</code></pre>
+        <article aria-label="Article" id="linked-list-inplace-reversal" itemscope itemtype="https://schema.org/BlogPosting"
+    class="post-article mx-auto prose dark:prose-invert">
+    <meta itemprop="identifier" content="linked-list-inplace-reversal">
+    
+    <header aria-label="Header section" role="doc-pageheader">
+        <h1 itemprop="headline" class="mb-4">Linked List In-Place Reversal</h1>
+        <div id="byline" aria-label="About the post" role="doc-introduction">
+            Posted <time itemprop="dateCreated datePublished" datetime="2026-08-19T16:14:00+00:00" title="Wednesday Aug 19th, 2026, at 4:14pm">Aug 19th, 2026</time>            by author
+<address itemprop="author" itemscope itemtype="https://schema.org/Person" aria-label="The post author" style="display: inline;">
+                <span itemprop="name" aria-label="The author's name" title=@john_mason>John Mason</span>
+            </address>            in the category "Data Structures and Algorithms"        </div>
+    </header>
+        <div aria-label="Article body" itemprop="articleBody">
+        <p>Reverse a linked list by flipping each node's <code>next</code> pointer as you walk. Three pointers: <code>prev</code>, <code>current</code>, <code>next</code>.</p>
+<p><strong>Time:</strong> O(n)<br />
+<strong>Space:</strong> O(1)</p>
+<p>Copying into an array and walking it backwards uses O(n) extra space and extra passes. In-place reversal uses constant extra memory.</p>
+<h2>Example — Reverse Linked List</h2>
+<p>LeetCode 206. <code>1 → 2 → 3 → 4 → 5</code> becomes <code>5 → 4 → 3 → 2 → 1</code>.</p>
+<p>Start with <code>prev = None</code>, <code>current = head</code>. Each step:</p>
+<ol>
+<li>Save <code>next = current.next</code></li>
+<li>Point <code>current.next</code> at <code>prev</code></li>
+<li>Advance <code>prev</code> and <code>current</code></li>
+</ol>
+<p>When <code>current</code> is <code>None</code>, <code>prev</code> is the new head.</p>
+<h2>Code</h2>
+<pre><code class="language-python">from typing import Optional
 
-        </article>
-    </main>
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+class Solution:
+    def reverseList(self, head: Optional[ListNode]) -&gt; Optional[ListNode]:
+        prev = None
+        current = head
+        while current is not None:
+            nxt = current.next
+            current.next = prev
+            prev = current
+            current = nxt
+        return prev
+</code></pre>
+<h2>When to use</h2>
+<ul>
+<li>Reverse entire list or a sublist (<code>m</code> to <code>n</code>)</li>
+<li>Palindrome linked list (reverse the second half)</li>
+<li>Reorder list / reverse in groups of k</li>
+</ul>
+<p>Related: <a href="/posts/fast-slow-pointers.html">fast and slow pointers</a></p>
+<p>Back to <a href="/posts/leetcode.html">LeetCode patterns</a>.</p>
+
+    </div>
+    <span class="sr-only">End of article</span>
+</article>    </main>
 
     </section>
 

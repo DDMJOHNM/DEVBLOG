@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DevBlog - Golang Notes</title>
+
+
+
+<meta name="description" content="Golang Concurrency Patterns">
+<meta name="twitter:title" content="DevBlog - Golang Notes">
+<meta name="author" content="John Mason">
+<meta name="keywords" content="Interviewing">
+<meta property="og:description" content="Golang Concurrency Patterns">
+<meta property="og:title" content="DevBlog - Golang Notes">
+<meta property="og:article:published_time" content="2026-07-15T23:54:00+00:00">
+<meta property="og:type" content="article">
+
+
+<meta name="generator" content="HydePHP v2.0.3">
+<meta property="og:site_name" content="HydePHP">
+
+
+
+
+<style>[x-cloak] {display: none!important}</style>
+
+
+            <link rel="stylesheet" href="../media/app.css?v=9450b0e0">
+    
+
+    
+    
+
+
+    
+    <meta id="meta-color-scheme" name="color-scheme" content="light">
+    <script>if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); document.getElementById('meta-color-scheme').setAttribute('content', 'dark');} else { document.documentElement.classList.remove('dark') } </script>
+
+
+
+
+
+
+</head>
+<body id="app" class="flex flex-col min-h-screen overflow-x-hidden dark:bg-gray-900 dark:text-white" x-data="{ navigationOpen: false }" x-on:keydown.escape="navigationOpen = false;">
+    <a href="#content" id="skip-to-content" class="sr-only focus:not-sr-only bg-black border-4 border-yellow-400 focus:absolute focus:mt-2 focus:mx-auto focus:p-2 focus:w-64 h-auto left-0 overflow-auto right-0 rounded-md text-center text-lg text-white top-auto z-50 ">Skip to content</a>    <nav aria-label="Main navigation" id="main-navigation" class="flex flex-wrap items-center justify-between p-4 shadow-lg sm:shadow-xl md:shadow-none dark:bg-gray-800">
+    <div id="main-navigation-brand" class="flex grow items-center shrink-0 text-gray-700 dark:text-gray-200">
+        <a href="../index.html" class="font-bold px-4" aria-label="Home page">
+    DevBlog
+</a>
+        <div class="ml-auto">
+            <button @click="toggleTheme" class="theme-toggle-button flex items-center px-2 py-1 hover:text-gray-700 dark:text-gray-200" title="Toggle theme">
+        <span class="sr-only">Toggle dark theme</span>
+        <svg width="1.25rem" height="1.25rem" class="w-5 h-5 hidden dark:block" fill="#FFFFFF" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+        <svg width="1.25rem" height="1.25rem" class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+    </button>
+        </div>
+    </div>
+
+    <div class="block md:hidden">
+        <button id="navigation-toggle-button" class="flex items-center px-3 py-1 hover:text-gray-700 dark:text-gray-200"
+                aria-label="Toggle navigation menu" @click="navigationOpen = ! navigationOpen">
+            <svg x-show="! navigationOpen" title="Open Navigation Menu" class="dark:fill-gray-200"
+                 style="display: block;"
+                 id="open-main-navigation-menu-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24"
+                 width="24">
+                <title>Open Menu</title>
+                <path d="M0 0h24v24H0z" fill="none"/>
+                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+            </svg>
+            <svg x-show="navigationOpen" title="Close Navigation Menu" class="dark:fill-gray-200" style="display: none;"
+                 id="close-main-navigation-menu-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24"
+                 width="24">
+                <title>Close Menu</title>
+                <path d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+            </svg>
+        </button>
+    </div>
+
+    <div id="main-navigation-links" 
+         class="w-full hidden md:flex grow md:grow-0 md:items-center md:w-auto px-6 -mx-4 border-t mt-3 pt-3 md:border-none md:mt-0 md:py-0 border-gray-200 dark:border-gray-700"
+         :class="navigationOpen ? 'block!' : ''">
+        <ul aria-label="Navigation links" class="md:grow md:flex justify-end">
+                            <li class="md:mx-2">
+                                            <a href="../index.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Home</a>                                    </li>
+                            <li class="md:mx-2">
+                                            <a href="../projects.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Projects</a>                                    </li>
+                    </ul>
+    </div>
+</nav>
+    <section>
+        
+    <main id="content" class="mx-auto max-w-7xl py-16 px-8">
+        <article aria-label="Article" id="golang-notes" itemscope itemtype="https://schema.org/BlogPosting"
+    class="post-article mx-auto prose dark:prose-invert">
+    <meta itemprop="identifier" content="golang-notes">
+    
+    <header aria-label="Header section" role="doc-pageheader">
+        <h1 itemprop="headline" class="mb-4">Golang Notes</h1>
+        <div id="byline" aria-label="About the post" role="doc-introduction">
+            Posted <time itemprop="dateCreated datePublished" datetime="2026-07-15T23:54:00+00:00" title="Wednesday Jul 15th, 2026, at 11:54pm">Jul 15th, 2026</time>            by author
+<address itemprop="author" itemscope itemtype="https://schema.org/Person" aria-label="The post author" style="display: inline;">
+                <span itemprop="name" aria-label="The author's name" title=@john_mason>John Mason</span>
+            </address>            in the category "Interviewing"        </div>
+    </header>
+        <div aria-label="Article body" itemprop="articleBody">
+        <h2>Golang Style Guide</h2>
+<ul>
+<li><a href="https://google.github.io/styleguide/go">Google Go Style Guide</a></li>
+<li><a href="https://google.github.io/styleguide/go/decisions">Style decisions</a> (subordinate to the core style guide; link in code reviews)</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Canonical</td>
+<td>Establishes prescriptive and enduring rules</td>
+</tr>
+<tr>
+<td>Normative</td>
+<td>Intended to establish consistency</td>
+</tr>
+<tr>
+<td>Idiomatic</td>
+<td>Common and familiar (pattern easy to recognise)</td>
+</tr>
+</tbody>
+</table>
+<h2>Style Principles (CSCM)</h2>
+<h3>1. Clarity</h3>
+<p>What is the code actually doing?</p>
+<ul>
+<li>Use more descriptive variable names</li>
+<li>Add additional commentary</li>
+<li>Break up the code with whitespace and comments</li>
+<li>Refactor into separate functions/methods to make it more modular</li>
+<li><strong>Why</strong> is the code doing what it does (readability)? The rationale is often sufficiently communicated by names of variables, functions, methods, or packages. Where it is not, add commentary</li>
+<li>A nuance in the language</li>
+<li>A nuance of business logic — code that stands out (e.g. an unfamiliar pattern) often needs this</li>
+</ul>
+<h3>2. Simplicity</h3>
+<p>Accomplishes its goal in the most simple way possible, both in terms of behavior and performance.</p>
+<ul>
+<li>Easy to read from top to bottom</li>
+<li>Does not assume that you already know what it is doing</li>
+<li>Does not assume that you can memorize all of the preceding code</li>
+<li>Does not have unnecessary levels of abstraction</li>
+<li>Does not have names that call attention to something mundane</li>
+<li>Makes the propagation of values and decisions clear to the reader</li>
+<li>Has comments that explain <strong>why</strong>, not <strong>what</strong>, the code is doing (to avoid future deviation)</li>
+<li>Has documentation that stands on its own</li>
+<li>Has useful errors and useful test failures</li>
+<li>May often be mutually exclusive with “clever” code</li>
+</ul>
+<p>Tradeoffs can arise between <strong>code simplicity</strong> and <strong>API usage simplicity</strong>.</p>
+<p>When code needs complexity, add it deliberately. This is typically necessary if additional performance is required, or where there are multiple disparate customers of a particular library or service.</p>
+<p>Complexity may be justified, but it should come with accompanying documentation so that clients and future maintainers can understand and navigate it.</p>
+<p>If code turns out to be very complex when its purpose should be simple, that is often a signal to revisit the implementation.</p>
+<h4>Least mechanism</h4>
+<ol>
+<li>Aim to use a core language construct</li>
+<li>If there isn’t one, look for a tool within the standard library</li>
+<li>Consider whether there is a core library in the Google codebase that is sufficient before introducing a new dependency or creating your own</li>
+</ol>
+<h3>3. Concision</h3>
+<p>High signal-to-noise ratio. It is easy to discern the relevant details, and the naming and structure guide the reader through these details.</p>
+<ul>
+<li>Repetitive code (e.g. table-driven testing factors out common code). When considering multiple ways to structure code, pick the way that makes important details the most apparent (common constructions and idioms)</li>
+</ul>
+<pre><code class="language-go">// Good:
+if err := doSomething(); err != nil { }
+</code></pre>
+<p>Avoid:</p>
+<ul>
+<li>Extraneous syntax</li>
+<li>Opaque names</li>
+<li>Unnecessary abstraction</li>
+<li>Whitespace noise</li>
+</ul>
+<h3>4. Maintainability</h3>
+<p>Maintainable code:</p>
+<ul>
+<li>Is easy for a future programmer to modify correctly</li>
+<li>Has APIs structured so they can grow gracefully</li>
+<li>Is clear about the assumptions it makes, and chooses abstractions that map to the <strong>structure of the problem</strong>, not the structure of the code</li>
+<li>Avoids unnecessary coupling and doesn’t include unused features</li>
+<li>Has a comprehensive test suite so promised behaviors are maintained and important logic is correct, with clear, actionable diagnostics on failure</li>
+</ul>
+<p>When using abstractions like interfaces and types — which by definition remove information from the context in which they are used — ensure they provide sufficient benefit.</p>
+<pre><code class="language-go">// Good:
+u, err := db.UserByID(userID)
+if err != nil {
+    return fmt.Errorf(&quot;invalid origin user: %s&quot;, err)
+}
+user = u
+
+// Good:
+// Gregorian leap years aren't just year%4 == 0.
+// See https://en.wikipedia.org/wiki/Leap_year#Algorithm.
+var (
+    leap4   = year%4 == 0
+    leap100 = year%100 == 0
+    leap400 = year%400 == 0
+)
+leap := leap4 &amp;&amp; (!leap100 || leap400)
+</code></pre>
+<ul>
+<li>Account for edge cases properly</li>
+<li>Predictable names are another feature of maintainable code</li>
+<li>Minimize dependencies (both implicit and explicit)</li>
+<li>When considering how to structure or write code, think through ways it may evolve. If a given approach is more conducive to easier and safer future changes, that is often a good trade-off, even if it means a slightly more complicated design</li>
+</ul>
+<h3>5. Consistency</h3>
+<p>Consistent code looks, feels, and behaves like similar code throughout the broader codebase, within a team or package, and even within a single file.</p>
+<p>Consistency does not override the principles above, but if a tie must be broken, it is often beneficial to break it in favor of consistency.</p>
+<p>Consistency within a <strong>package</strong> is often the most immediately important level. It is jarring if the same problem is approached in multiple ways throughout a package, or if the same concept has many names within a file. Even this should not override documented style principles or global consistency.</p>
+<h4>Formatting</h4>
+<p>All Go source files must conform to the format outputted by <code>gofmt</code>. This format is enforced by a presubmit check in the Google codebase.</p>
+<p>Generated code should generally also be formatted (e.g. by using <code>format.Source</code>), as it is also browsable in Code Search.</p>
+<h4>MixedCaps</h4>
+<p>Go source code uses <code>MixedCaps</code> or <code>mixedCaps</code> (camel case) rather than underscores (snake case) when writing multi-word names.</p>
+<p>This applies even when it breaks conventions in other languages. For example, a constant is <code>MaxLength</code> (not <code>MAX_LENGTH</code>) if exported and <code>maxLength</code> (not <code>max_length</code>) if unexported.</p>
+<p>Local variables are considered <strong>unexported</strong> for the purpose of choosing the initial capitalization.</p>
+<h4>Line length</h4>
+<p>There is no fixed line length for Go source code. If a line feels too long, prefer refactoring instead of splitting it. If it is already as short as it is practical to be, allow it to remain long.</p>
+<p>Do <strong>not</strong> split a line:</p>
+<ul>
+<li>Before an indentation change (e.g. function declaration, conditional)</li>
+<li>To make a long string (e.g. a URL) fit into multiple shorter lines</li>
+</ul>
+<h4>Naming</h4>
+<p>Naming is more art than science. In Go, names tend to be somewhat shorter than in many other languages, but the same general guidelines apply. Names should:</p>
+<ul>
+<li>Not feel repetitive when they are used</li>
+<li>Take the context into consideration</li>
+<li>Not repeat concepts that are already clear</li>
+</ul>
+<p>More specific guidance: <a href="https://google.github.io/styleguide/go/decisions">style decisions</a>.</p>
+<h4>Local consistency</h4>
+<p>Where the style guide has nothing to say about a particular point of style, authors may choose the style they prefer, unless nearby code (usually the same file or package, sometimes a team or project directory) has taken a consistent stance.</p>
+<p><strong>Valid</strong> local style considerations:</p>
+<ul>
+<li>Use of <code>%s</code> or <code>%v</code> for formatted printing of errors</li>
+<li>Usage of buffered channels in lieu of mutexes</li>
+</ul>
+<p><strong>Invalid</strong> local style considerations:</p>
+<ul>
+<li>Line length restrictions for code</li>
+<li>Use of assertion-based testing libraries</li>
+</ul>
+<p>If the local style disagrees with the style guide but the readability impact is limited to one file, it will generally be surfaced in a code review for which a consistent fix would be outside the scope of the CL. At that point, file a bug to track the fix.</p>
+<p>If a change would worsen an existing style deviation, expose it in more API surfaces, expand the number of files in which the deviation is present, or introduce an actual bug, then local consistency is <strong>no longer</strong> a valid justification for violating the style guide for new code. Clean up the existing codebase in the same CL, refactor in advance, or find an alternative that at least does not make the local problem worse.</p>
+<h2>Decisions</h2>
+<h3>Naming</h3>
+<ul>
+<li>Underscores</li>
+<li>Package names</li>
+<li>Receiver names</li>
+<li>Constant names</li>
+<li>Initialisms (<code>URL</code>)</li>
+<li>Getters</li>
+<li>Variable names (scope)</li>
+<li>Repetition:
+<ul>
+<li>name vs type</li>
+<li>package vs exported name</li>
+<li>external context vs local names</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-go">// Good:
+// In package &quot;ads/targeting/revenue/reporting&quot;
+type Report struct{}
+
+func (p *Project) Name() string
+</code></pre>
+<h3>Commentary</h3>
+<ul>
+<li>Comment line length</li>
+<li>Doc comments (GoDoc)</li>
+<li>Comment sentences</li>
+<li>Named result parameters</li>
+<li>Package comments</li>
+</ul>
+<h3>Imports</h3>
+<ul>
+<li>Import renaming</li>
+<li>Import grouping</li>
+<li>Import blank</li>
+<li>Import dot</li>
+</ul>
+<h3>Errors</h3>
+<ul>
+<li>Returning errors</li>
+<li>Error strings not capitalised</li>
+<li>Handle errors</li>
+<li>In-band errors</li>
+<li>Indent error flow</li>
+</ul>
+<p>Go’s support for multiple return values provides a better solution (see the <a href="https://go.dev/doc/effective_go#multiple-returns">Effective Go section on multiple returns</a>).</p>
+<p>Instead of requiring clients to check for an in-band error value, a function should return an additional value to indicate whether its other return values are valid. This return value may be an <code>error</code> or a <code>boolean</code> when no explanation is needed, and should be the <strong>final</strong> return value.</p>
+<pre><code class="language-go">// Good:
+// Lookup returns the value for key or ok=false if there is no mapping for key.
+func Lookup(key string) (value string, ok bool)
+
+// Good:
+value, ok := Lookup(key)
+if !ok {
+    return fmt.Errorf(&quot;no value for %q&quot;, key)
+}
+return Parse(value)
+</code></pre>
+<h3>Language</h3>
+<ul>
+<li>Literal formatting</li>
+<li>Matching braces</li>
+<li>Cuddled braces</li>
+</ul>
+<pre><code class="language-go">// Good:
+good := []*Type{
+    { // Not cuddled — no whitespace between braces
+        Field: &quot;value&quot;,
+    },
+    {
+        Field: &quot;value&quot;,
+    },
+}
+</code></pre>
+<ul>
+<li>Repeated type names</li>
+<li>Zero-value fields — omit from structure literals</li>
+<li>Concise (struct) &amp; explicit field names</li>
+<li><code>nil</code> slices</li>
+<li>Indentation confusion</li>
+<li>Function formatting</li>
+<li>Conditionals and loops</li>
+<li>Copying</li>
+<li>Don’t panic</li>
+<li><code>Must</code> functions — early on function startup</li>
+<li>Goroutine lifetimes — <a href="https://drive.google.com/file/d/1nPdvhB0PutEJzdCq5ms6UI58dp50fcAN/view">slides</a></li>
+</ul>
+<pre><code class="language-go">// Good:
+func (w *Worker) Run(ctx context.Context) error {
+    var wg sync.WaitGroup
+    // ...
+    for item := range w.q {
+        // process returns at latest when the context is cancelled.
+        wg.Add(1)
+        go func() {
+            defer wg.Done()
+            process(ctx, item)
+        }()
+    }
+    // ...
+    wg.Wait()  // Prevent spawned goroutines from outliving this function.
+}
+</code></pre>
+<p>There are other variants of the above that use raw signal channels like <code>chan struct{}</code>, synchronized variables, condition variables, and more. The important part is that the goroutine’s end is evident for subsequent maintainers.</p>
+<p>In contrast, the following code is careless about when its spawned goroutines finish:</p>
+<pre><code class="language-go">// Bad:
+func (w *Worker) Run() {
+    for item := range w.q {
+        // process returns when it finishes, if ever, possibly not cleanly
+        // handling a state transition or termination of the Go program itself.
+        go process(item)
+    }
+}
+</code></pre>
+<p>This code may look OK, but there are several underlying problems:</p>
+<ul>
+<li>The code probably has undefined behavior in production, and the program may not terminate cleanly, even if the operating system releases the resources</li>
+<li>The code is difficult to test meaningfully due to the code’s indeterminate lifecycle</li>
+<li>The code may leak resources as described above</li>
+</ul>
+<p>See also:</p>
+<ul>
+<li>Never start a goroutine without knowing how it will stop</li>
+<li>Rethinking Classical Concurrency Patterns: <a href="https://drive.google.com/file/d/1nPdvhB0PutEJzdCq5ms6UI58dp50fcAN/view">slides</a>, video</li>
+<li>When Go programs end</li>
+<li>Documentation Conventions: Contexts</li>
+</ul>
+<h3>Interfaces</h3>
+<p>Focus on the required <strong>behavior</strong> rather than just an abstract named pattern.</p>
+<h3>Generics</h3>
+<p>Generics (formally called “Type Parameters”) are allowed where they fulfill your business requirements.</p>
+<p>In many applications, a conventional approach using existing language features (slices, maps, interfaces, and so on) works just as well without the added complexity, so be wary of premature use. See the discussion on <strong>least mechanism</strong>. Pass values.</p>
+<h3>Receiver type</h3>
+<p>A <a href="https://go.dev/ref/spec#Method_declarations">method receiver</a> can be passed either as a value or a pointer, just as if it were a regular function parameter.</p>
+<p>The choice between the two is based on which <strong>method set(s)</strong> the method should be a part of.</p>
+<p><strong>Correctness wins over speed or simplicity.</strong> There are cases where you must use a pointer value. In other cases, pick pointers for large types or as future-proofing if you don’t have a good sense of how the code will grow, and use values for simple plain old data.</p>
+<p>Also: <code>switch</code> and <code>break</code>.</p>
+<h3>Synchronous functions</h3>
+<h3>Type aliases</h3>
+<h3>Common libraries</h3>
+<p>Flags must only be defined in <code>package main</code> or equivalent.</p>
+<h3>Logging</h3>
+<p><code>log.Fatal</code></p>
+<h3>Contexts</h3>
+<p>When passed to a function or method, <code>context.Context</code> is always the first parameter.</p>
+<p><code>crypto/rand</code></p>
+<h3>Useful test failures</h3>
+<p>It should be possible to diagnose a test’s failure without reading the test’s source. Tests should fail with helpful messages detailing:</p>
+<ul>
+<li>What caused the failure</li>
+<li>What inputs resulted in an error</li>
+<li>The actual result</li>
+<li>What was expected</li>
+</ul>
+<h3>Assertion libraries</h3>
+<p>Do not create “assertion libraries” as helpers for testing.</p>
+<ul>
+<li>Identify the function</li>
+<li>Identify the input</li>
+<li>Got before want</li>
+<li>Full structure comparisons</li>
+<li>Compare stable results</li>
+<li>Keep going</li>
+<li>Equality comparison and diffs</li>
+<li>Level of detail</li>
+<li>Print diffs</li>
+<li>Test error semantics</li>
+</ul>
+<h3>Test structure</h3>
+<ul>
+<li>Subtests</li>
+<li>Table-driven tests</li>
+<li>Data-driven test cases</li>
+<li>Test helpers</li>
+<li>Test package</li>
+<li>Tests in the same package</li>
+<li>Tests in a different package</li>
+<li>Use package <code>testing</code></li>
+</ul>
+<pre><code class="language-go">// Good:
+func TestTranslate(t *testing.T) {
+    data := []struct {
+        name, desc, srcLang, dstLang, srcText, wantDstText string
+    }{
+        {
+            name:        &quot;hu=en_bug-1234&quot;,
+            desc:        &quot;regression test following bug 1234. contact: cleese&quot;,
+            srcLang:     &quot;hu&quot;,
+            srcText:     &quot;cigarettát és egy öngyújtót kérek&quot;,
+            dstLang:     &quot;en&quot;,
+            wantDstText: &quot;cigarettes and a lighter please&quot;,
+        }, // ...
+    }
+    for _, d := range data {
+        t.Run(d.name, func(t *testing.T) {
+            got := Translate(d.srcLang, d.dstLang, d.srcText)
+            if got != d.wantDstText {
+                t.Errorf(&quot;%s\nTranslate(%q, %q, %q) = %q, want %q&quot;,
+                    d.desc, d.srcLang, d.dstLang, d.srcText, got, d.wantDstText)
+            }
+        })
+    }
+}
+</code></pre>
+<p>Use <strong>table-driven tests</strong> when many different test cases can be tested using similar testing logic.</p>
+<h3>Non-decisions</h3>
+<p>A style guide cannot enumerate positive prescriptions for all matters, nor all matters about which it does not offer an opinion. The readability community has previously debated and not achieved consensus on:</p>
+<ul>
+<li>Local variable initialization with zero value. <code>var i int</code> and <code>i := 0</code> are equivalent. See also initialization best practices</li>
+<li>Empty composite literal vs. <code>new</code> or <code>make</code>. <code>&amp;File{}</code> and <code>new(File)</code> are equivalent. So are <code>map[string]bool{}</code> and <code>make(map[string]bool)</code>. See also composite declaration best practices</li>
+<li><code>got</code>, <code>want</code> argument ordering in <code>cmp.Diff</code> calls. Be locally consistent, and include a legend in your failure message</li>
+<li><code>errors.New</code> vs <code>fmt.Errorf</code> on non-formatted strings. <code>errors.New(&quot;foo&quot;)</code> and <code>fmt.Errorf(&quot;foo&quot;)</code> may be used interchangeably</li>
+</ul>
+<hr />
+<h2>Concurrency</h2>
+<p><strong>Brian C. Mills — Rethinking Classical Concurrency Patterns</strong></p>
+<ul>
+<li><a href="https://drive.google.com/file/d/1nPdvhB0PutEJzdCq5ms6UI58dp50fcAN/view">Slides</a></li>
+</ul>
+<h2>Concurrency Patterns (Rob Pike)</h2>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=f6kdp27TYZs">Talk (YouTube)</a></li>
+<li><a href="https://go.dev/talks/2012/concurrency.slide#1">Slides</a></li>
+</ul>
+<p>Concurrency is not parallelism. A program on a single processor can still be concurrent.</p>
+<p>Tony Hoare, 1978 CSP paper.</p>
+<ul>
+<li>Go channel as a first-class value</li>
+</ul>
+<pre><code class="language-go">func main() {
+    go boring(&quot;boring!&quot;) // goroutine — independently running function
+}
+
+func boring(msg string) {
+    for i := 0; ; i++ {
+        fmt.Println(msg, i)
+        time.Sleep(time.Duration(rand.Intn(1e3)) * time.Millisecond)
+    }
+}
+</code></pre>
+<p>A goroutine has its own stack. It expands and reduces in size as needed — it is not a thread.</p>
+<h3>Channels</h3>
+<p>Channels communicate between goroutines and synchronise.</p>
+<pre><code class="language-go">func main() {
+    c := make(chan string)
+    go boring(&quot;boring!&quot;, c)
+    for i := 0; i &lt; 5; i++ {
+        fmt.Printf(&quot;You say: %q\n&quot;, &lt;-c) // receive expression is just a value; also blocking
+    }
+    fmt.Println(&quot;You're boring; I'm leaving.&quot;)
+}
+
+func boring(msg string, c chan string) {
+    for i := 0; ; i++ {
+        c &lt;- fmt.Sprintf(&quot;%s %d&quot;, msg, i) // expression to be sent can be any suitable value; blocking
+        time.Sleep(time.Duration(rand.Intn(1e3)) * time.Millisecond)
+    }
+}
+</code></pre>
+<p>Buffered channels don’t synchronise on send — that is the exception.</p>
+<h3>The Go approach</h3>
+<p>Don’t communicate by sharing memory; share memory by communicating.</p>
+<h3>Generator</h3>
+<p>A function that returns a channel. Channels are first-class values, just like strings or integers.</p>
+<pre><code class="language-go">c := boring(&quot;boring!&quot;) // function returning a channel
+for i := 0; i &lt; 5; i++ {
+    fmt.Printf(&quot;You say: %q\n&quot;, &lt;-c)
+}
+fmt.Println(&quot;You're boring; I'm leaving.&quot;)
+
+func boring(msg string) &lt;-chan string { // returns receive-only channel of strings
+    c := make(chan string)
+    go func() { // launch the goroutine from inside the function
+        for i := 0; ; i++ {
+            c &lt;- fmt.Sprintf(&quot;%s %d&quot;, msg, i)
+            time.Sleep(time.Duration(rand.Intn(1e3)) * time.Millisecond)
+        }
+    }()
+    return c // return the channel to the caller
+}
+</code></pre>
+<p>We can have more instances of the service:</p>
+<pre><code class="language-go">func main() {
+    joe := boring(&quot;Joe&quot;)
+    ann := boring(&quot;Ann&quot;)
+    for i := 0; i &lt; 5; i++ {
+        fmt.Println(&lt;-joe)
+        fmt.Println(&lt;-ann)
+    }
+    fmt.Println(&quot;You're both boring; I'm leaving.&quot;)
+}
+</code></pre>
+<h3>Multiplexing</h3>
+<p>Let whoever is ready talk.</p>
+<pre><code class="language-go">func fanIn(input1, input2 &lt;-chan string) &lt;-chan string {
+    c := make(chan string)
+    go func() { for { c &lt;- &lt;-input1 } }()
+    go func() { for { c &lt;- &lt;-input2 } }()
+    return c
+}
+
+func main() {
+    c := fanIn(boring(&quot;Joe&quot;), boring(&quot;Ann&quot;))
+    for i := 0; i &lt; 10; i++ {
+        fmt.Println(&lt;-c)
+    }
+    fmt.Println(&quot;You're both boring; I'm leaving.&quot;)
+}
+</code></pre>
+<h3>Restoring sequencing</h3>
+<p>Send a channel on a channel, making a goroutine wait its turn.</p>
+<p>Receive all messages, then enable them again by sending on a private channel.</p>
+<p>First define a message type that contains a channel for the reply:</p>
+<pre><code class="language-go">type Message struct {
+    str  string
+    wait chan bool
+}
+</code></pre>
+<p>Each speaker must wait for a go-ahead:</p>
+<pre><code class="language-go">for i := 0; i &lt; 5; i++ {
+    msg1 := &lt;-c
+    fmt.Println(msg1.str)
+    msg2 := &lt;-c
+    fmt.Println(msg2.str)
+    msg1.wait &lt;- true
+    msg2.wait &lt;- true
+}
+
+waitForIt := make(chan bool) // shared between all messages
+c &lt;- Message{fmt.Sprintf(&quot;%s: %d&quot;, msg, i), waitForIt}
+time.Sleep(time.Duration(rand.Intn(2e3)) * time.Millisecond)
+&lt;-waitForIt
+</code></pre>
+<h3>Select</h3>
+<p>A control structure unique to concurrency. The reason channels and goroutines are built into the language.</p>
+<p><code>select</code> is another way to handle multiple channels. It is like a <code>switch</code>, but each case is a communication:</p>
+<ul>
+<li>All channels are evaluated</li>
+<li>Selection blocks until one communication can proceed, which then does</li>
+<li>If multiple can proceed, <code>select</code> chooses pseudo-randomly</li>
+<li>A <code>default</code> clause, if present, executes immediately if no channel is ready</li>
+</ul>
+<pre><code class="language-go">select { // like a switch; blocks until a communication is ready
+case v1 := &lt;-c1:
+    fmt.Printf(&quot;received %v from c1\n&quot;, v1)
+case v2 := &lt;-c2:
+    fmt.Printf(&quot;received %v from c2\n&quot;, v2)
+case c3 &lt;- 23:
+    fmt.Printf(&quot;sent %v to c3\n&quot;, 23)
+default: // without default, select is blocking
+    fmt.Printf(&quot;no one was ready to communicate\n&quot;)
+}
+</code></pre>
+<p>Rewrite <code>fanIn</code> with <code>select</code>:</p>
+<pre><code class="language-go">func fanIn(input1, input2 &lt;-chan string) &lt;-chan string {
+    c := make(chan string)
+    go func() {
+        for {
+            select {
+            case s := &lt;-input1:
+                c &lt;- s
+            case s := &lt;-input2:
+                c &lt;- s
+            }
+        }
+    }()
+    return c
+}
+</code></pre>
+<h3>Timeout using select</h3>
+<p><code>time.After</code> returns a channel that blocks for the specified duration. After the interval, the channel delivers the current time, once.</p>
+<pre><code class="language-go">func main() {
+    c := boring(&quot;Joe&quot;)
+    for {
+        select {
+        case s := &lt;-c:
+            fmt.Println(s)
+        case &lt;-time.After(1 * time.Second):
+            fmt.Println(&quot;You're too slow.&quot;)
+            return
+        }
+    }
+}
+</code></pre>
+<p>Timeout for the <strong>whole conversation</strong>: create the timer once, outside the loop. (The previous program timed out each message.)</p>
+<pre><code class="language-go">func main() {
+    c := boring(&quot;Joe&quot;)
+    timeout := time.After(5 * time.Second)
+    for {
+        select {
+        case s := &lt;-c:
+            fmt.Println(s)
+        case &lt;-timeout:
+            fmt.Println(&quot;You talk too much.&quot;)
+            return
+        }
+    }
+}
+</code></pre>
+<h3>Quit channel</h3>
+<p>Turn this around and tell Joe to stop when we’re tired of listening:</p>
+<pre><code class="language-go">quit := make(chan bool)
+c := boring(&quot;Joe&quot;, quit)
+for i := rand.Intn(10); i &gt;= 0; i-- {
+    fmt.Println(&lt;-c)
+}
+quit &lt;- true
+
+select {
+case c &lt;- fmt.Sprintf(&quot;%s: %d&quot;, msg, i):
+    // do nothing
+case &lt;-quit:
+    return
+}
+</code></pre>
+<h4>Receive on quit channel</h4>
+<p>How do we know it’s finished? Wait for it to tell us it’s done — receive on the quit channel:</p>
+<pre><code class="language-go">quit := make(chan string)
+c := boring(&quot;Joe&quot;, quit)
+for i := rand.Intn(10); i &gt;= 0; i-- {
+    fmt.Println(&lt;-c)
+}
+quit &lt;- &quot;Bye!&quot;
+fmt.Printf(&quot;Joe says: %q\n&quot;, &lt;-quit)
+
+select {
+case c &lt;- fmt.Sprintf(&quot;%s: %d&quot;, msg, i):
+    // do nothing
+case &lt;-quit:
+    cleanup()
+    quit &lt;- &quot;See you!&quot;
+    return
+}
+</code></pre>
+<h3>Daisy-chain</h3>
+<pre><code class="language-go">func f(left, right chan int) {
+    left &lt;- 1 + &lt;-right
+}
+
+func main() {
+    const n = 10000 // fast gophers!!
+    leftmost := make(chan int)
+    right := leftmost
+    left := leftmost
+    for i := 0; i &lt; n; i++ {
+        right = make(chan int)
+        go f(left, right)
+        left = right
+    }
+    go func(c chan int) { c &lt;- 1 }(right)
+    fmt.Println(&lt;-leftmost)
+}
+</code></pre>
+<h3>Google Search examples</h3>
+<p>A channel is a first-class value and can be used as a mock.</p>
+<pre><code class="language-go">func Google(query string) (results []Result) {
+    c := make(chan Result)
+    go func() { c &lt;- Web(query) }()
+    go func() { c &lt;- Image(query) }()
+    go func() { c &lt;- Video(query) }()
+
+    for i := 0; i &lt; 3; i++ {
+        result := &lt;-c
+        results = append(results, result)
+    }
+    return
+}
+</code></pre>
+<p>Don’t wait for slow servers. No locks. No condition variables. No callbacks like Node.js.</p>
+<pre><code class="language-go">c := make(chan Result)
+go func() { c &lt;- Web(query) }()
+go func() { c &lt;- Image(query) }()
+go func() { c &lt;- Video(query) }()
+
+timeout := time.After(80 * time.Millisecond)
+for i := 0; i &lt; 3; i++ {
+    select {
+    case result := &lt;-c:
+        results = append(results, result)
+    case &lt;-timeout:
+        fmt.Println(&quot;timed out&quot;)
+        return
+    }
+}
+return
+</code></pre>
+<h4>Fan-in with timeout — avoid discarding slow servers</h4>
+<p><strong>Q:</strong> How do we avoid discarding results from slow servers?</p>
+<p><strong>A:</strong> Replicate the servers. Send requests to multiple replicas, and use the first response.</p>
+<pre><code class="language-go">func First(query string, replicas ...Search) Result {
+    c := make(chan Result)
+    searchReplica := func(i int) { c &lt;- replicas[i](query) }
+    for i := range replicas {
+        go searchReplica(i)
+    }
+    return &lt;-c
+}
+
+c := make(chan Result)
+go func() { c &lt;- First(query, Web1, Web2) }()
+go func() { c &lt;- First(query, Image1, Image2) }()
+go func() { c &lt;- First(query, Video1, Video2) }()
+timeout := time.After(80 * time.Millisecond)
+for i := 0; i &lt; 3; i++ {
+    select {
+    case result := &lt;-c:
+        results = append(results, result)
+    case &lt;-timeout:
+        fmt.Println(&quot;timed out&quot;)
+        return
+    }
+}
+return
+</code></pre>
+<h3>Summary</h3>
+<p>In just a few simple transformations we used Go's concurrency primitives to convert a program that is:</p>
+<ul>
+<li>slow</li>
+<li>sequential</li>
+<li>failure-sensitive</li>
+</ul>
+<p>into one that is:</p>
+<ul>
+<li>fast</li>
+<li>concurrent</li>
+<li>replicated</li>
+<li>robust</li>
+</ul>
+<p>There are endless ways to use these tools, many presented elsewhere:</p>
+<ul>
+<li>Chatroulette toy: <a href="https://go.dev/s/chat-roulette">go.dev/s/chat-roulette</a></li>
+<li>Load balancer: <a href="https://go.dev/s/load-balancer">go.dev/s/load-balancer</a></li>
+<li>Concurrent prime sieve: <a href="https://go.dev/s/prime-sieve">go.dev/s/prime-sieve</a></li>
+<li>Concurrent power series (by McIlroy): <a href="https://go.dev/s/power-series">go.dev/s/power-series</a></li>
+</ul>
+<h3>Don’t overdo it</h3>
+<p>They’re fun to play with, but don’t overuse these ideas.</p>
+<p>Goroutines and channels are big ideas. They’re tools for program construction.</p>
+<p>But sometimes all you need is a reference counter. Go has <code>sync</code> and <code>sync/atomic</code> packages that provide mutexes, condition variables, etc. They provide tools for smaller problems.</p>
+<p>Often, these things will work together to solve a bigger problem. Always use the right tool for the job.</p>
+<h2>Conclusions</h2>
+<p>Goroutines and channels make it easy to express complex operations dealing with:</p>
+<ul>
+<li>multiple inputs</li>
+<li>multiple outputs</li>
+<li>timeouts</li>
+<li>failure</li>
+</ul>
+<p>And they’re fun to use.</p>
+<h2>References</h2>
+<ul>
+<li>Go Home Page: <a href="https://go.dev">go.dev</a></li>
+<li>Go Tour: <a href="https://go.dev/tour">go.dev/tour</a></li>
+<li>Package documentation: <a href="https://pkg.go.dev">go.dev/pkg</a></li>
+<li>Articles: <a href="https://go.dev/doc">go.dev/doc</a></li>
+<li>Concurrency is not parallelism: <a href="https://go.dev/s/concurrency-is-not-parallelism">go.dev/s/concurrency-is-not-parallelism</a></li>
+<li>Microservice patterns: <a href="https://www.designgurus.io/blog/19-essential-microservices-patterns-for-system-design-interviews">19 essential microservices patterns</a></li>
+</ul>
+<p>Rob Pike, Google — <a href="https://go.dev">go.dev</a></p>
+<h2>Go 1.26 (February 2026)</h2>
+<p>Go 1.26 is the latest stable release as of February 2026. It focuses on automated modernization, performance optimizations, and enhanced security.</p>
+<p>Key features include advanced <code>go fix</code> code modernization, experimental SIMD support (<code>simd</code>/<code>archsimd</code>), and a new garbage collector (&quot;Green Tea&quot;) enabling higher efficiency, particularly with AVX-512.</p>
+<h3>Key features</h3>
+<ul>
+<li><strong>Automated modernization:</strong> The <code>go fix</code> command has been rewritten to act as a &quot;modernizer,&quot; automatically identifying and fixing code to use newer language features, including a <code>//go:fix inline</code> directive.</li>
+<li><strong>Experimental SIMD (<code>simd</code>/<code>archsimd</code>):</strong> Introduces access to &quot;single instruction, multiple data&quot; operations for specialized performance optimization.</li>
+<li><strong>Runtime/secret management:</strong> An experimental <code>runtime/secret</code> package facilitates secure erasure of temporary data used in cryptographic operations.</li>
+<li><strong>Compiler and linker upgrades:</strong> Further refinements to the compiler and linker (building on Go 1.25's slice optimization) improve general performance.</li>
+</ul>
+<h3>Recent prior releases (Go 1.25–1.24)</h3>
+<ul>
+<li><strong>&quot;Green Tea&quot; garbage collector (Go 1.25/1.26):</strong> Reduces GC overhead by 10%–40%, with further improvements slated for AVX-512 in 1.26.</li>
+<li><strong>Container-aware <code>GOMAXPROCS</code> (Go 1.25):</strong> The runtime better detects CPU limits in Docker/Kubernetes, simplifying concurrency management.</li>
+<li><strong>Generic type aliases and map performance (Go 1.24):</strong> Fully supports parameterized type aliases and includes a redesigned, faster map implementation.</li>
+<li><strong>FIPS 140-3 compliance (Go 1.24):</strong> Introduces the Go Cryptographic Module for improved security compliance.</li>
+</ul>
+<h3>Standard library enhancements</h3>
+<ul>
+<li><strong>New packages:</strong> Addition of <code>crypto/hpke</code>, <code>crypto/mlkem/mlkemtest</code>, and <code>testing/cryptotest</code>.</li>
+<li><strong>Iterators:</strong> Improvements to the <code>bytes</code> package with new iterator functions like <code>Lines</code> and <code>SplitSeq</code>.</li>
+</ul>
+
+    </div>
+    <span class="sr-only">End of article</span>
+</article>    </main>
+
+    </section>
+
+    <footer aria-label="Page footer" class="flex py-4 px-6 w-full text-center mt-auto bg-slate-100 dark:bg-gray-800">
+        <div class="prose dark:prose-invert text-center mx-auto">
+            <p>Site proudly built with <a href="https://github.com/hydephp/hyde">HydePHP</a> 🎩</p>
+        </div>
+                    <a href="#app" aria-label="Go to top of page" class="float-right" @click.prevent="document.querySelector('#app').scrollIntoView({ behavior: 'smooth' })">
+                <button title="Scroll to top">
+                    <svg width="1.5rem" height="1.5rem" role="presentation" class="fill-current text-gray-500 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+                    </svg>
+                </button>
+            </a>
+            </footer>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.3/dist/cdn.min.js" integrity="sha256-gOkV4d9/FmMNEkjOzVlyM2eNAWSUXisT+1RbMTTIgXI=" crossorigin="anonymous"></script>
+
+<script>
+    function toggleTheme() {
+        if (localStorage.getItem('color-theme') === 'dark' || !('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem('color-theme', 'light');
+            document.getElementById('meta-color-scheme').setAttribute('content', 'light');
+        } else {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem('color-theme', 'dark');
+            document.getElementById('meta-color-scheme').setAttribute('content', 'dark');
+        }
+    }
+</script>
+
+
+
+
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+  const isDark =
+    document.documentElement.classList.contains('dark') ||
+    (!('color-theme' in localStorage) &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches) ||
+    localStorage.getItem('color-theme') === 'dark';
+
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: isDark ? 'dark' : 'default',
+    securityLevel: 'loose',
+  });
+
+  document.querySelectorAll('pre code.language-mermaid').forEach((code) => {
+    const pre = code.closest('pre');
+    if (!pre) return;
+
+    const container = document.createElement('div');
+    container.className = 'mermaid';
+    container.textContent = code.textContent;
+    pre.replaceWith(container);
+  });
+
+  await mermaid.run({ querySelector: '.mermaid' });
+</script>
+
+</body>
+</html>

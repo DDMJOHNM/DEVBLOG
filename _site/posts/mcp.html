@@ -3,17 +3,17 @@
 <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DevBlog - System Design</title>
+<title>DevBlog - MCP</title>
 
 
 
-<meta name="description" content="Course notes and framework">
-<meta name="twitter:title" content="DevBlog - System Design">
+<meta name="description" content="Using Model Context Protocol to inject private knowledge without training on your data">
+<meta name="twitter:title" content="DevBlog - MCP">
 <meta name="author" content="John Mason">
-<meta name="keywords" content="System Design">
-<meta property="og:description" content="Course notes and framework">
-<meta property="og:title" content="DevBlog - System Design">
-<meta property="og:article:published_time" content="2026-07-15T01:48:00+00:00">
+<meta name="keywords" content="Agentic AI">
+<meta property="og:description" content="Using Model Context Protocol to inject private knowledge without training on your data">
+<meta property="og:title" content="DevBlog - MCP">
+<meta property="og:article:published_time" content="2026-08-19T12:55:00+00:00">
 <meta property="og:type" content="article">
 
 
@@ -93,60 +93,72 @@
     <section>
         
     <main id="content" class="mx-auto max-w-7xl py-16 px-8">
-        <article aria-label="Article" id="system-design" itemscope itemtype="https://schema.org/BlogPosting"
+        <article aria-label="Article" id="mcp" itemscope itemtype="https://schema.org/BlogPosting"
     class="post-article mx-auto prose dark:prose-invert">
-    <meta itemprop="identifier" content="system-design">
+    <meta itemprop="identifier" content="mcp">
     
     <header aria-label="Header section" role="doc-pageheader">
-        <h1 itemprop="headline" class="mb-4">System Design</h1>
+        <h1 itemprop="headline" class="mb-4">MCP</h1>
         <div id="byline" aria-label="About the post" role="doc-introduction">
-            Posted <time itemprop="dateCreated datePublished" datetime="2026-07-15T01:48:00+00:00" title="Wednesday Jul 15th, 2026, at 1:48am">Jul 15th, 2026</time>            by author
+            Posted <time itemprop="dateCreated datePublished" datetime="2026-08-19T12:55:00+00:00" title="Wednesday Aug 19th, 2026, at 12:55pm">Aug 19th, 2026</time>            by author
 <address itemprop="author" itemscope itemtype="https://schema.org/Person" aria-label="The post author" style="display: inline;">
                 <span itemprop="name" aria-label="The author's name" title=@john_mason>John Mason</span>
-            </address>            in the category "System Design"        </div>
+            </address>            in the category "Agentic AI"        </div>
     </header>
         <div aria-label="Article body" itemprop="articleBody">
-        <h2>Overview</h2>
-<p>Course notes to be added.</p>
-<h2>System Design Trade-offs</h2>
-<p>System design trade-offs are essential engineering decisions, where improving one attribute—such as latency, scalability, or availability—inevitably sacrifices another. Common trade-offs include choosing between strong consistency (accuracy) and high availability (speed), or choosing between denormalization (faster reads) and normalization (better integrity).</p>
-<h3>Key Trade-offs</h3>
+        <p>You can use a Model Context Protocol (MCP) server to inject private knowledge into an AI agent while ensuring that information is not used by OpenAI to train its models.</p>
+<p>By running an MCP server locally or within your own infrastructure (e.g. behind a firewall), you maintain control over the data. The AI client (like Claude Desktop) only retrieves the necessary context from your private database, such as SQL or local Markdown files, without transferring the entire repository to the model provider.</p>
+<h2>How to Ensure Data Privacy with MCP</h2>
+<p>To keep a private knowledge base out of OpenAI training, use these safeguards:</p>
 <ul>
-<li><strong>Consistency vs. Availability (CAP Theorem):</strong> In a distributed system, you can prioritize either immediate data consistency (all nodes see the same data simultaneously) or high availability (the system stays functional even if nodes fail or network issues occur).</li>
-<li><strong>Latency vs. Throughput:</strong> Optimizing for low latency reduces the time to process a single request, whereas high throughput increases the total amount of data processed per second.</li>
-<li><strong>Stateful vs. Stateless:</strong> Stateful systems remember past interactions, making them better for personalization but harder to scale. Stateless systems are easier to scale horizontally but require external storage to maintain session data.</li>
-<li><strong>SQL (Normalized) vs. NoSQL (Denormalized):</strong> SQL ensures data integrity and reduces redundancy. NoSQL databases (e.g. Cassandra) are better at scaling horizontally and handling high-volume write traffic, often sacrificing strict consistency.</li>
-<li><strong>Sync vs. Async Processing:</strong> Synchronous calls (e.g. HTTP) are simpler but create dependencies. Asynchronous processing (e.g. messaging queues) decouples services for better performance, but increases complexity.</li>
-<li><strong>Monolith vs. Microservices:</strong> Monoliths are simpler to develop and deploy initially. Microservices offer better scalability and flexibility but are much harder to manage and debug.</li>
-<li><strong>Caching (Performance) vs. Memory (Cost):</strong> Adding cache (e.g. Redis) improves read speeds (lowers latency) but increases cost, complexity, and the risk of data inconsistency.</li>
+<li><strong>Run local MCP servers:</strong> Local MCP servers act as a bridge between your agent and your private data. The agent can read local files, search documentation, or query local databases (like SQLite) without sending the data to the cloud.</li>
+<li><strong>Use Zero Data Retention (ZDR) keys:</strong> When using OpenAI's API, enable Zero Data Retention so OpenAI does not store your input data for training.</li>
+<li><strong>Require human-in-the-loop approvals:</strong> Configure the agent to require approval before executing any MCP tool call. This gives you visibility and control over what data is shared with the model.</li>
+<li><strong>Use secure in-memory data access:</strong> The MCP server can perform semantic search (using local embeddings) on your data and only inject the relevant snippets into the prompt, rather than sending the entire private document.</li>
 </ul>
-<h3>How to Approach Trade-offs in Interviews</h3>
+<h2>Important Considerations and Risks</h2>
+<p>MCP is useful for this purpose, but it is not without risks:</p>
+<ul>
+<li><strong>Data exfiltration:</strong> If the MCP server is not properly secured, an attacker could potentially trick the agent into exfiltrating private data.</li>
+<li><strong>Insecure defaults:</strong> By default, some MCP servers may lack authentication or encryption. Use Transport Layer Security (TLS) and robust authentication (like OAuth) to protect the connection.</li>
+<li><strong>Prompt injection:</strong> A malicious prompt could, in theory, cause the agent to reveal the private data it has accessed via the MCP server.</li>
+</ul>
+<p>For the highest level of security, use a reputable, self-hosted MCP server implementation and follow the principle of least privilege, so the agent only has access to the specific data it needs.</p>
+<h2>Agentic AI Guardrails for MCP</h2>
+<p>Agentic AI guardrails for MCP servers are security measures, policies, and monitoring tools designed to govern how AI agents interact with external tools, APIs, and databases. As MCP becomes the standard protocol for connecting AI agents to real-world systems, these guardrails are crucial for preventing unauthorized data access, preventing &quot;confused deputy&quot; problems, and restricting harmful actions.</p>
+<h3>The Need for MCP Security Guardrails</h3>
+<p>While MCP allows agents to perform tasks like running code or updating CRM systems, it also exposes new, significant risks:</p>
+<ul>
+<li><strong>&quot;Toxic flow&quot; and chaining hazards:</strong> Agents can chain multiple tool calls, leading to unintended and dangerous interactions between different services.</li>
+<li><strong>Over-permissioning:</strong> Agents may hold broad API tokens that provide more access than needed.</li>
+<li><strong>Malicious or vulnerable servers:</strong> Third-party or poorly developed MCP servers can be compromised, feeding malicious data to the agent (poisoned context).</li>
+<li><strong>Unmonitored activity:</strong> Local or rogue MCP server connections can run without enterprise visibility.</li>
+</ul>
+<h3>Key Types of MCP Guardrails</h3>
+<ul>
+<li><strong>MCP scanning and inventory:</strong> Security tools (like Snyk) are used to scan and inventory active MCP servers, mapping which tools are connected, their origins, and their configurations.</li>
+<li><strong>Policy-driven access control:</strong> Enforcing least-privilege access, where an agent's ability to call specific tools is restricted based on user or context.</li>
+<li><strong>Runtime protection and inspection:</strong> Using an MCP gateway (e.g. Prompt Security, NOMA) to intercept, inspect, and filter traffic between the LLM and the MCP server, blocking harmful commands in real-time.</li>
+<li><strong>AI Bill of Materials (AI-BOM):</strong> Cataloging all MCP servers, datasets, and models in use to identify vulnerabilities in the dependency chain.</li>
+<li><strong>Human-in-the-loop (HITL):</strong> Requiring human approval for high-risk actions (e.g. deleting files, modifying production databases).</li>
+</ul>
+<h3>Top Tools and Platforms for MCP Security</h3>
+<p>Several companies are now providing specialized solutions to manage MCP risk:</p>
+<ul>
+<li><strong>Snyk:</strong> Offers MCP scanning to detect vulnerabilities in local or remote MCP servers.</li>
+<li><strong>Prompt Security:</strong> Provides an AI gateway that acts as a secure proxy to inspect and sanitize MCP traffic.</li>
+<li><strong>NOMA Security:</strong> Provides security posture management and runtime protection for MCP tool calling.</li>
+<li><strong>Harmonic Security:</strong> Offers an MCP gateway for visibility and control over agentic workflows.</li>
+<li><strong>PointGuard AI:</strong> Provides a platform for OAuth 2.0 authentication and granular tool authorization for MCPs.</li>
+<li><strong>Dynamo AgentWarden:</strong> Provides risk detection and evaluation for AI agents and connected MCP servers.</li>
+</ul>
+<h3>Best Practices for Securing MCP</h3>
 <ol>
-<li><strong>Understand requirements:</strong> Define if the system is read-heavy or write-heavy.</li>
-<li><strong>Highlight trade-offs:</strong> Always explain what is gained and what is lost when choosing a technology.</li>
-<li><strong>Justify decisions:</strong> Base decisions on specific product needs (e.g. banking needs consistency, social media needs availability).</li>
+<li><strong>Validate before use:</strong> Verify if an MCP server is on a trusted, official list, or test it in a sandboxed environment.</li>
+<li><strong>Use a proxy/gateway:</strong> Route all MCP traffic through a secure gateway to monitor and block malicious actions.</li>
+<li><strong>Implement least privilege:</strong> Scope permissions to the absolute minimum required for the agent to function.</li>
+<li><strong>Log all activity:</strong> Ensure full audit logging and traceability of the &quot;chain of thought&quot; from user query to tool execution.</li>
 </ol>
-<h2>Load Balancers</h2>
-<p>A load balancer is a dedicated hardware appliance or software service that acts as a reverse proxy, distributing incoming network traffic across multiple servers. It maximizes application reliability, prevents server overloads, and minimizes latency by ensuring no single machine is overwhelmed.</p>
-<h3>Key Benefits</h3>
-<ul>
-<li><strong>High Availability:</strong> If a backend server goes offline, the load balancer automatically reroutes traffic to healthy servers, preventing downtime.</li>
-<li><strong>Scalability:</strong> It allows administrators to seamlessly add or remove servers from the backend pool without interrupting user access.</li>
-<li><strong>Security:</strong> Acting as an intermediary, it hides backend server identities and can help mitigate Distributed Denial of Service (DDoS) attacks.</li>
-</ul>
-<h3>Common Load Balancing Algorithms</h3>
-<p>Different methods are used to determine which server receives the next incoming request:</p>
-<ul>
-<li><strong>Round Robin:</strong> Distributes requests sequentially across the server pool in a revolving loop.</li>
-<li><strong>Least Connections:</strong> Routes traffic to the server with the fewest active connections, making it ideal if requests vary greatly in processing time.</li>
-<li><strong>IP Hash:</strong> Uses the client's IP address to consistently route them to the same server, preserving session data.</li>
-</ul>
-<h3>Load Balancer Tiers</h3>
-<p>Load balancing generally operates at two primary network levels:</p>
-<ul>
-<li><strong>Layer 4 (Transport Layer):</strong> Routes traffic based on IP addresses and TCP/UDP ports without inspecting the actual content of the packets. It is highly performant.</li>
-<li><strong>Layer 7 (Application Layer):</strong> Makes highly intelligent routing decisions based on request attributes like HTTP headers, cookies, or URL paths, making it ideal for microservices.</li>
-</ul>
 
     </div>
     <span class="sr-only">End of article</span>

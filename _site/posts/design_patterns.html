@@ -3,14 +3,18 @@
 <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DevBlog - Projects</title>
+<title>DevBlog - Design Patterns</title>
 
 
 
-<meta name="description" content="Selected project write-ups">
-<meta name="twitter:title" content="DevBlog - Projects">
-<meta property="og:description" content="Selected project write-ups">
-<meta property="og:title" content="DevBlog - Projects">
+<meta name="description" content="Reusable solutions within a system architecture">
+<meta name="twitter:title" content="DevBlog - Design Patterns">
+<meta name="author" content="John Mason">
+<meta name="keywords" content="System Design">
+<meta property="og:description" content="Reusable solutions within a system architecture">
+<meta property="og:title" content="DevBlog - Design Patterns">
+<meta property="og:article:published_time" content="2026-08-19T12:00:00+00:00">
+<meta property="og:type" content="article">
 
 
 <meta name="generator" content="HydePHP v2.0.3">
@@ -22,7 +26,7 @@
 <style>[x-cloak] {display: none!important}</style>
 
 
-            <link rel="stylesheet" href="media/app.css?v=9450b0e0">
+            <link rel="stylesheet" href="../media/app.css?v=9450b0e0">
     
 
     
@@ -42,7 +46,7 @@
 <body id="app" class="flex flex-col min-h-screen overflow-x-hidden dark:bg-gray-900 dark:text-white" x-data="{ navigationOpen: false }" x-on:keydown.escape="navigationOpen = false;">
     <a href="#content" id="skip-to-content" class="sr-only focus:not-sr-only bg-black border-4 border-yellow-400 focus:absolute focus:mt-2 focus:mx-auto focus:p-2 focus:w-64 h-auto left-0 overflow-auto right-0 rounded-md text-center text-lg text-white top-auto z-50 ">Skip to content</a>    <nav aria-label="Main navigation" id="main-navigation" class="flex flex-wrap items-center justify-between p-4 shadow-lg sm:shadow-xl md:shadow-none dark:bg-gray-800">
     <div id="main-navigation-brand" class="flex grow items-center shrink-0 text-gray-700 dark:text-gray-200">
-        <a href="index.html" class="font-bold px-4" aria-label="Home page">
+        <a href="../index.html" class="font-bold px-4" aria-label="Home page">
     DevBlog
 </a>
         <div class="ml-auto">
@@ -80,40 +84,40 @@
          :class="navigationOpen ? 'block!' : ''">
         <ul aria-label="Navigation links" class="md:grow md:flex justify-end">
                             <li class="md:mx-2">
-                                            <a href="index.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Home</a>                                    </li>
+                                            <a href="../index.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Home</a>                                    </li>
                             <li class="md:mx-2">
-                                            <a href="projects.html" aria-current="page" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100 navigation-link-active border-l-4 border-indigo-500 md:border-none font-medium -ml-6 pl-5 md:ml-0 md:pl-0 bg-gray-100 dark:bg-gray-800 md:bg-transparent dark:md:bg-transparent">Projects</a>                                    </li>
+                                            <a href="../projects.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Projects</a>                                    </li>
                     </ul>
     </div>
 </nav>
     <section>
         
     <main id="content" class="mx-auto max-w-7xl py-16 px-8">
-        <article class="mx-auto prose dark:prose-invert">
-            <h1>Projects</h1>
-<h2>Positive Thought Counselling Onboarding Module</h2>
-<pre><code class="language-mermaid">flowchart LR
-  A[Idea] --&gt; B[Build]
-  B --&gt; C[Ship]
-</code></pre>
-<h2>Positive Thought Counselling Dental Module</h2>
-<pre><code class="language-mermaid">flowchart LR
-  A[Idea] --&gt; B[Build]
-  B --&gt; C[Ship]
-</code></pre>
-<h2>Logging and Subscription System</h2>
-<pre><code class="language-mermaid">flowchart LR
-  A[Idea] --&gt; B[Build]
-  B --&gt; C[Ship]
-</code></pre>
-<h2>Serverless Online Shopping Cart</h2>
-<pre><code class="language-mermaid">flowchart LR
-  A[Idea] --&gt; B[Build]
-  B --&gt; C[Ship]
-</code></pre>
+        <article aria-label="Article" id="design_patterns" itemscope itemtype="https://schema.org/BlogPosting"
+    class="post-article mx-auto prose dark:prose-invert">
+    <meta itemprop="identifier" content="design_patterns">
+    
+    <header aria-label="Header section" role="doc-pageheader">
+        <h1 itemprop="headline" class="mb-4">Design Patterns</h1>
+        <div id="byline" aria-label="About the post" role="doc-introduction">
+            Posted <time itemprop="dateCreated datePublished" datetime="2026-08-19T12:00:00+00:00" title="Wednesday Aug 19th, 2026, at 12:00pm">Aug 19th, 2026</time>            by author
+<address itemprop="author" itemscope itemtype="https://schema.org/Person" aria-label="The post author" style="display: inline;">
+                <span itemprop="name" aria-label="The author's name" title=@john_mason>John Mason</span>
+            </address>            in the category "System Design"        </div>
+    </header>
+        <div aria-label="Article body" itemprop="articleBody">
+        <ul>
+<li><strong>System design</strong> defines a high-level blueprint for a system's overall architecture.</li>
+<li><strong>Design patterns</strong> offer mid-level, reusable solutions for recurring challenges within that architecture.</li>
+</ul>
+<h2>References</h2>
+<ul>
+<li><a href="https://refactoring.guru/design-patterns">Refactoring Guru — Design Patterns</a></li>
+</ul>
 
-        </article>
-    </main>
+    </div>
+    <span class="sr-only">End of article</span>
+</article>    </main>
 
     </section>
 

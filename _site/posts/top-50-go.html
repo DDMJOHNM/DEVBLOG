@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DevBlog - Top 50 Go</title>
+
+
+
+<meta name="description" content="Go interview questions covering language basics, concurrency, interfaces, and the runtime">
+<meta name="twitter:title" content="DevBlog - Top 50 Go">
+<meta name="author" content="John Mason">
+<meta name="keywords" content="Interviewing">
+<meta property="og:description" content="Go interview questions covering language basics, concurrency, interfaces, and the runtime">
+<meta property="og:title" content="DevBlog - Top 50 Go">
+<meta property="og:article:published_time" content="2026-08-19T15:59:00+00:00">
+<meta property="og:type" content="article">
+
+
+<meta name="generator" content="HydePHP v2.0.3">
+<meta property="og:site_name" content="HydePHP">
+
+
+
+
+<style>[x-cloak] {display: none!important}</style>
+
+
+            <link rel="stylesheet" href="../media/app.css?v=9450b0e0">
+    
+
+    
+    
+
+
+    
+    <meta id="meta-color-scheme" name="color-scheme" content="light">
+    <script>if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); document.getElementById('meta-color-scheme').setAttribute('content', 'dark');} else { document.documentElement.classList.remove('dark') } </script>
+
+
+
+
+
+
+</head>
+<body id="app" class="flex flex-col min-h-screen overflow-x-hidden dark:bg-gray-900 dark:text-white" x-data="{ navigationOpen: false }" x-on:keydown.escape="navigationOpen = false;">
+    <a href="#content" id="skip-to-content" class="sr-only focus:not-sr-only bg-black border-4 border-yellow-400 focus:absolute focus:mt-2 focus:mx-auto focus:p-2 focus:w-64 h-auto left-0 overflow-auto right-0 rounded-md text-center text-lg text-white top-auto z-50 ">Skip to content</a>    <nav aria-label="Main navigation" id="main-navigation" class="flex flex-wrap items-center justify-between p-4 shadow-lg sm:shadow-xl md:shadow-none dark:bg-gray-800">
+    <div id="main-navigation-brand" class="flex grow items-center shrink-0 text-gray-700 dark:text-gray-200">
+        <a href="../index.html" class="font-bold px-4" aria-label="Home page">
+    DevBlog
+</a>
+        <div class="ml-auto">
+            <button @click="toggleTheme" class="theme-toggle-button flex items-center px-2 py-1 hover:text-gray-700 dark:text-gray-200" title="Toggle theme">
+        <span class="sr-only">Toggle dark theme</span>
+        <svg width="1.25rem" height="1.25rem" class="w-5 h-5 hidden dark:block" fill="#FFFFFF" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+        <svg width="1.25rem" height="1.25rem" class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+    </button>
+        </div>
+    </div>
+
+    <div class="block md:hidden">
+        <button id="navigation-toggle-button" class="flex items-center px-3 py-1 hover:text-gray-700 dark:text-gray-200"
+                aria-label="Toggle navigation menu" @click="navigationOpen = ! navigationOpen">
+            <svg x-show="! navigationOpen" title="Open Navigation Menu" class="dark:fill-gray-200"
+                 style="display: block;"
+                 id="open-main-navigation-menu-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24"
+                 width="24">
+                <title>Open Menu</title>
+                <path d="M0 0h24v24H0z" fill="none"/>
+                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+            </svg>
+            <svg x-show="navigationOpen" title="Close Navigation Menu" class="dark:fill-gray-200" style="display: none;"
+                 id="close-main-navigation-menu-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24"
+                 width="24">
+                <title>Close Menu</title>
+                <path d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+            </svg>
+        </button>
+    </div>
+
+    <div id="main-navigation-links" 
+         class="w-full hidden md:flex grow md:grow-0 md:items-center md:w-auto px-6 -mx-4 border-t mt-3 pt-3 md:border-none md:mt-0 md:py-0 border-gray-200 dark:border-gray-700"
+         :class="navigationOpen ? 'block!' : ''">
+        <ul aria-label="Navigation links" class="md:grow md:flex justify-end">
+                            <li class="md:mx-2">
+                                            <a href="../index.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Home</a>                                    </li>
+                            <li class="md:mx-2">
+                                            <a href="../projects.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Projects</a>                                    </li>
+                    </ul>
+    </div>
+</nav>
+    <section>
+        
+    <main id="content" class="mx-auto max-w-7xl py-16 px-8">
+        <article aria-label="Article" id="top-50-go" itemscope itemtype="https://schema.org/BlogPosting"
+    class="post-article mx-auto prose dark:prose-invert">
+    <meta itemprop="identifier" content="top-50-go">
+    
+    <header aria-label="Header section" role="doc-pageheader">
+        <h1 itemprop="headline" class="mb-4">Top 50 Go</h1>
+        <div id="byline" aria-label="About the post" role="doc-introduction">
+            Posted <time itemprop="dateCreated datePublished" datetime="2026-08-19T15:59:00+00:00" title="Wednesday Aug 19th, 2026, at 3:59pm">Aug 19th, 2026</time>            by author
+<address itemprop="author" itemscope itemtype="https://schema.org/Person" aria-label="The post author" style="display: inline;">
+                <span itemprop="name" aria-label="The author's name" title=@john_mason>John Mason</span>
+            </address>            in the category "Interviewing"        </div>
+    </header>
+        <div aria-label="Article body" itemprop="articleBody">
+        <p>Interview notes for Go (1.22+). Numbered questions with short answers and examples.</p>
+<ul>
+<li><a href="https://gobyexample.com/">Go by Example</a></li>
+<li><a href="https://roadmap.sh/questions/golang">roadmap.sh Golang questions</a></li>
+</ul>
+<h2>Beginner</h2>
+<h2>1. What is Go?</h2>
+<p>Go is a compiled, statically typed language developed at Google to address slow compilation and complex dependency management.</p>
+<h2>2. What is the difference between <code>var</code> and <code>:=</code>?</h2>
+<ul>
+<li><code>var</code> is an explicit declaration. It can be used at package or function scope, and the type can be stated or inferred.</li>
+<li><code>:=</code> is short variable declaration. It is only valid inside functions, infers the type, and must initialize at least one new variable.</li>
+</ul>
+<h2>3. What is a zero value?</h2>
+<p>The default value assigned to a declared but uninitialized variable. Examples: <code>0</code> for numeric types, <code>false</code> for <code>bool</code>, <code>&quot;&quot;</code> for <code>string</code>, and <code>nil</code> for pointers, slices, maps, channels, functions, and interfaces.</p>
+<h2>4. How are packages and modules different?</h2>
+<ul>
+<li>A <strong>package</strong> is a collection of source files in one directory that share the same <code>package</code> name.</li>
+<li>A <strong>module</strong> is a collection of packages versioned together and tracked by a <code>go.mod</code> file.</li>
+</ul>
+<h2>5. What are the primary data types?</h2>
+<p>Numeric types (integers and floats), <code>bool</code>, and <code>string</code>, plus derived types: array, slice, map, struct, pointer, channel, function, and interface.</p>
+<h2>6. How do you export functions?</h2>
+<p>Capitalize the first letter of the identifier. <code>Foo</code> is exported (visible outside the package); <code>foo</code> is not.</p>
+<h2>7. What is a pointer?</h2>
+<p>A variable that stores the memory address of another value. <code>&amp;x</code> takes the address of <code>x</code>; <code>*p</code> dereferences pointer <code>p</code>.</p>
+<h2>8. What is the role of <code>main</code>?</h2>
+<p><code>func main()</code> in package <code>main</code> is the program's entry point.</p>
+<h2>9. Explain the <code>init()</code> function.</h2>
+<p>A special function that runs automatically before <code>main()</code> (and before other packages use this package) to initialize package state. A file may have more than one <code>init</code>.</p>
+<h2>10. What are raw versus interpreted string literals?</h2>
+<p>A string literal is either double-quoted <code>&quot;&quot;</code> (interpreted) or backtick-quoted <code>` `</code> (raw).</p>
+<ul>
+<li>Interpreted literals support escape sequences (<code>\n</code>, <code>\t</code>) and cannot span multiple lines.</li>
+<li>Raw string literals do not process escapes, cannot contain backticks, and can span multiple lines.</li>
+</ul>
+<h2>11. How do you handle errors in Go?</h2>
+<p>Go uses explicit error checking. Functions typically return an <code>error</code> as the last result, and callers check it immediately:</p>
+<pre><code class="language-go">result, err := doWork()
+if err != nil {
+    return err
+}
+</code></pre>
+<h2>12. Can Go have multiple return values?</h2>
+<p>Yes. Functions often return a result and an error:</p>
+<pre><code class="language-go">func divide(a, b int) (int, error) {
+    if b == 0 {
+        return 0, errors.New(&quot;division by zero&quot;)
+    }
+    return a / b, nil
+}
+</code></pre>
+<h2>13. What is the difference between <code>GOROOT</code> and <code>GOPATH</code>?</h2>
+<ul>
+<li><code>GOROOT</code> is where the Go toolchain and standard library live.</li>
+<li><code>GOPATH</code> was the old workspace for projects. Modules (<code>go.mod</code>) largely superseded it; <code>GOPATH</code> is now mainly a cache location (<code>pkg/mod</code>).</li>
+</ul>
+<h2>14. What is the <code>range</code> keyword?</h2>
+<p>Used to iterate over elements in arrays, slices, strings, maps, or channels:</p>
+<pre><code class="language-go">for i, v := range nums {
+    fmt.Println(i, v)
+}
+</code></pre>
+<h2>15. What is a struct?</h2>
+<p>A composite type that groups fields of different types into a single unit:</p>
+<pre><code class="language-go">type User struct {
+    Name string
+    Age  int
+}
+</code></pre>
+<h2>16. How do you create a constant?</h2>
+<p>Use <code>const</code>. Values must be known at compile time:</p>
+<pre><code class="language-go">const MaxRetries = 3
+</code></pre>
+<h2>17. What is the difference between an array and a slice?</h2>
+<p>Arrays have a fixed size that is part of the type (<code>[5]int</code>). Slices are dynamic views into an underlying array (<code>[]int</code>) with a length and capacity.</p>
+<pre><code class="language-go">var a [5]int      // array
+s := []int{1, 2}  // slice
+</code></pre>
+<p>See <a href="https://gobyexample.com/arrays">Go by Example: Arrays</a>.</p>
+<h2>18. Explain the <code>iota</code> keyword.</h2>
+<p>A predeclared identifier that increments by 1 in a <code>const</code> block, starting at 0. Useful for enumerations:</p>
+<pre><code class="language-go">type Season int
+
+const (
+    Spring Season = iota
+    Summer
+    Autumn
+    Winter
+)
+
+s := Summer
+fmt.Println(s) // 1
+</code></pre>
+<p>See <a href="https://dlintw.github.io/gobyexample/public/constants-and-iota.html">constants and iota</a>.</p>
+<h2>19. What is type conversion?</h2>
+<p>Explicitly changing a value from one type to another. Go has no implicit numeric conversion:</p>
+<pre><code class="language-go">x := 1
+f := float64(x)
+</code></pre>
+<h2>20. Is Go an object-oriented language?</h2>
+<p>Not in the class/inheritance sense. Go prefers composition and interfaces over classes and inheritance.</p>
+<h2>Concurrency and intermediate</h2>
+<h2>21. What is a goroutine?</h2>
+<p>A lightweight concurrent function managed by the Go runtime, not by the OS as a 1:1 thread. Start one with <code>go f()</code>.</p>
+<h2>22. Explain channels.</h2>
+<p>Typed pipes for communication and synchronization between goroutines. Send with <code>ch &lt;- v</code>, receive with <code>v := &lt;-ch</code>.</p>
+<h2>23. Buffered vs unbuffered channels?</h2>
+<ul>
+<li><strong>Unbuffered</strong> (<code>make(chan int)</code>): send blocks until a receiver is ready (and vice versa).</li>
+<li><strong>Buffered</strong> (<code>make(chan int, n)</code>): send blocks only when the buffer is full; receive blocks when it is empty.</li>
+</ul>
+<h2>24. What is the <code>select</code> statement?</h2>
+<p>Multiplexes multiple channel operations, similar to a switch over channels. It blocks until one case can run; a <code>default</code> case makes it non-blocking.</p>
+<pre><code class="language-go">select {
+case msg := &lt;-ch:
+    fmt.Println(msg)
+case &lt;-time.After(time.Second):
+    fmt.Println(&quot;timeout&quot;)
+}
+</code></pre>
+<h2>25. How do you stop a goroutine?</h2>
+<p>Goroutines cannot be killed from the outside. Signal them to exit with a done channel or <code>context.Context</code> cancellation, and return from the function.</p>
+<h2>26. What is a mutex?</h2>
+<p>A mutual exclusion lock that prevents concurrent access to shared data.</p>
+<ul>
+<li><code>sync.Mutex</code>: exclusive lock for all access.</li>
+<li><code>sync.RWMutex</code>: many concurrent readers, or one writer.</li>
+</ul>
+<h2>27. What is a race condition?</h2>
+<p>When two or more goroutines access the same memory concurrently and at least one access is a write, without synchronization.</p>
+<h2>28. How do you detect race conditions?</h2>
+<p>Use Go's built-in race detector (ThreadSanitizer):</p>
+<pre><code class="language-bash">go run -race .
+go test -race ./...
+</code></pre>
+<p>It instruments memory access at runtime and reports unsynchronized concurrent reads and writes. Look for check-then-act, read-modify-write (<code>counter++</code>), and shared mutable state without a lock or channel.</p>
+<h2>29. What is an interface?</h2>
+<p>A set of method signatures. A type satisfies an interface by implementing those methods.</p>
+<pre><code class="language-go">type Reader interface {
+    Read(p []byte) (n int, err error)
+}
+</code></pre>
+<h2>30. How are interfaces implemented in Go?</h2>
+<p>Implicitly. If a type has the required methods, it implements the interface. There is no <code>implements</code> keyword.</p>
+<h2>31. What is a type assertion?</h2>
+<p>A way to retrieve the concrete value from an interface:</p>
+<pre><code class="language-go">s, ok := val.(string)
+if !ok {
+    // val is not a string
+}
+</code></pre>
+<h2>32. What is type embedding?</h2>
+<p>Including one type inside another so the outer type promotes the inner type's fields and methods. This is composition, not inheritance:</p>
+<pre><code class="language-go">type Logger struct{}
+
+func (Logger) Log(msg string) {}
+
+type Server struct {
+    Logger
+}
+</code></pre>
+<h2>33. What is a receiver function?</h2>
+<p>A method: a function with a receiver, associated with a type:</p>
+<pre><code class="language-go">func (u User) Name() string {
+    return u.name
+}
+</code></pre>
+<h2>34. Value vs pointer receivers?</h2>
+<ul>
+<li><strong>Pointer receivers</strong> (<code>func (u *User)</code>) can modify the receiver and avoid copying large structs.</li>
+<li><strong>Value receivers</strong> (<code>func (u User)</code>) operate on a copy. If any method uses a pointer receiver, typically all methods on that type should.</li>
+</ul>
+<h2>35. What is the <code>defer</code> keyword?</h2>
+<p>Schedules a function call to run just before the surrounding function returns. Multiple defers run in LIFO order. Common for <code>Close()</code>, <code>Unlock()</code>, and cleanup.</p>
+<h2>36. Explain <code>panic</code> and <code>recover</code>.</h2>
+<ul>
+<li><code>panic</code> stops normal execution and starts unwinding the stack.</li>
+<li><code>recover</code> is only useful inside <code>defer</code>; it stops the panic and returns the panic value. Prefer errors for expected failures; reserve panic for truly unrecoverable states.</li>
+</ul>
+<h2>37. What are anonymous functions?</h2>
+<p>Functions without a name, often used as closures:</p>
+<pre><code class="language-go">add := func(a, b int) int {
+    return a + b
+}
+</code></pre>
+<h2>38. What is an empty struct (<code>struct{}</code>) used for?</h2>
+<p>It occupies zero bytes. Typical uses: signaling on channels (<code>chan struct{}</code>), implementing sets (<code>map[T]struct{}</code>), and embedding as a marker type.</p>
+<h2>39. How do you write a unit test?</h2>
+<p>Create a file named <code>*_test.go</code> in the same package (or <code>package foo_test</code> for an external test) and use <code>testing.T</code>:</p>
+<pre><code class="language-go">func TestAdd(t *testing.T) {
+    got := Add(1, 2)
+    if got != 3 {
+        t.Fatalf(&quot;Add(1, 2) = %d, want 3&quot;, got)
+    }
+}
+</code></pre>
+<p>Run with <code>go test</code>.</p>
+<h2>Advanced architecture and runtime</h2>
+<h2>40. Explain the G-M-P scheduler.</h2>
+<p>Go's scheduler maps <strong>G</strong> (goroutines) onto <strong>P</strong> (logical processors / scheduler contexts) which run on <strong>M</strong> (OS threads). This M:N model lets many goroutines share a smaller set of OS threads.</p>
+<h2>41. What is escape analysis?</h2>
+<p>The compiler decides whether a variable can live on the stack or must &quot;escape&quot; to the heap (for example because a pointer to it is returned or stored). Heap allocation is slower and visible to the garbage collector; <code>go build -gcflags=&quot;-m&quot;</code> prints escape decisions.</p>
+<h2>42. How does the garbage collector work?</h2>
+<p>Go uses a concurrent tri-color mark-and-sweep collector. It marks reachable objects while the program runs, then sweeps unmarked memory, aiming for short stop-the-world pauses.</p>
+<h2>43. What is inlining?</h2>
+<p>A compiler optimization that replaces a function call with the function body to reduce call overhead. Small, simple functions are typical inline candidates.</p>
+<h2>44. How do you use the <code>context</code> package?</h2>
+<p>Pass deadlines, cancellation, and request-scoped values across API boundaries:</p>
+<pre><code class="language-go">ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+defer cancel()
+
+req, _ := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+</code></pre>
+<p>Downstream work should select on <code>ctx.Done()</code> and return <code>ctx.Err()</code>.</p>
+<h2>45. What is reflection?</h2>
+<p>Examining and manipulating types and values at runtime via the <code>reflect</code> package (<code>reflect.TypeOf</code>, <code>reflect.ValueOf</code>). Useful for encoding, ORMs, and generic helpers; it is slower and less type-safe than ordinary code.</p>
+<h2>46. How do you handle JSON?</h2>
+<p>Use <code>encoding/json</code>: <code>json.Marshal</code> to encode, <code>json.Unmarshal</code> to decode. Struct field tags control names:</p>
+<pre><code class="language-go">type User struct {
+    Name string `json:&quot;name&quot;`
+    Age  int    `json:&quot;age&quot;`
+}
+</code></pre>
+<h2>47. What is <code>sync.Pool</code>?</h2>
+<p>A concurrent pool of reusable objects. <code>Get</code> / <code>Put</code> reduce allocation and GC pressure for short-lived, frequently allocated items (for example buffers). Cached items may be discarded at any time, so do not store important state there.</p>
+<h2>48. How do you implement a graceful shutdown?</h2>
+<p>Listen for signals (<code>os.Interrupt</code>, <code>SIGTERM</code>), cancel a root context, stop accepting new work, and wait for in-flight goroutines (often with <code>sync.WaitGroup</code> or <code>errgroup</code>) before exiting. For HTTP, use <code>http.Server.Shutdown</code>.</p>
+<h2>49. Explain range over integers (Go 1.22).</h2>
+<p><code>for i := range n</code> iterates <code>i</code> from <code>0</code> to <code>n-1</code>:</p>
+<pre><code class="language-go">for i := range 10 {
+    fmt.Println(i) // 0 through 9
+}
+</code></pre>
+<h2>50. What is <code>make</code> vs <code>new</code>?</h2>
+<ul>
+<li><code>new(T)</code> allocates a zero value of <code>T</code> and returns <code>*T</code>.</li>
+<li><code>make</code> initializes slices, maps, and channels (the built-in types that need runtime setup) and returns a ready-to-use value, not a pointer.</li>
+</ul>
+<pre><code class="language-go">p := new(int)           // *int, value 0
+s := make([]int, 0, 10) // slice with cap 10
+m := make(map[string]int)
+ch := make(chan int, 1)
+</code></pre>
+
+    </div>
+    <span class="sr-only">End of article</span>
+</article>    </main>
+
+    </section>
+
+    <footer aria-label="Page footer" class="flex py-4 px-6 w-full text-center mt-auto bg-slate-100 dark:bg-gray-800">
+        <div class="prose dark:prose-invert text-center mx-auto">
+            <p>Site proudly built with <a href="https://github.com/hydephp/hyde">HydePHP</a> 🎩</p>
+        </div>
+                    <a href="#app" aria-label="Go to top of page" class="float-right" @click.prevent="document.querySelector('#app').scrollIntoView({ behavior: 'smooth' })">
+                <button title="Scroll to top">
+                    <svg width="1.5rem" height="1.5rem" role="presentation" class="fill-current text-gray-500 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+                    </svg>
+                </button>
+            </a>
+            </footer>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.3/dist/cdn.min.js" integrity="sha256-gOkV4d9/FmMNEkjOzVlyM2eNAWSUXisT+1RbMTTIgXI=" crossorigin="anonymous"></script>
+
+<script>
+    function toggleTheme() {
+        if (localStorage.getItem('color-theme') === 'dark' || !('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem('color-theme', 'light');
+            document.getElementById('meta-color-scheme').setAttribute('content', 'light');
+        } else {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem('color-theme', 'dark');
+            document.getElementById('meta-color-scheme').setAttribute('content', 'dark');
+        }
+    }
+</script>
+
+
+
+
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+  const isDark =
+    document.documentElement.classList.contains('dark') ||
+    (!('color-theme' in localStorage) &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches) ||
+    localStorage.getItem('color-theme') === 'dark';
+
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: isDark ? 'dark' : 'default',
+    securityLevel: 'loose',
+  });
+
+  document.querySelectorAll('pre code.language-mermaid').forEach((code) => {
+    const pre = code.closest('pre');
+    if (!pre) return;
+
+    const container = document.createElement('div');
+    container.className = 'mermaid';
+    container.textContent = code.textContent;
+    pre.replaceWith(container);
+  });
+
+  await mermaid.run({ querySelector: '.mermaid' });
+</script>
+
+</body>
+</html>

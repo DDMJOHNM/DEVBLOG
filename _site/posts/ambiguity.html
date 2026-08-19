@@ -3,17 +3,17 @@
 <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DevBlog - System Design</title>
+<title>DevBlog - Ambiguity</title>
 
 
 
-<meta name="description" content="Course notes and framework">
-<meta name="twitter:title" content="DevBlog - System Design">
+<meta name="description" content="Managing vague requirements in software engineering">
+<meta name="twitter:title" content="DevBlog - Ambiguity">
 <meta name="author" content="John Mason">
-<meta name="keywords" content="System Design">
-<meta property="og:description" content="Course notes and framework">
-<meta property="og:title" content="DevBlog - System Design">
-<meta property="og:article:published_time" content="2026-07-15T01:48:00+00:00">
+<meta name="keywords" content="Interviewing">
+<meta property="og:description" content="Managing vague requirements in software engineering">
+<meta property="og:title" content="DevBlog - Ambiguity">
+<meta property="og:article:published_time" content="2026-08-19T12:00:00+00:00">
 <meta property="og:type" content="article">
 
 
@@ -93,59 +93,78 @@
     <section>
         
     <main id="content" class="mx-auto max-w-7xl py-16 px-8">
-        <article aria-label="Article" id="system-design" itemscope itemtype="https://schema.org/BlogPosting"
+        <article aria-label="Article" id="ambiguity" itemscope itemtype="https://schema.org/BlogPosting"
     class="post-article mx-auto prose dark:prose-invert">
-    <meta itemprop="identifier" content="system-design">
+    <meta itemprop="identifier" content="ambiguity">
     
     <header aria-label="Header section" role="doc-pageheader">
-        <h1 itemprop="headline" class="mb-4">System Design</h1>
+        <h1 itemprop="headline" class="mb-4">Ambiguity</h1>
         <div id="byline" aria-label="About the post" role="doc-introduction">
-            Posted <time itemprop="dateCreated datePublished" datetime="2026-07-15T01:48:00+00:00" title="Wednesday Jul 15th, 2026, at 1:48am">Jul 15th, 2026</time>            by author
+            Posted <time itemprop="dateCreated datePublished" datetime="2026-08-19T12:00:00+00:00" title="Wednesday Aug 19th, 2026, at 12:00pm">Aug 19th, 2026</time>            by author
 <address itemprop="author" itemscope itemtype="https://schema.org/Person" aria-label="The post author" style="display: inline;">
                 <span itemprop="name" aria-label="The author's name" title=@john_mason>John Mason</span>
-            </address>            in the category "System Design"        </div>
+            </address>            in the category "Interviewing"        </div>
     </header>
         <div aria-label="Article body" itemprop="articleBody">
-        <h2>Overview</h2>
-<p>Course notes to be added.</p>
-<h2>System Design Trade-offs</h2>
-<p>System design trade-offs are essential engineering decisions, where improving one attribute—such as latency, scalability, or availability—inevitably sacrifices another. Common trade-offs include choosing between strong consistency (accuracy) and high availability (speed), or choosing between denormalization (faster reads) and normalization (better integrity).</p>
-<h3>Key Trade-offs</h3>
+        <p><strong>Ambiguity</strong> in software engineering refers to vague, conflicting, or incomplete requirements that are open to multiple interpretations.</p>
+<p>It leads to blown estimates, scope creep, and building the wrong product. Developers must actively manage and clarify these uncertainties through structured frameworks and iterative communication.</p>
+<h2>Levels of Ambiguity</h2>
+<p>Navigating ambiguity is a key skill for career growth in software engineering. Industry discussions break this down into specific stages:</p>
 <ul>
-<li><strong>Consistency vs. Availability (CAP Theorem):</strong> In a distributed system, you can prioritize either immediate data consistency (all nodes see the same data simultaneously) or high availability (the system stays functional even if nodes fail or network issues occur).</li>
-<li><strong>Latency vs. Throughput:</strong> Optimizing for low latency reduces the time to process a single request, whereas high throughput increases the total amount of data processed per second.</li>
-<li><strong>Stateful vs. Stateless:</strong> Stateful systems remember past interactions, making them better for personalization but harder to scale. Stateless systems are easier to scale horizontally but require external storage to maintain session data.</li>
-<li><strong>SQL (Normalized) vs. NoSQL (Denormalized):</strong> SQL ensures data integrity and reduces redundancy. NoSQL databases (e.g. Cassandra) are better at scaling horizontally and handling high-volume write traffic, often sacrificing strict consistency.</li>
-<li><strong>Sync vs. Async Processing:</strong> Synchronous calls (e.g. HTTP) are simpler but create dependencies. Asynchronous processing (e.g. messaging queues) decouples services for better performance, but increases complexity.</li>
-<li><strong>Monolith vs. Microservices:</strong> Monoliths are simpler to develop and deploy initially. Microservices offer better scalability and flexibility but are much harder to manage and debug.</li>
-<li><strong>Caching (Performance) vs. Memory (Cost):</strong> Adding cache (e.g. Redis) improves read speeds (lowers latency) but increases cost, complexity, and the risk of data inconsistency.</li>
+<li><strong>Junior (feature-level):</strong> The problem and end-goal are known, but the specific implementation details are unclear.</li>
+<li><strong>Mid-level (module/component-level):</strong> The team knows the &quot;why&quot; and what needs solving, but the technical approach is open-ended.</li>
+<li><strong>Senior (roadmap-level):</strong> The general problem is defined, but it requires technical leadership to discover what needs to be built to solve it.</li>
+<li><strong>Staff/Principal (strategy-level):</strong> The exact problems to tackle are undefined; the engineer must establish the scope and vision.</li>
 </ul>
-<h3>How to Approach Trade-offs in Interviews</h3>
-<ol>
-<li><strong>Understand requirements:</strong> Define if the system is read-heavy or write-heavy.</li>
-<li><strong>Highlight trade-offs:</strong> Always explain what is gained and what is lost when choosing a technology.</li>
-<li><strong>Justify decisions:</strong> Base decisions on specific product needs (e.g. banking needs consistency, social media needs availability).</li>
-</ol>
-<h2>Load Balancers</h2>
-<p>A load balancer is a dedicated hardware appliance or software service that acts as a reverse proxy, distributing incoming network traffic across multiple servers. It maximizes application reliability, prevents server overloads, and minimizes latency by ensuring no single machine is overwhelmed.</p>
-<h3>Key Benefits</h3>
+<h2>Common Causes</h2>
+<p>Engineers often face ambiguity due to:</p>
 <ul>
-<li><strong>High Availability:</strong> If a backend server goes offline, the load balancer automatically reroutes traffic to healthy servers, preventing downtime.</li>
-<li><strong>Scalability:</strong> It allows administrators to seamlessly add or remove servers from the backend pool without interrupting user access.</li>
-<li><strong>Security:</strong> Acting as an intermediary, it hides backend server identities and can help mitigate Distributed Denial of Service (DDoS) attacks.</li>
+<li><strong>Human factors:</strong> Stakeholders or product owners may have conflicting opinions, lack clear product goals, or be indecisive.</li>
+<li><strong>Constantly evolving systems:</strong> The underlying business rules or technical environments are in a state of flux.</li>
+<li><strong>Vague user stories:</strong> Requirements that rely on subjective adjectives (e.g. the system should be &quot;fast&quot; instead of &quot;loading within 2 seconds&quot;).</li>
 </ul>
-<h3>Common Load Balancing Algorithms</h3>
-<p>Different methods are used to determine which server receives the next incoming request:</p>
+<h2>Strategies to Resolve Ambiguity</h2>
+<p>Addressing unclear requirements relies on several systematic approaches:</p>
 <ul>
-<li><strong>Round Robin:</strong> Distributes requests sequentially across the server pool in a revolving loop.</li>
-<li><strong>Least Connections:</strong> Routes traffic to the server with the fewest active connections, making it ideal if requests vary greatly in processing time.</li>
-<li><strong>IP Hash:</strong> Uses the client's IP address to consistently route them to the same server, preserving session data.</li>
+<li><strong>Iterative sprints (Agile):</strong> Working in small increments allows the team to get regular feedback, preventing you from heading too far in the wrong direction.</li>
+<li><strong>Ask direct clarifying questions:</strong> Avoid making assumptions. If you notice gaps, confront them proactively by proposing specific solutions to confirm with stakeholders.</li>
+<li><strong>Prototyping and wireframing:</strong> Build quick, throwaway code or UI mockups to visualize the requirements and drive stakeholder alignment.</li>
+<li><strong>Define specific acceptance criteria:</strong> Translate loose requests into concrete, measurable goals (e.g. limits for error rates, exact response times, or edge cases).</li>
 </ul>
-<h3>Load Balancer Tiers</h3>
-<p>Load balancing generally operates at two primary network levels:</p>
+<p>Handling ambiguity in software development involves breaking down vague requirements through active stakeholder communication, iterative prototyping, and documenting assumptions.</p>
+<p>Key strategies include asking &quot;why&quot; to understand goals, defining Minimum Viable Products (MVPs) to establish focus, and using test-driven development (TDD) to clarify edge cases.</p>
+<h2>Structured Approach</h2>
 <ul>
-<li><strong>Layer 4 (Transport Layer):</strong> Routes traffic based on IP addresses and TCP/UDP ports without inspecting the actual content of the packets. It is highly performant.</li>
-<li><strong>Layer 7 (Application Layer):</strong> Makes highly intelligent routing decisions based on request attributes like HTTP headers, cookies, or URL paths, making it ideal for microservices.</li>
+<li><strong>Active communication and validation:</strong> Engage stakeholders immediately to ask probing questions regarding the &quot;who, what, and why&quot; of a requirement. Define the &quot;North Star&quot; or final success criteria to guide development.</li>
+<li><strong>Iterative decomposition:</strong> Break complex or vague tasks into smaller, manageable user stories. Use Agile methodologies to allow for continuous feedback and refinement.</li>
+<li><strong>Prototyping and visuals:</strong> Create mockups or prototypes to turn abstract requirements into tangible, visual representations, allowing stakeholders to provide concrete feedback.</li>
+<li><strong>Document assumptions:</strong> Document all assumptions made when dealing with uncertainty. If requirements change later, these documents act as a reference.</li>
+<li><strong>Start with knowns:</strong> Focus on what is already clear to generate value, which often sheds light on the ambiguous parts as development progresses.</li>
+<li><strong>QA as a diagnostic tool:</strong> Involve QA early to write test cases for vague requirements; this surfaces hidden assumptions and edge cases.</li>
+</ul>
+<h2>Comfort with Ambiguity</h2>
+<p>You make progress even when requirements evolve. You break down complex problems, make sensible trade-offs, and seek clarity at the right moments.</p>
+<p>Dealing with ambiguity involves proactive communication, asking clarifying questions to define the problem space, breaking work into small increments, and using decision frameworks like <strong>RACI</strong> (Responsible, Accountable, Consulted, Informed) to assign ownership. The goal is iterative feedback and shared understanding rather than perfect upfront clarity.</p>
+<h3>Strategies for Developers and Teams</h3>
+<ul>
+<li><strong>Ask questions and document:</strong> Start with a &quot;question dump&quot; to map unknowns, then focus questions to reduce the problem space. Document answers to build shared knowledge.</li>
+<li><strong>Communicate openly:</strong> Be transparent about what's known and unknown, even if uncomfortable. This fosters trust and innovation.</li>
+<li><strong>Iterate in small increments:</strong> Use Agile principles to build, test, and get feedback on small pieces (like user stories) to refine requirements continuously.</li>
+<li><strong>Define roles and ownership:</strong> Use frameworks like RACI to clarify who makes decisions and who is responsible for tasks, preventing gaps and overlaps.</li>
+<li><strong>Create user stories and use cases:</strong> Develop brief alternative scenarios for different options and present them to stakeholders to help them choose.</li>
+<li><strong>Analyze trade-offs:</strong> When multiple solutions exist, list pros/cons (cost, risk, complexity) and present a justified recommendation to stakeholders.</li>
+</ul>
+<h3>Mindset and Approach</h3>
+<ul>
+<li><strong>Embrace uncertainty:</strong> See ambiguity as an opportunity for discovery rather than a roadblock. Build tolerance by reframing uncertainty.</li>
+<li><strong>Escalate appropriately:</strong> If stuck, escalate the problem. If that fails, slow down and wait for conditions to evolve.</li>
+<li><strong>Avoid over-planning:</strong> Don't get stuck trying to plan for every possibility. Focus on iterative learning and adapting.</li>
+</ul>
+<p>By combining structured questioning, iterative development, clear communication, and a flexible mindset, teams can navigate unclear requirements and deliver successful software.</p>
+<h2>References</h2>
+<ul>
+<li><a href="https://medium.com/@nstjohn10/turning-ambiguity-into-action-a-framework-52043fbedd6a">Turning Ambiguity into Action: A Framework</a></li>
+<li><a href="https://www.linkedin.com/pulse/how-software-engineers-can-maintain-long-term-world-satish-samala--uxqbc/">How Software Engineers Can Maintain Long-Term Relevance</a></li>
 </ul>
 
     </div>

@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DevBlog - Top 50 JavaScript</title>
+
+
+
+<meta name="description" content="JavaScript interview questions covering the event loop, closures, DOM, and async patterns">
+<meta name="twitter:title" content="DevBlog - Top 50 JavaScript">
+<meta name="author" content="John Mason">
+<meta name="keywords" content="Interviewing">
+<meta property="og:description" content="JavaScript interview questions covering the event loop, closures, DOM, and async patterns">
+<meta property="og:title" content="DevBlog - Top 50 JavaScript">
+<meta property="og:article:published_time" content="2026-08-19T15:42:00+00:00">
+<meta property="og:type" content="article">
+
+
+<meta name="generator" content="HydePHP v2.0.3">
+<meta property="og:site_name" content="HydePHP">
+
+
+
+
+<style>[x-cloak] {display: none!important}</style>
+
+
+            <link rel="stylesheet" href="../media/app.css?v=9450b0e0">
+    
+
+    
+    
+
+
+    
+    <meta id="meta-color-scheme" name="color-scheme" content="light">
+    <script>if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); document.getElementById('meta-color-scheme').setAttribute('content', 'dark');} else { document.documentElement.classList.remove('dark') } </script>
+
+
+
+
+
+
+</head>
+<body id="app" class="flex flex-col min-h-screen overflow-x-hidden dark:bg-gray-900 dark:text-white" x-data="{ navigationOpen: false }" x-on:keydown.escape="navigationOpen = false;">
+    <a href="#content" id="skip-to-content" class="sr-only focus:not-sr-only bg-black border-4 border-yellow-400 focus:absolute focus:mt-2 focus:mx-auto focus:p-2 focus:w-64 h-auto left-0 overflow-auto right-0 rounded-md text-center text-lg text-white top-auto z-50 ">Skip to content</a>    <nav aria-label="Main navigation" id="main-navigation" class="flex flex-wrap items-center justify-between p-4 shadow-lg sm:shadow-xl md:shadow-none dark:bg-gray-800">
+    <div id="main-navigation-brand" class="flex grow items-center shrink-0 text-gray-700 dark:text-gray-200">
+        <a href="../index.html" class="font-bold px-4" aria-label="Home page">
+    DevBlog
+</a>
+        <div class="ml-auto">
+            <button @click="toggleTheme" class="theme-toggle-button flex items-center px-2 py-1 hover:text-gray-700 dark:text-gray-200" title="Toggle theme">
+        <span class="sr-only">Toggle dark theme</span>
+        <svg width="1.25rem" height="1.25rem" class="w-5 h-5 hidden dark:block" fill="#FFFFFF" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+        <svg width="1.25rem" height="1.25rem" class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+    </button>
+        </div>
+    </div>
+
+    <div class="block md:hidden">
+        <button id="navigation-toggle-button" class="flex items-center px-3 py-1 hover:text-gray-700 dark:text-gray-200"
+                aria-label="Toggle navigation menu" @click="navigationOpen = ! navigationOpen">
+            <svg x-show="! navigationOpen" title="Open Navigation Menu" class="dark:fill-gray-200"
+                 style="display: block;"
+                 id="open-main-navigation-menu-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24"
+                 width="24">
+                <title>Open Menu</title>
+                <path d="M0 0h24v24H0z" fill="none"/>
+                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+            </svg>
+            <svg x-show="navigationOpen" title="Close Navigation Menu" class="dark:fill-gray-200" style="display: none;"
+                 id="close-main-navigation-menu-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24"
+                 width="24">
+                <title>Close Menu</title>
+                <path d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+            </svg>
+        </button>
+    </div>
+
+    <div id="main-navigation-links" 
+         class="w-full hidden md:flex grow md:grow-0 md:items-center md:w-auto px-6 -mx-4 border-t mt-3 pt-3 md:border-none md:mt-0 md:py-0 border-gray-200 dark:border-gray-700"
+         :class="navigationOpen ? 'block!' : ''">
+        <ul aria-label="Navigation links" class="md:grow md:flex justify-end">
+                            <li class="md:mx-2">
+                                            <a href="../index.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Home</a>                                    </li>
+                            <li class="md:mx-2">
+                                            <a href="../projects.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Projects</a>                                    </li>
+                    </ul>
+    </div>
+</nav>
+    <section>
+        
+    <main id="content" class="mx-auto max-w-7xl py-16 px-8">
+        <article aria-label="Article" id="top-50-javascript" itemscope itemtype="https://schema.org/BlogPosting"
+    class="post-article mx-auto prose dark:prose-invert">
+    <meta itemprop="identifier" content="top-50-javascript">
+    
+    <header aria-label="Header section" role="doc-pageheader">
+        <h1 itemprop="headline" class="mb-4">Top 50 JavaScript</h1>
+        <div id="byline" aria-label="About the post" role="doc-introduction">
+            Posted <time itemprop="dateCreated datePublished" datetime="2026-08-19T15:42:00+00:00" title="Wednesday Aug 19th, 2026, at 3:42pm">Aug 19th, 2026</time>            by author
+<address itemprop="author" itemscope itemtype="https://schema.org/Person" aria-label="The post author" style="display: inline;">
+                <span itemprop="name" aria-label="The author's name" title=@john_mason>John Mason</span>
+            </address>            in the category "Interviewing"        </div>
+    </header>
+        <div aria-label="Article body" itemprop="articleBody">
+        <p>Interview notes for JavaScript. Numbered questions with short answers and examples.</p>
+<h2>1. What is Debouncing in JavaScript?</h2>
+<p>Debouncing is a smart way to handle events that fire repeatedly within a short time, such as typing in a search box or resizing a window. Instead of executing a function every single time the event is triggered, debouncing ensures the function runs only after the event stops firing for a specified time.</p>
+<p>Why is it important?</p>
+<p>It prevents performance bottlenecks by reducing the number of unnecessary function calls, making your app smoother and more efficient.</p>
+<p>How does it work?</p>
+<p>The debounce method delays a function's execution until after a defined &quot;waiting period&quot; has passed since the last event. Let's see an example using Lodash:</p>
+<pre><code class="language-js">import { debounce } from 'lodash';
+
+const searchInput = document.getElementById('search-input');
+
+const debouncedSearch = debounce(() =&gt; {
+  // Perform the search operation here
+  console.log('Searching for:', searchInput.value);
+}, 300);
+
+searchInput.addEventListener('input', debouncedSearch);
+</code></pre>
+<h3>Key features of debouncing</h3>
+<ul>
+<li>Delay-based execution: Runs the function after user activity has stopped</li>
+<li>Improves performance: Prevents excessive computations or network calls during rapid events</li>
+<li>Flexible configurations: Supports leading (immediate) and trailing (delayed) execution, and even a maximum wait time</li>
+</ul>
+<p>How is it different from throttling?</p>
+<p>While debouncing waits until user activity stops, throttling ensures the function runs at fixed intervals, regardless of how often the event occurs. Each technique suits specific use cases, such as search boxes (debouncing) versus scroll events (throttling).</p>
+<h2>2. What is Promise.all()?</h2>
+<p>Promise.all() is a powerful method in JavaScript that allows you to handle multiple asynchronous tasks simultaneously. It takes an array of promises and returns a single promise that resolves when all the promises resolve, or rejects if any one of them fails.</p>
+<p>This method is perfect when you need to wait for several independent asynchronous tasks to finish before proceeding, like fetching data from multiple APIs.</p>
+<p>Here's how Promise.all() works with multiple API requests:</p>
+<pre><code class="language-js">const promise1 = fetch('https://api.example.com/data/1');
+const promise2 = fetch('https://api.example.com/data/2');
+const promise3 = fetch('https://api.example.com/data/3');
+
+Promise.all([promise1, promise2, promise3])
+  .then((responses) =&gt; {
+    // Executes only when all promises are resolved.
+    console.log('All responses:', responses);
+  })
+  .catch((error) =&gt; {
+    // Catches any error from any promise.
+    console.error('Error:', error);
+  });
+</code></pre>
+<ul>
+<li>Concurrency: Runs multiple asynchronous tasks in parallel, improving performance.</li>
+<li>All-or-nothing resolution: The promise resolves only when all tasks succeed, or it rejects if any one fails.</li>
+<li>Simplifies workflows: Ideal for managing interdependent or independent tasks efficiently.</li>
+</ul>
+<h2>3. What is Deep Equal?</h2>
+<p>Deep equality involves comparing two objects or arrays to determine if they are structurally identical.</p>
+<p>Unlike shallow equality, which only checks if object references are the same, deep equality examines whether all nested values are equal.</p>
+<p>Here's a simple deepEqual implementation:</p>
+<pre><code class="language-js">function deepEqual(obj1, obj2) {
+  if (obj1 === obj2) return true;
+
+  if (
+    obj1 == null ||
+    typeof obj1 !== 'object' ||
+    obj2 == null ||
+    typeof obj2 !== 'object'
+  )
+    return false;
+
+  let keys1 = Object.keys(obj1);
+  let keys2 = Object.keys(obj2);
+
+  if (keys1.length !== keys2.length) return false;
+
+  for (let key of keys1) {
+    if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) return false;
+  }
+
+  return true;
+}
+
+// Example usage
+const object1 = {
+  name: 'John',
+  age: 30,
+  address: {
+    city: 'New York',
+    zip: '10001',
+  },
+};
+
+const object2 = {
+  name: 'John',
+  age: 30,
+  address: {
+    city: 'New York',
+    zip: '10001',
+  },
+};
+
+console.log(deepEqual(object1, object2)); // true
+</code></pre>
+<p>This function uses recursion to check nested properties, ensuring all values match in both objects or arrays. It's a critical concept for comparing complex data structures in frontend development.</p>
+<h2>4. Understanding Event Emitters</h2>
+<p>An EventEmitter is a utility that enables objects to listen for and emit events. It implements the observer pattern, allowing you to subscribe to actions or changes and handle them when triggered. This concept is fundamental in both JavaScript and Node.js for managing event-driven programming.</p>
+<pre><code class="language-js">const eventEmitter = new EventEmitter();
+
+// Subscribe to an event
+eventEmitter.on('customEvent', (data) =&gt; {
+  console.log('Event emitted with data:', data);
+});
+
+// Emit the event
+eventEmitter.emit('customEvent', { message: 'Hello, world!' });
+</code></pre>
+<p>EventEmitter allows flexible communication between components, making it useful in scenarios like state management, logging, or real-time updates.</p>
+<h2>5. What is Array.prototype.reduce()?</h2>
+<p>Array.prototype.reduce() is a versatile method for iterating through an array and reducing it to a single value. It processes each element with a callback function, carrying over an accumulator to build the final result. Common use cases include summing numbers, flattening arrays, or even building complex objects.</p>
+<pre><code class="language-js">const numbers = [1, 2, 3, 4, 5];
+const sum = numbers.reduce(function (accumulator, currentValue) {
+  return accumulator + currentValue;
+}, 0);
+
+console.log(sum); // Output: 15
+</code></pre>
+<p>Why Use reduce?</p>
+<ul>
+<li>Flexibility: Handles various operations, from aggregations to transformations.</li>
+<li>Functional programming: Encourages declarative and clean code.</li>
+<li>Powerful: Can replace loops or multiple utility methods in a single chain.</li>
+</ul>
+<h2>6. Simplifying arrays – Flattening</h2>
+<p>Flattening transforms a nested array into a single-level array, making it more manageable. Since ES2019, JavaScript provides the Array.prototype.flat() method for this.</p>
+<pre><code class="language-js">const nestedArray = [1, [2, [3, [4, [5]]]]];
+const flatArray = nestedArray.flat(Infinity);
+
+console.log(flatArray); // Output: [1, 2, 3, 4, 5]
+</code></pre>
+<p>Before ES2019, custom solutions were common:</p>
+<pre><code class="language-js">// Custom recursive array flattener
+function flattenArray(arr) {
+  return arr.reduce(
+    (acc, val) =&gt;
+      Array.isArray(val) ? acc.concat(flattenArray(val)) : acc.concat(val),
+    [],
+  );
+}
+
+const nestedArray = [1, [2, [3, [4, [5]]]]];
+const flatArray = flattenArray(nestedArray);
+
+console.log(flatArray); // Output: [1, 2, 3, 4, 5]
+</code></pre>
+<h2>7. Merging data structures</h2>
+<p>Merging data is crucial when handling complex structures. JavaScript provides efficient ways to combine objects or arrays.</p>
+<h2>Merging objects</h2>
+<p>Using the spread operator
+The spread operator is concise and intuitive for merging objects:</p>
+<pre><code class="language-js">const obj1 = { a: 1, b: 2 };
+const obj2 = { b: 3, c: 4 };
+
+const mergedObj = { ...obj1, ...obj2 };
+
+console.log(mergedObj); // Output: { a: 1, b: 3, c: 4 }
+</code></pre>
+<p>Using Object.assign()</p>
+<p>Another approach is Object.assign():</p>
+<pre><code class="language-js">const obj1 = { a: 1, b: 2 };
+const obj2 = { b: 3, c: 4 };
+
+const mergedObj = Object.assign({}, obj1, obj2);
+
+console.log(mergedObj); // Output: { a: 1, b: 3, c: 4 }
+</code></pre>
+<p>Merging arrays
+Using the spread operator</p>
+<pre><code class="language-js">const array1 = [1, 2, 3];
+const array2 = [4, 5, 6];
+
+const mergedArray = [...array1, ...array2];
+
+console.log(mergedArray); // Output: [1, 2, 3, 4, 5, 6]
+</code></pre>
+<p>Using Array.concat()</p>
+<pre><code class="language-js">const array1 = [1, 2, 3];
+const array2 = [4, 5, 6];
+
+const mergedArray = array1.concat(array2);
+
+console.log(mergedArray); // Output: [1, 2, 3, 4, 5, 6]
+</code></pre>
+<p>Deep merging
+For nested objects, you'll need custom logic or libraries:</p>
+<pre><code class="language-js">function deepMerge(target, source) {
+  for (const key in source) {
+    if (source[key] instanceof Object &amp;&amp; key in target) {
+      Object.assign(source[key], deepMerge(target[key], source[key]));
+    }
+  }
+  Object.assign(target || {}, source);
+  return target;
+}
+
+const obj1 = { a: 1, b: { x: 10, y: 20 } };
+const obj2 = { b: { y: 30, z: 40 }, c: 3 };
+
+const mergedObj = deepMerge(obj1, obj2);
+
+console.log(mergedObj); // Output: { a: 1, b: { x: 10, y: 30, z: 40 }, c: 3 }
+</code></pre>
+<p>Alternatively, libraries like Lodash simplify deep merging:</p>
+<pre><code class="language-js">const _ = require('lodash');
+
+const obj1 = { a: 1, b: { x: 10, y: 20 } };
+const obj2 = { b: { y: 30, z: 40 }, c: 3 };
+
+const mergedObj = _.merge({}, obj1, obj2);
+
+console.log(mergedObj); // Output: { a: 1, b: { x: 10, y: 30, z: 40 }, c: 3 }
+</code></pre>
+<h2>8. Selecting DOM Elements – getElementsByClassName</h2>
+<p>getElementsByClassName fetches elements matching a specific class and returns them as a live HTMLCollection.</p>
+<pre><code class="language-js">// Fetch and loop through elements
+const elements = document.getElementsByClassName('example');
+
+for (let i = 0; i &lt; elements.length; i++) {
+  console.log(elements[i].textContent);
+}
+</code></pre>
+<p>Multiple classes
+You can combine class names for more specific selections:</p>
+<pre><code class="language-js">const elements = document.getElementsByClassName('class1 class2');
+</code></pre>
+<p>Live collections
+HTMLCollection updates automatically if DOM elements are added or removed.</p>
+<p>For more complex selectors, use querySelectorAll:</p>
+<pre><code class="language-js">const elements = document.querySelectorAll('.example');
+</code></pre>
+<h2>9. Avoiding redundant computations with memoization</h2>
+<p>Memoization saves computed results to avoid redundant calculations.</p>
+<pre><code class="language-js">function expensiveOperation(n) {
+  console.log('Calculating for', n);
+  return n * 2;
+}
+
+// Memoize function
+function memoize(func) {
+  const cache = {};
+
+  return function (n) {
+    if (cache[n] !== undefined) {
+      console.log('From cache for', n);
+      return cache[n];
+    }
+    const result = func(n);
+    cache[n] = result;
+    return result;
+  };
+}
+
+const memoizedExpensiveOperation = memoize(expensiveOperation);
+
+console.log(memoizedExpensiveOperation(5)); // Calculating for 5, 10
+console.log(memoizedExpensiveOperation(5)); // From cache for 5, 10
+</code></pre>
+<h2>10. Safer nested property access: get</h2>
+<p>Accessing nested object properties risk errors if any property is undefined. Tools like Lodash's get or JavaScript's optional chaining (?.) help mitigate this.</p>
+<pre><code class="language-js">const user = { address: { city: 'New York' } };
+console.log(_.get(user, 'address.city')); // 'New York'
+console.log(user.address?.city); // 'New York'
+</code></pre>
+<p>These methods safely retrieve nested properties without crashing the program.</p>
+<h2>11. Hoisting in JavaScript</h2>
+<p>Hoisting refers to how JavaScript moves variable and function declarations to the top of their scope during compilation. While only the declaration is hoisted (not the initialization), understanding hoisting helps in writing cleaner and bug-free code.</p>
+<p>//Hoisting with var
+Variables declared with var are hoisted and initialized as undefined. Accessing them before initialization results in undefined.</p>
+<pre><code class="language-js">console.log(foo); // undefined
+var foo = 1;
+console.log(foo); // 1
+</code></pre>
+<p>Hoisting with let, const, and class
+Variables declared with let, const, and class are hoisted but exist in a &quot;temporal dead zone&quot; until their declaration is reached, causing a ReferenceError if accessed early.</p>
+<pre><code class="language-js">console.log(y); // ReferenceError
+let y = 'local';
+
+//Function hoisting
+
+//Function declarations
+</code></pre>
+<p>Both the declaration and definition of functions are hoisted, allowing them to be called before their declaration.</p>
+<pre><code class="language-js">foo(); // 'FOOOOO'
+
+function foo() {
+  console.log('FOOOOO');
+}
+
+//Function expressions
+</code></pre>
+<p>For function expressions, only the variable is hoisted, not the function itself.</p>
+<pre><code class="language-js">console.log(bar); // undefined
+bar(); // TypeError: bar is not a function
+
+var bar = function () {
+  console.log('BARRRR');
+};
+
+//Import statements
+</code></pre>
+<p>Imports are hoisted, making them available throughout the module. However, their initialization happens before the module code executes.</p>
+<pre><code class="language-js">foo.doSomething(); // Works fine
+
+import foo from './modules/foo';
+</code></pre>
+<p>Modern JavaScript uses let and const to avoid hoisting pitfalls. Declare variables at the top of their scope for better readability and use tools like ESLint to enforce best practices:</p>
+<p>no-use-before-define
+no-undef
+By following these practices, you can write robust, maintainable code.</p>
+<h2>12. What are the differences between JavaScript variables created using let, var, and const?</h2>
+<p>In JavaScript, let, var, and const are used to declare variables, but they differ in scope, initialization, redeclaration, reassignment, and behavior when accessed before declaration.</p>
+<p>Scope
+Variables declared with var are function-scoped or global, while let and const are block-scoped (confined to the nearest {} block).</p>
+<pre><code class="language-js">if (true) {
+  var foo = 1;
+  let bar = 2;
+  const baz = 3;
+}
+
+console.log(foo); // 1
+console.log(bar); // ReferenceError
+console.log(baz); // ReferenceError
+</code></pre>
+<p>Initialization
+var and let can be declared without initialization, but const requires an initial value.</p>
+<pre><code class="language-js">var a; // Valid
+let b; // Valid
+const c; // SyntaxError: Missing initializer
+</code></pre>
+<p>Redeclaration
+Variables declared with var can be redeclared, but let and const cannot.</p>
+<pre><code class="language-js">var x = 10;
+var x = 20; // Allowed
+
+let y = 10;
+let y = 20; // SyntaxError: Identifier 'y' has already been declared
+</code></pre>
+<p>Reassignment
+var and let allow reassignment, while const does not.</p>
+<pre><code class="language-js">let a = 1;
+a = 2; // Allowed
+
+const b = 1;
+b = 2; // TypeError: Assignment to constant variable
+</code></pre>
+<p>Access before declaration
+All variables are hoisted, but var initializes to undefined, whereas let and const exist in a &quot;temporal dead zone&quot; until the declaration is reached.</p>
+<pre><code class="language-js">console.log(foo); // undefined
+var foo = 'foo';
+
+console.log(bar); // ReferenceError
+let bar = 'bar';
+</code></pre>
+<p>Best practices</p>
+<ul>
+<li>Use const for variables that don't change to ensure immutability.</li>
+<li>Use let when reassignment is needed.</li>
+<li>Avoid var due to its hoisting and scoping issues.</li>
+<li>Use tools like ESLint to enforce modern best practices</li>
+</ul>
+<h2>13. Explain the difference between == and === in JavaScript?</h2>
+<p>The == operator checks for equality after performing type conversion, while === checks for strict equality without type conversion.</p>
+<p>Loose equality (==)
+== allows type coercion, which means JavaScript converts values to the same type before comparison. This can lead to unexpected results.</p>
+<pre><code class="language-js">42 == '42'; // true
+0 == false; // true
+null == undefined; // true
+</code></pre>
+<p>Strict equality (===)
+=== checks both value and type, avoiding the pitfalls of type coercion.</p>
+<pre><code class="language-js">42 === '42'; // false
+0 === false; // false
+null === undefined; // false
+</code></pre>
+<p>Use cases</p>
+<ul>
+<li>Prefer === for most comparisons as it avoids implicit type conversion and makes code more predictable.</li>
+<li>Use == only when comparing null or undefined for simplicity.</li>
+</ul>
+<pre><code class="language-js">let x = null;
+console.log(x == null); // true
+console.log(x == undefined); // true
+</code></pre>
+<p>Bonus: Object.is()
+Object.is() is similar to === but treats -0 and +0 as distinct and considers NaN equal to itself.</p>
+<pre><code class="language-js">console.log(Object.is(-0, +0)); // false
+console.log(Object.is(NaN, NaN)); // true
+</code></pre>
+<p>Conclusion</p>
+<ul>
+<li>Use === for strict comparisons to avoid bugs caused by type coercion.</li>
+<li>Rely on Object.is() for nuanced comparisons like distinguishing -0 and +0.</li>
+</ul>
+<h2>14. Understanding the Event Loop in JavaScript</h2>
+<p>The event loop is the backbone of JavaScript's asynchronous behavior, enabling single-threaded execution without blocking.</p>
+<p>Key components</p>
+<p>Call stack: Tracks function executions in a Last-In-First-Out (LIFO) order</p>
+<p>Web APIs/Node.js APIs: Handle asynchronous tasks like setTimeout and HTTP requests on separate threads</p>
+<p>Task queue (Macrotask queue): Queues tasks like setTimeout and UI events</p>
+<p>Microtask queue: Prioritizes tasks like Promise callbacks, executed before macrotasks</p>
+<p>How it works</p>
+<ul>
+<li>Synchronous code execution: Functions are pushed and popped from the call stack.</li>
+<li>Asynchronous tasks: Offloaded to APIs for processing.</li>
+<li>Task completion: Completed tasks are queued.</li>
+<li>Event loop execution: Executes microtasks until the queue is empty. Processes one macrotask and checks the microtask queue again.</li>
+</ul>
+<pre><code class="language-js">console.log('Start');
+
+setTimeout(() =&gt; console.log('Timeout 1'), 0);
+
+Promise.resolve().then(() =&gt; console.log('Promise 1'));
+
+setTimeout(() =&gt; console.log('Timeout 2'), 0);
+
+console.log('End');
+</code></pre>
+<p>Output:</p>
+<pre><code class="language-js">Start
+End
+Promise 1
+Timeout 1
+Timeout 2
+
+Synchronous logs (Start, End) run first.
+Microtasks (Promise 1) follow.
+Macrotasks (Timeout 1, Timeout 2) run last.
+</code></pre>
+<h2>15. What is Event Delegation in JavaScript?</h2>
+<p>Event delegation is an efficient way to manage events for multiple elements by attaching a single event listener to their common parent.</p>
+<p>How it works</p>
+<ul>
+<li>Attach a listener: Add an event listener to a parent element instead of each child.</li>
+<li>Event bubbling: Events triggered on children bubble up to the parent.</li>
+<li>Identify target: Use event.target to determine the clicked element.</li>
+<li>Perform action: Execute logic based on the event target.</li>
+</ul>
+<pre><code class="language-js">// HTML:
+// &lt;ul id=&quot;item-list&quot;&gt;
+//   &lt;li&gt;Item 1&lt;/li&gt;
+//   &lt;li&gt;Item 2&lt;/li&gt;
+// &lt;/ul&gt;
+
+const itemList = document.getElementById('item-list');
+
+itemList.addEventListener('click', (event) =&gt; {
+  if (event.target.tagName === 'LI') {
+    console.log(`Clicked on ${event.target.textContent}`);
+  }
+});
+</code></pre>
+<p>Benefits</p>
+<ul>
+<li>Efficiency: Reduces the number of event listeners, improving performance.</li>
+<li>Dynamic content: Automatically handles new elements added to the DOM.</li>
+</ul>
+<h2>16. How this works in JavaScript</h2>
+<p>The value of this depends on how a function is called. Let's explore its different behaviors.</p>
+<p>Scenarios
+//Using new: When creating objects, this refers to the newly created object.</p>
+<pre><code class="language-js">function Person(name) {
+  this.name = name;
+}
+const person = new Person('Alice');
+console.log(person.name); // 'Alice'
+
+//Using apply, call, or bind: Explicitly sets this to a specified object.
+</code></pre>
+<p>Using apply, call, or bind: Explicitly sets this to a specified object.</p>
+<pre><code class="language-js">function greet() {
+  console.log(this.name);
+}
+const person = { name: 'Alice' };
+greet.call(person); // 'Alice'
+</code></pre>
+<p>//Method call: this refers to the object the method is called on.</p>
+<pre><code class="language-js">const obj = {
+  name: 'Alice',
+  greet() {
+    console.log(this.name);
+  },
+};
+obj.greet(); // 'Alice'
+</code></pre>
+<p>//Free function call: Defaults to the global object (window in browsers) or undefined in strict mode.</p>
+<pre><code class="language-js">function greet() {
+  console.log(this); // global object or undefined
+}
+greet();
+</code></pre>
+<p>///Arrow functions: Capture this from their enclosing scope.</p>
+<pre><code class="language-js">const obj = {
+  name: 'Alice',
+  greet: () =&gt; {
+    console.log(this.name); // Inherits `this` from enclosing scope
+  },
+};
+obj.greet(); // undefined
+</code></pre>
+<p>//ES6 and this
+Arrow functions simplify usage by capturing this from their lexical scope.</p>
+<pre><code class="language-js">function Timer() {
+  this.seconds = 0;
+  setInterval(() =&gt; {
+    this.seconds++;
+    console.log(this.seconds);
+  }, 1000);
+}
+
+const timer = new Timer();
+</code></pre>
+<h2>17. What sets Cookies, sessionStorage, and localStorage apart?</h2>
+<p>When it comes to client-side storage, cookies, localStorage, and sessionStorage serve distinct roles:</p>
+<h3>Cookies</h3>
+<ul>
+<li>Function: Stores small pieces of data sent along with HTTP requests to the server.</li>
+<li>Limit: Roughly 4KB per domain.</li>
+<li>Lifetime: Can persist or expire after a set time. Session cookies disappear when the browser closes.</li>
+<li>Scope: Accessible across pages and subdomains for a single domain.</li>
+<li>Security: Features like HttpOnly and Secure flags add extra security.</li>
+</ul>
+<pre><code class="language-js">// Set a cookie with an expiry date
+document.cookie = 'userId=12345; expires=Fri, 31 Dec 2025 23:59:59 GMT; path=/';
+
+// Read all cookies
+console.log(document.cookie);
+
+// Delete a cookie
+document.cookie = 'userId=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+</code></pre>
+<h3>localStorage</h3>
+<ul>
+<li>Function: Allows persistent data storage on the client side.</li>
+<li>Limit: About 5MB per origin.</li>
+<li>Lifetime: Data stays until explicitly removed.</li>
+<li>Scope: Shared across all tabs and windows for the same origin.</li>
+<li>Security: Accessible by JavaScript within the same origin.</li>
+</ul>
+<pre><code class="language-js">// Store data in localStorage
+localStorage.setItem('username', 'john_doe');
+
+// Retrieve data
+console.log(localStorage.getItem('username'));
+
+// Remove an item
+localStorage.removeItem('username');
+
+// Clear all localStorage data
+localStorage.clear();
+</code></pre>
+<h3>sessionStorage</h3>
+<ul>
+<li>Function: Stores data for the duration of a page session.</li>
+<li>Limit: Similar to localStorage (around 5MB).</li>
+<li>Lifetime: Cleared when the tab or browser closes.</li>
+<li>Scope: Data is confined to the current tab or window.</li>
+<li>Security: Accessible by JavaScript on the same origin.</li>
+</ul>
+<pre><code class="language-js">// Store data in sessionStorage
+sessionStorage.setItem('sessionId', 'abcdef');
+
+// Retrieve data
+console.log(sessionStorage.getItem('sessionId'));
+
+// Remove an item
+sessionStorage.removeItem('sessionId');
+
+// Clear all sessionStorage data
+sessionStorage.clear();
+</code></pre>
+<h2>18. How do <code>&lt;script&gt;</code>, <code>&lt;script async&gt;</code>, and <code>&lt;script defer&gt;</code> differ?</h2>
+<p><strong><code>&lt;script&gt;</code></strong> — fetches and executes immediately, pausing HTML parsing. Use for critical scripts needed before render.</p>
+<pre><code class="language-html">&lt;script src=&quot;main.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p><strong><code>&lt;script async&gt;</code></strong> — loads in parallel with HTML parsing and executes as soon as it is ready. Use for independent scripts such as analytics.</p>
+<pre><code class="language-html">&lt;script async src=&quot;analytics.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p><strong><code>&lt;script defer&gt;</code></strong> — loads alongside HTML parsing but only runs after the document is fully parsed. Use for scripts that need a complete DOM.</p>
+<pre><code class="language-html">&lt;script defer src=&quot;deferred.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+<h2>19. What's the difference between null, undefined?</h2>
+<h3>Undeclared</h3>
+<p>Variables not defined using var, let, or const are considered undeclared and can cause global scope issues.</p>
+<h3>undefined</h3>
+<p>A declared variable that hasn't been assigned a value is undefined.</p>
+<h3>null</h3>
+<p>Represents the intentional absence of any value. It's an explicit assignment. Example Code:</p>
+<pre><code class="language-js">let a;
+console.log(a); // undefined
+
+let b = null;
+console.log(b); // null
+
+try {
+  console.log(c); // ReferenceError: c is not defined
+} catch (e) {
+  console.log('c is undeclared');
+}
+</code></pre>
+<h2>20. What's the difference between .call() vs .apply()?</h2>
+<p>Both .call and .apply let you invoke a function with a specified this value. The key difference lies in how arguments are passed:</p>
+<p>.call: Accepts arguments as a comma-separated list.</p>
+<p>.apply: Accepts arguments as an array.</p>
+<p>Memory aid:</p>
+<p>C for call = comma-separated
+A for apply = array</p>
+<pre><code class="language-js">function sum(a, b) {
+  return a + b;
+}
+
+console.log(sum.call(null, 1, 2)); // 3
+console.log(sum.apply(null, [1, 2])); // 3
+</code></pre>
+<h2>21. How does Function.prototype.bind work?</h2>
+<p>The bind method is used to create a new function with a specific this value and, optionally, preset arguments. This ensures that the function always has the correct this context, regardless of how or where it's called.</p>
+<p>Key uses of bind:</p>
+<ul>
+<li>Maintaining Context: Ensures that this is correctly set for the function.</li>
+<li>Preset Arguments: Allows you to predefine arguments for a function.</li>
+<li>Borrowing Methods: Enables you to use methods from one object in another.</li>
+</ul>
+<pre><code class="language-js">const john = {
+  age: 42,
+  getAge: function () {
+    return this.age;
+  },
+};
+
+console.log(john.getAge()); // 42
+
+const unboundGetAge = john.getAge;
+console.log(unboundGetAge()); // undefined
+
+const boundGetAge = john.getAge.bind(john);
+console.log(boundGetAge()); // 42
+
+const mary = { age: 21 };
+const boundGetAgeMary = john.getAge.bind(mary);
+console.log(boundGetAgeMary()); // 21
+</code></pre>
+<h2>22. Why use arrow functions in constructors?</h2>
+<p>Using arrow functions for methods in constructors automatically binds the this context to the constructor, avoiding the need to manually bind it. This eliminates issues caused by this referring to unexpected contexts.</p>
+<pre><code class="language-js">const Person = function (name) {
+  this.name = name;
+  this.sayName1 = function () {
+    console.log(this.name);
+  };
+  this.sayName2 = () =&gt; {
+    console.log(this.name);
+  };
+};
+
+const john = new Person('John');
+const dave = new Person('Dave');
+
+john.sayName1(); // John
+john.sayName2(); // John
+
+john.sayName1.call(dave); // Dave
+john.sayName2.call(dave); // John
+</code></pre>
+<p>Arrow functions are particularly useful in React class components, ensuring methods maintain the correct context when passed to child components.</p>
+<h2>23. How does prototypal inheritance work?</h2>
+<p>Prototypal inheritance is a way for objects to share properties and methods through their prototype chain.</p>
+<p>Key concepts:</p>
+<ul>
+<li>Prototypes: Each object has a prototype, from which it inherits properties and methods.</li>
+<li>Prototype chain: JavaScript looks for properties/methods up the chain until it finds them or reaches null.</li>
+<li>Constructor functions: Functions used with new to create objects.</li>
+</ul>
+<pre><code class="language-js">function Animal(name) {
+  this.name = name;
+}
+
+Animal.prototype.sayName = function () {
+  console.log(`My name is ${this.name}`);
+};
+
+function Dog(name, breed) {
+  Animal.call(this, name);
+  this.breed = breed;
+}
+
+Dog.prototype = Object.create(Animal.prototype);
+Dog.prototype.bark = function () {
+  console.log('Woof!');
+};
+
+let fido = new Dog('Fido', 'Labrador');
+fido.bark(); // &quot;Woof!&quot;
+fido.sayName(); // &quot;My name is Fido&quot;
+</code></pre>
+<h2>24. Differences between: function Person(){}, const person = Person(), and const person = new Person()?</h2>
+<p>Key differences:</p>
+<pre><code class="language-js">function Person(){}: A function declaration, typically used for constructors if written in PascalCase.
+
+const person = Person(): Calls the function normally and assigns the result to person. No object creation happens unless explicitly returned.
+
+const person = new Person(): Invokes the function as a constructor, creating a new object and setting its prototype to Person.prototype.
+</code></pre>
+<h2>25. Function declarations vs. Function expressions</h2>
+<p>Function declarations:</p>
+<p>Syntax: function foo() {}
+Hoisting: Fully hoisted; can be called before its definition.</p>
+<pre><code class="language-js">foo(); // &quot;Hello!&quot;
+function foo() {
+  console.log('Hello!');
+}
+</code></pre>
+<p>Function expressions:</p>
+<p>Syntax: var foo = function() {}
+Hoisting: Only the variable is hoisted, not the function body.</p>
+<pre><code class="language-js">foo(); // TypeError: foo is not a function
+var foo = function () {
+  console.log('Hello!');
+};
+</code></pre>
+<h2>26. What are the different ways to create objects in JavaScript?</h2>
+<p>Here are various approaches to creating objects in JavaScript:</p>
+<h3>Object literals: The simplest and most common way to create an object is using curly braces {} with key-value pairs.</h3>
+<pre><code class="language-js">const person = {
+  firstName: 'John',
+  lastName: 'Doe',
+};
+</code></pre>
+<h3>Object constructor: Use the built-in Object constructor with the new keyword.</h3>
+<pre><code class="language-js">const person = new Object();
+person.firstName = 'John';
+person.lastName = 'Doe';
+</code></pre>
+<h3>Object.create() method: Create an object with a specific prototype.</h3>
+<pre><code class="language-js">const personPrototype = {
+  greet() {
+    console.log(`Hello, my name is ${this.name}.`);
+  },
+};
+
+const person = Object.create(personPrototype);
+person.name = 'John';
+person.greet(); // Hello, my name is John.
+</code></pre>
+<h3>ES2015 classes: Define objects using the class syntax for a blueprint-like structure.</h3>
+<pre><code class="language-js">class Person {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  greet() {
+    console.log(`Hi, I'm ${this.name} and I'm ${this.age} years old.`);
+  }
+}
+
+const john = new Person('John', 30);
+john.greet(); // Hi, I'm John and I'm 30 years old.
+</code></pre>
+<h3>Constructor functions: Use a function as a template for creating multiple objects.</h3>
+<pre><code class="language-js">function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
+
+const john = new Person('John', 30);
+console.log(john.name); // John
+</code></pre>
+<h2>27. What is a higher-order function?</h2>
+<p>A higher-order function is a function that either:</p>
+<p>Accepts another function as an argument:</p>
+<pre><code class="language-js">function greet(name) {
+  return `Hello, ${name}!`;
+}
+
+function greetUser(greeter, name) {
+  console.log(greeter(name));
+}
+
+greetUser(greet, 'Alice'); // Hello, Alice!
+</code></pre>
+<p>Returns another function:</p>
+<pre><code class="language-js">function multiplier(factor) {
+  return function (num) {
+    return num * factor;
+  };
+}
+
+const double = multiplier(2);
+console.log(double(4)); // 8
+</code></pre>
+<h2>28. How do ES2015 classes differ from ES5 constructor functions?</h2>
+<h3>ES5 constructor functions use function constructors and prototypes for object creation and inheritance.</h3>
+<pre><code class="language-js">function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
+
+Person.prototype.greet = function () {
+  console.log(`Hi, I'm ${this.name} and I'm ${this.age} years old.`);
+};
+
+const john = new Person('John', 30);
+john.greet(); // Hi, I'm John and I'm 30 years old.
+</code></pre>
+<p>ES2015 Classes use the class keyword for cleaner and more intuitive syntax.</p>
+<pre><code class="language-js">class Person {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  greet() {
+    console.log(`Hi, I'm ${this.name} and I'm ${this.age} years old.`);
+  }
+}
+
+const john = new Person('John', 30);
+john.greet(); // Hi, I'm John and I'm 30 years old.
+</code></pre>
+<p>Key differences:
+Syntax: ES2015 classes are more readable and concise.
+Static methods: Easier to define using static in ES2015.
+Inheritance: Simpler with the extends and super keywords in ES2015.</p>
+<h2>29. What is event bubbling?</h2>
+<h3>Event bubbling is the process where an event triggers on the target element and then propagates upwards through its ancestors in the DOM.</h3>
+<pre><code class="language-js">const parent = document.getElementById('parent');
+const child = document.getElementById('child');
+
+parent.addEventListener('click', () =&gt; {
+  console.log('Parent clicked');
+});
+
+child.addEventListener('click', () =&gt; {
+  console.log('Child clicked');
+});
+</code></pre>
+<p>Clicking the child element will log both &quot;Child clicked&quot; and &quot;Parent clicked&quot; due to bubbling.</p>
+<pre><code class="language-js">### Prevent bubbling:
+</code></pre>
+<p>Use event.stopPropagation() to prevent the event from propagating upwards.</p>
+<pre><code class="language-js">child.addEventListener('click', (event) =&gt; {
+  event.stopPropagation();
+  console.log('Child clicked only');
+});
+</code></pre>
+<h2>30. What is event capturing?</h2>
+<p>Event capturing, also called &quot;trickling&quot;, is the reverse of bubbling. The event propagates from the root element down to the target element.</p>
+<h3>Enable event capturing</h3>
+<p>Capturing is enabled by passing { capture: true } to addEventListener() as the third argument.</p>
+<pre><code class="language-js">const parent = document.getElementById('parent');
+const child = document.getElementById('child');
+
+parent.addEventListener(
+  'click',
+  () =&gt; {
+    console.log('Parent capturing');
+  },
+  { capture: true },
+);
+
+child.addEventListener('click', () =&gt; {
+  console.log('Child clicked');
+});
+</code></pre>
+<p>Clicking the child will log &quot;Parent capturing&quot; first, followed by &quot;Child clicked.&quot;</p>
+<h2>31. How do mouseenter and mouseover differ?</h2>
+<h3>mouseenter</h3>
+<ul>
+<li>Does not bubble up the DOM tree.</li>
+<li>Triggered only when the mouse pointer enters the element itself, excluding its children.</li>
+<li>Fires a single event when entering the target element.</li>
+</ul>
+<h3>mouseover</h3>
+<p>Bubbles up the DOM tree.</p>
+<ul>
+<li>Triggered when the mouse pointer enters the target element or any of its children.</li>
+<li>Fires multiple events when moving over child elements.</li>
+</ul>
+<h2>32. What's the difference between synchronous and asynchronous functions?</h2>
+<h3>Synchronous functions</h3>
+<ul>
+<li>Execute tasks in a sequential, blocking manner.</li>
+<li>Program execution halts until the current task completes.</li>
+<li>Easier to debug due to their predictable flow.</li>
+</ul>
+<pre><code class="language-js">const fs = require('fs');
+const data = fs.readFileSync('file.txt', 'utf8');
+console.log(data); // Blocks until the file is fully read
+console.log('Program ends');
+</code></pre>
+<h3>Asynchronous functions</h3>
+<ul>
+<li>Perform tasks without blocking program execution.</li>
+<li>Other operations can run while waiting for the task to finish.</li>
+<li>Commonly used for I/O operations, network requests, and timers.</li>
+</ul>
+<pre><code class="language-js">console.log('Start');
+
+fetch('https://api.example.com/data')
+  .then((response) =&gt; response.json())
+  .then((data) =&gt; console.log(data)) // Non-blocking
+  .catch((error) =&gt; console.error(error));
+
+console.log('End');
+</code></pre>
+<h2>33. What is AJAX?</h2>
+<h3>AJAX (Asynchronous JavaScript and XML) is a technique that allows web pages to fetch and send data asynchronously, enabling dynamic updates without reloading the entire page.</h3>
+<p>Key points</p>
+<ul>
+<li>Asynchronous: Updates parts of a page without reloading.</li>
+<li>Data formats: Initially XML, now primarily JSON due to its simplicity.</li>
+<li>APIs: Traditionally used XMLHttpRequest; fetch() is the modern alternative.</li>
+</ul>
+<p>Using XMLHttpRequest:</p>
+<pre><code class="language-js">let xhr = new XMLHttpRequest();
+xhr.onreadystatechange = function () {
+  if (xhr.readyState === XMLHttpRequest.DONE) {
+    if (xhr.status === 200) {
+      console.log(xhr.responseText);
+    } else {
+      console.error('Request failed');
+    }
+  }
+};
+xhr.open('GET', 'https://jsonplaceholder.typicode.com/todos/1', true);
+xhr.send();
+</code></pre>
+<p>Using fetch():</p>
+<pre><code class="language-js">fetch('https://jsonplaceholder.typicode.com/todos/1')
+  .then((response) =&gt; response.json())
+  .then((data) =&gt; console.log(data))
+  .catch((error) =&gt; console.error('Fetch error:', error));
+</code></pre>
+<h2>34. What are the pros and cons of using AJAX?</h2>
+<h3>Advantages</h3>
+<ul>
+<li>Enhances user experience by enabling seamless updates.</li>
+<li>Reduces server load by fetching only necessary data.</li>
+<li>Keeps the user on the same page while updating content.</li>
+</ul>
+<h3>Disadvantages</h3>
+<ul>
+<li>Relies on JavaScript, so functionality may break if it's disabled.</li>
+<li>SEO challenges with dynamically loaded content.</li>
+<li>Bookmarking specific page states becomes difficult.</li>
+</ul>
+<h2>35. What are the differences between XMLHttpRequest and fetch()?</h2>
+<h3>XMLHttpRequest</h3>
+<ul>
+<li>Syntax: Event-driven; requires listeners for response handling.</li>
+<li>Progress tracking: Supports progress tracking via onprogress.</li>
+<li>Error handling: Uses onerror event.</li>
+</ul>
+<pre><code class="language-js">let xhr = new XMLHttpRequest();
+xhr.open('GET', 'https://example.com/api', true);
+xhr.onload = function () {
+  if (xhr.status === 200) {
+    console.log(xhr.responseText);
+  }
+};
+xhr.send();
+</code></pre>
+<h3>fetch()</h3>
+<ul>
+<li>Syntax: Promise-based; simpler and more readable.</li>
+<li>Error handling: Uses .catch() for better error management.</li>
+<li>Modern features: Built-in support for AbortController for cancellations.</li>
+</ul>
+<pre><code class="language-js">fetch('https://example.com/api')
+  .then((response) =&gt; response.json())
+  .then((data) =&gt; console.log(data))
+  .catch((error) =&gt; console.error(error));
+</code></pre>
+<p>Key differences</p>
+<ul>
+<li>fetch() has cleaner syntax and better Promise integration.</li>
+<li>XMLHttpRequest supports progress tracking, which fetch() does not. (On Progress)</li>
+</ul>
+<h2>36. What are the various data types in JavaScript?</h2>
+<p>JavaScript features a mix of primitive and non-primitive (reference) data types.</p>
+<h3>Primitive data types</h3>
+<ul>
+<li>Number: Includes integers and floating-point values.</li>
+<li>String: Text values enclosed in single, double quotes, or backticks.</li>
+<li>Boolean: Represents true or false.</li>
+<li>Undefined: A declared variable that hasn't been assigned a value.</li>
+<li>Null: Indicates an intentional lack of value.</li>
+<li>Symbol: A unique and immutable identifier often used as object property keys.</li>
+<li>BigInt: Handles large integers with arbitrary precision.</li>
+</ul>
+<h3>Non-primitive data types</h3>
+<ul>
+<li>Object: Collections of key-value pairs.</li>
+<li>Array: Ordered lists of elements.</li>
+<li>Function: First-class objects that can be assigned, passed, and returned.</li>
+<li>Date: Represents date and time values.</li>
+<li>RegExp: For pattern matching in strings.</li>
+<li>Map: A collection of key-value pairs, allowing any type of key.</li>
+<li>Set: Stores unique values, whether primitive or object references.</li>
+<li>Tip: Use the typeof operator to determine the type of a variable.</li>
+</ul>
+<h2>37. How do you iterate over object properties and array items?</h2>
+<p>JavaScript provides multiple ways to iterate over objects and arrays.</p>
+<h3>Iterating over objects</h3>
+<ol>
+<li>for...in</li>
+</ol>
+<p>Loops over all enumerable properties, including inherited ones.</p>
+<pre><code class="language-js">for (const property in obj) {
+  if (Object.hasOwn(obj, property)) {
+    console.log(property);
+  }
+}
+</code></pre>
+<p>2.Object.keys()</p>
+<p>Retrieves an array of an object's own enumerable properties.</p>
+<pre><code class="language-js">Object.keys(obj).forEach((key) =&gt; console.log(key));
+</code></pre>
+<ol start="3">
+<li>Object.entries()</li>
+</ol>
+<p>Returns an array of [key, value] pairs.</p>
+<pre><code class="language-js">Object.entries(obj).forEach(([key, value]) =&gt; console.log(`${key}: ${value}`));
+</code></pre>
+<ol start="4">
+<li>Object.getOwnPropertyNames()</li>
+</ol>
+<p>Includes both enumerable and non-enumerable properties.</p>
+<pre><code class="language-js">Object.getOwnPropertyNames(obj).forEach((prop) =&gt; console.log(prop));
+</code></pre>
+<h3>Iterating over arrays</h3>
+<ol>
+<li>for Loop</li>
+</ol>
+<p>Classic approach for iterating through arrays:</p>
+<pre><code class="language-js">for (let i = 0; i &lt; arr.length; i++) {
+  console.log(arr[i]);
+}
+</code></pre>
+<ol start="2">
+<li>Array.prototype.forEach()</li>
+</ol>
+<p>Executes a callback for each array item.</p>
+<pre><code class="language-js">arr.forEach((element, index) =&gt; console.log(element, index));
+</code></pre>
+<ol start="3">
+<li>for...of</li>
+</ol>
+<p>Ideal for looping through iterable objects like arrays.</p>
+<pre><code class="language-js">for (const element of arr) {
+  console.log(element);
+}
+</code></pre>
+<ol start="4">
+<li>Array.prototype.entries()</li>
+</ol>
+<p>Iterates with both index and value.</p>
+<pre><code class="language-js">for (const [index, element] of arr.entries()) {
+  console.log(index, ':', element);
+}
+</code></pre>
+<h2>38. What are the benefits of spread syntax, and how is it different from rest syntax?</h2>
+<h3>Spread syntax (...)</h3>
+<p>The spread operator is used to expand elements of arrays or objects.</p>
+<p>Copying arrays/objects:</p>
+<pre><code class="language-js">const array = [1, 2, 3];
+const newArray = [...array]; // [1, 2, 3]
+</code></pre>
+<p>Merging arrays/objects:</p>
+<pre><code class="language-js">const arr1 = [1, 2];
+const arr2 = [3, 4];
+const mergedArray = [...arr1, ...arr2]; // [1, 2, 3, 4]
+</code></pre>
+<p>Passing function arguments:</p>
+<pre><code class="language-js">const nums = [1, 2, 3];
+console.log(Math.max(...nums)); // 3
+</code></pre>
+<h3>Rest syntax (...)</h3>
+<p>The rest operator collects multiple elements into an array or object.</p>
+<pre><code class="language-js">Function parameters:
+
+function sum(...numbers) {
+  return numbers.reduce((a, b) =&gt; a + b);
+}
+sum(1, 2, 3); // 6
+</code></pre>
+<p>Destructuring:</p>
+<pre><code class="language-js">const [first, ...rest] = [1, 2, 3];
+console.log(rest); // [2, 3]
+</code></pre>
+<h2>39. What are the differences between Maps vs. Plain objects?</h2>
+<h3>Map</h3>
+<ul>
+<li>Keys can be any type.</li>
+<li>Maintains the insertion order.</li>
+<li>Has a size property.</li>
+<li>Directly iterable.</li>
+</ul>
+<pre><code class="language-js">const map = new Map();
+map.set('key', 'value');
+console.log(map.size); // 1
+</code></pre>
+<h3>Plain objects</h3>
+<ul>
+<li>Keys are strings or symbols.</li>
+<li>Iteration requires Object.keys(), Object.values(), or Object.entries().</li>
+<li>No direct size property.</li>
+</ul>
+<pre><code class="language-js">const obj = { key: 'value' };
+console.log(Object.keys(obj).length); // 1
+</code></pre>
+<h2>40. What are the differences between Map/Set and WeakMap/WeakSet</h2>
+<ul>
+<li>Key Types: WeakMap and WeakSet keys must be objects, while Map and Set accept any data type.</li>
+<li>Memory Management: WeakMap and WeakSet allow garbage collection of keys, making them useful for managing memory.</li>
+<li>Size: Only Map and Set have a size property.</li>
+<li>Iteration: WeakMap and WeakSet are not iterable.</li>
+</ul>
+<pre><code class="language-js">// Map Example
+const map = new Map();
+map.set({}, 'value');
+console.log(map.size); // 1
+
+// WeakMap Example
+const weakMap = new WeakMap();
+let obj = {};
+weakMap.set(obj, 'value');
+obj = null; // Key is garbage-collected
+</code></pre>
+<h2>41. What are practical use cases for arrow functions?</h2>
+<p>Arrow functions simplify function syntax, making them ideal for inline callbacks.</p>
+<p>// Traditional function syntax</p>
+<pre><code class="language-js">const numbers = [1, 2, 3, 4, 5];
+const doubledNumbers = numbers.map(function (number) {
+  return number * 2;
+});
+
+console.log(doubledNumbers); // [2, 4, 6, 8, 10]
+</code></pre>
+<p>// Arrow function syntax</p>
+<pre><code class="language-js">const doubledWithArrow = numbers.map((number) =&gt; number * 2);
+console.log(doubledWithArrow); // [2, 4, 6, 8, 10]
+</code></pre>
+<h2>42. What are callback functions in asynchronous operations?</h2>
+<p>A callback is a function passed as an argument to another function, executed after the completion of an asynchronous task.</p>
+<pre><code class="language-js">function fetchData(callback) {
+  setTimeout(() =&gt; {
+    const data = { name: 'John', age: 30 };
+    callback(data);
+  }, 1000);
+}
+
+fetchData((data) =&gt; {
+  console.log(data); // { name: 'John', age: 30 }
+});
+</code></pre>
+<h2>43. What is debouncing and throttling?</h2>
+<p>Debouncing delays execution of a function until a specified time has elapsed since its last invocation.</p>
+<pre><code class="language-js">function debounce(func, delay) {
+  let timeoutId;
+  return (...args) =&gt; {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() =&gt; func.apply(this, args), delay);
+  };
+}
+</code></pre>
+<p>Throttling ensures a function executes at most once within a set time interval.</p>
+<pre><code class="language-js">function throttle(func, limit) {
+  let inThrottle;
+  return (...args) =&gt; {
+    if (!inThrottle) {
+      func.apply(this, args);
+      inThrottle = true;
+      setTimeout(() =&gt; (inThrottle = false), limit);
+    }
+  };
+}
+</code></pre>
+<h2>44. How does destructuring assignment work?</h2>
+<p>Destructuring simplifies extracting values from arrays or objects into individual variables.</p>
+<pre><code class="language-js">// Array destructuring
+const [a, b] = [1, 2];
+
+// Object destructuring
+const { name, age } = { name: 'John', age: 30 };
+</code></pre>
+<h2>45. What is function hoisting?</h2>
+<p>Hoisting moves function declarations to the top of their scope during the compilation phase. However, function expressions and arrow functions do not get hoisted in the same way.</p>
+<pre><code class="language-js">// Function declaration
+hoistedFunction(); // Works fine
+function hoistedFunction() {
+  console.log('This function is hoisted');
+}
+
+// Function expression
+nonHoistedFunction(); // Throws an error
+var nonHoistedFunction = function () {
+  console.log('This function is not hoisted');
+};
+</code></pre>
+<h2>46. How does inheritance work in ES2015 classes?</h2>
+<p>Classes in ES2015 use extends for inheritance and super to access parent constructors and methods.</p>
+<pre><code class="language-js">class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+
+  speak() {
+    console.log(`${this.name} makes a noise.`);
+  }
+}
+
+class Dog extends Animal {
+  constructor(name, breed) {
+    super(name);
+    this.breed = breed;
+  }
+
+  speak() {
+    console.log(`${this.name} barks.`);
+  }
+}
+
+const dog = new Dog('Rex', 'German Shepherd');
+dog.speak(); // Rex barks.
+</code></pre>
+<h2>47. What is lexical scoping?</h2>
+<p>Lexical scoping determines variable access based on where functions are defined, not where they're called.</p>
+<pre><code class="language-js">function outerFunction() {
+  let outerVariable = 'I am outside!';
+
+  function innerFunction() {
+    console.log(outerVariable); // I am outside!
+  }
+
+  innerFunction();
+}
+
+outerFunction();
+</code></pre>
+<h2>48. What are scopes in JavaScript?</h2>
+<p>JavaScript has three main types of scope: global, function, and block.</p>
+<pre><code class="language-js">// Global scope
+var globalVar = 'I am global';
+
+function myFunction() {
+  // Function scope
+  var functionVar = 'I am in a function';
+
+  if (true) {
+    // Block scope
+    let blockVar = 'I am in a block';
+    console.log(blockVar); // Accessible here
+  }
+  // console.log(blockVar); // Error
+}
+</code></pre>
+<h2>49. What is the spread operator?</h2>
+<p>The spread operator (...) expands elements of an iterable (like arrays) or properties of objects into individual elements.</p>
+<pre><code class="language-js">// Copying an array
+const arr1 = [1, 2, 3];
+const arr2 = [...arr1];
+
+// Merging arrays
+const mergedArray = [...arr1, [4, 5]];
+
+// Copying an object
+const obj1 = { a: 1, b: 2 };
+const obj2 = { ...obj1 };
+
+// Passing as function arguments
+const sum = (x, y, z) =&gt; x + y + z;
+const nums = [1, 2, 3];
+sum(...nums); // 6
+</code></pre>
+<h2>50. How does this work in event handlers?</h2>
+<p>In JavaScript, this in event handlers refers to the element that triggered the event. Its context can be explicitly bound using bind(), arrow functions, or direct assignment.</p>
+<pre><code class="language-js">const button = document.querySelector('button');
+button.addEventListener('click', function () {
+  console.log(this); // Refers to the button
+});
+
+const obj = {
+  handleClick: function () {
+    console.log(this); // Refers to obj
+  },
+};
+button.addEventListener('click', obj.handleClick.bind(obj));
+</code></pre>
+<h2>References</h2>
+<ul>
+<li><a href="https://www.greatfrontend.com/blog/50-must-know-javascript-interview-questions-by-ex-interviewers">https://www.greatfrontend.com/blog/50-must-know-javascript-interview-questions-by-ex-interviewers</a></li>
+<li><a href="https://api.example.com/data/1'">https://api.example.com/data/1'</a></li>
+<li><a href="https://api.example.com/data/2'">https://api.example.com/data/2'</a></li>
+<li><a href="https://api.example.com/data/3'">https://api.example.com/data/3'</a></li>
+<li><a href="https://api.example.com/data'">https://api.example.com/data'</a></li>
+<li><a href="https://jsonplaceholder.typicode.com/todos/1'">https://jsonplaceholder.typicode.com/todos/1'</a></li>
+<li><a href="https://example.com/api'">https://example.com/api'</a></li>
+</ul>
+
+    </div>
+    <span class="sr-only">End of article</span>
+</article>    </main>
+
+    </section>
+
+    <footer aria-label="Page footer" class="flex py-4 px-6 w-full text-center mt-auto bg-slate-100 dark:bg-gray-800">
+        <div class="prose dark:prose-invert text-center mx-auto">
+            <p>Site proudly built with <a href="https://github.com/hydephp/hyde">HydePHP</a> 🎩</p>
+        </div>
+                    <a href="#app" aria-label="Go to top of page" class="float-right" @click.prevent="document.querySelector('#app').scrollIntoView({ behavior: 'smooth' })">
+                <button title="Scroll to top">
+                    <svg width="1.5rem" height="1.5rem" role="presentation" class="fill-current text-gray-500 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+                    </svg>
+                </button>
+            </a>
+            </footer>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.3/dist/cdn.min.js" integrity="sha256-gOkV4d9/FmMNEkjOzVlyM2eNAWSUXisT+1RbMTTIgXI=" crossorigin="anonymous"></script>
+
+<script>
+    function toggleTheme() {
+        if (localStorage.getItem('color-theme') === 'dark' || !('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem('color-theme', 'light');
+            document.getElementById('meta-color-scheme').setAttribute('content', 'light');
+        } else {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem('color-theme', 'dark');
+            document.getElementById('meta-color-scheme').setAttribute('content', 'dark');
+        }
+    }
+</script>
+
+
+
+
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+  const isDark =
+    document.documentElement.classList.contains('dark') ||
+    (!('color-theme' in localStorage) &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches) ||
+    localStorage.getItem('color-theme') === 'dark';
+
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: isDark ? 'dark' : 'default',
+    securityLevel: 'loose',
+  });
+
+  document.querySelectorAll('pre code.language-mermaid').forEach((code) => {
+    const pre = code.closest('pre');
+    if (!pre) return;
+
+    const container = document.createElement('div');
+    container.className = 'mermaid';
+    container.textContent = code.textContent;
+    pre.replaceWith(container);
+  });
+
+  await mermaid.run({ querySelector: '.mermaid' });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DevBlog - Top 50 PHP</title>
+
+
+
+<meta name="description" content="PHP and Laravel interview questions covering language basics, OOP, and the request lifecycle">
+<meta name="twitter:title" content="DevBlog - Top 50 PHP">
+<meta name="author" content="John Mason">
+<meta name="keywords" content="Interviewing">
+<meta property="og:description" content="PHP and Laravel interview questions covering language basics, OOP, and the request lifecycle">
+<meta property="og:title" content="DevBlog - Top 50 PHP">
+<meta property="og:article:published_time" content="2026-08-19T15:42:00+00:00">
+<meta property="og:type" content="article">
+
+
+<meta name="generator" content="HydePHP v2.0.3">
+<meta property="og:site_name" content="HydePHP">
+
+
+
+
+<style>[x-cloak] {display: none!important}</style>
+
+
+            <link rel="stylesheet" href="../media/app.css?v=9450b0e0">
+    
+
+    
+    
+
+
+    
+    <meta id="meta-color-scheme" name="color-scheme" content="light">
+    <script>if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); document.getElementById('meta-color-scheme').setAttribute('content', 'dark');} else { document.documentElement.classList.remove('dark') } </script>
+
+
+
+
+
+
+</head>
+<body id="app" class="flex flex-col min-h-screen overflow-x-hidden dark:bg-gray-900 dark:text-white" x-data="{ navigationOpen: false }" x-on:keydown.escape="navigationOpen = false;">
+    <a href="#content" id="skip-to-content" class="sr-only focus:not-sr-only bg-black border-4 border-yellow-400 focus:absolute focus:mt-2 focus:mx-auto focus:p-2 focus:w-64 h-auto left-0 overflow-auto right-0 rounded-md text-center text-lg text-white top-auto z-50 ">Skip to content</a>    <nav aria-label="Main navigation" id="main-navigation" class="flex flex-wrap items-center justify-between p-4 shadow-lg sm:shadow-xl md:shadow-none dark:bg-gray-800">
+    <div id="main-navigation-brand" class="flex grow items-center shrink-0 text-gray-700 dark:text-gray-200">
+        <a href="../index.html" class="font-bold px-4" aria-label="Home page">
+    DevBlog
+</a>
+        <div class="ml-auto">
+            <button @click="toggleTheme" class="theme-toggle-button flex items-center px-2 py-1 hover:text-gray-700 dark:text-gray-200" title="Toggle theme">
+        <span class="sr-only">Toggle dark theme</span>
+        <svg width="1.25rem" height="1.25rem" class="w-5 h-5 hidden dark:block" fill="#FFFFFF" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+        <svg width="1.25rem" height="1.25rem" class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+    </button>
+        </div>
+    </div>
+
+    <div class="block md:hidden">
+        <button id="navigation-toggle-button" class="flex items-center px-3 py-1 hover:text-gray-700 dark:text-gray-200"
+                aria-label="Toggle navigation menu" @click="navigationOpen = ! navigationOpen">
+            <svg x-show="! navigationOpen" title="Open Navigation Menu" class="dark:fill-gray-200"
+                 style="display: block;"
+                 id="open-main-navigation-menu-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24"
+                 width="24">
+                <title>Open Menu</title>
+                <path d="M0 0h24v24H0z" fill="none"/>
+                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+            </svg>
+            <svg x-show="navigationOpen" title="Close Navigation Menu" class="dark:fill-gray-200" style="display: none;"
+                 id="close-main-navigation-menu-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24"
+                 width="24">
+                <title>Close Menu</title>
+                <path d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+            </svg>
+        </button>
+    </div>
+
+    <div id="main-navigation-links" 
+         class="w-full hidden md:flex grow md:grow-0 md:items-center md:w-auto px-6 -mx-4 border-t mt-3 pt-3 md:border-none md:mt-0 md:py-0 border-gray-200 dark:border-gray-700"
+         :class="navigationOpen ? 'block!' : ''">
+        <ul aria-label="Navigation links" class="md:grow md:flex justify-end">
+                            <li class="md:mx-2">
+                                            <a href="../index.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Home</a>                                    </li>
+                            <li class="md:mx-2">
+                                            <a href="../projects.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Projects</a>                                    </li>
+                    </ul>
+    </div>
+</nav>
+    <section>
+        
+    <main id="content" class="mx-auto max-w-7xl py-16 px-8">
+        <article aria-label="Article" id="top-50-php" itemscope itemtype="https://schema.org/BlogPosting"
+    class="post-article mx-auto prose dark:prose-invert">
+    <meta itemprop="identifier" content="top-50-php">
+    
+    <header aria-label="Header section" role="doc-pageheader">
+        <h1 itemprop="headline" class="mb-4">Top 50 PHP</h1>
+        <div id="byline" aria-label="About the post" role="doc-introduction">
+            Posted <time itemprop="dateCreated datePublished" datetime="2026-08-19T15:42:00+00:00" title="Wednesday Aug 19th, 2026, at 3:42pm">Aug 19th, 2026</time>            by author
+<address itemprop="author" itemscope itemtype="https://schema.org/Person" aria-label="The post author" style="display: inline;">
+                <span itemprop="name" aria-label="The author's name" title=@john_mason>John Mason</span>
+            </address>            in the category "Interviewing"        </div>
+    </header>
+        <div aria-label="Article body" itemprop="articleBody">
+        <p>Interview notes for PHP, with Laravel follow-ups. Numbered questions with short answers and examples.</p>
+<h2>Current version</h2>
+<p>The current stable version of PHP is 8.5, with version 8.5.5 being the most recent maintenance release as of April 9, 2026</p>
+<h2>Key New Features in PHP 8.5</h2>
+<p>The 8.5 release (November 2025) introduced several functional programming enhancements and utility improvements:</p>
+<p><strong>Pipe Operator (|&gt;):</strong></p>
+<p>Allows chaining multiple functions in a readable left-to-right manner.
+It passes the result of the left expression as the first argument to the next function.</p>
+<p><strong>Built-in URI Extension:</strong></p>
+<p>A new, standards-compliant extension for parsing, validating, and normalizing URLs based on RFC 3986.</p>
+<p><strong>Clone With:</strong> modify specific properties while cloning an object in a single expression: <code>clone $obj with ['prop' =&gt; 'value']</code>.</p>
+<p><strong>New Array Functions:</strong></p>
+<p>Native array_first() and array_last()
+functions provide a cleaner way to retrieve the first and last elements of an array compared to older methods like reset() or end().</p>
+<p><strong>Fatal Error Backtraces:</strong></p>
+<p>Fatal errors, such as memory exhaustion or execution timeouts, now provide a full stack trace to simplify debugging.</p>
+<p><strong>[NoDiscard] Attribute:</strong></p>
+<p>A new attribute that triggers a warning if a function's return value is ignored by the caller.</p>
+<h2>Previous Major Highlights (PHP 8.4)</h2>
+<p>Released in late 2024, PHP 8.4 introduced several fundamental changes to the language's object model:</p>
+<p><strong>Property Hooks:</strong></p>
+<p>Support for get and set hooks on class properties, reducing the need for boilerplate getters and setters.</p>
+<p><strong>Asymmetric Visibility:</strong></p>
+<p>Allows different visibility levels for reading and writing a property (e.g., public private(set)).</p>
+<ul>
+<li>
+<p>HTML5 Support: A new, standards-compliant HTML5 parser within the DOM extension.</p>
+</li>
+<li>
+<p>New Array Search Functions: Addition of array_find(), array_find_key(), array_any(), and array_all().</p>
+</li>
+</ul>
+<h3>Basic</h3>
+<h2>1. What is PHP?</h2>
+<p>PHP stands for Hypertext Preprocessor.
+It is an open-source, server-side scripting language designed for creating dynamic web pages.</p>
+<h2>2. What are the common uses of PHP?</h2>
+<p>PHP is commonly used for:</p>
+<ul>
+<li>Server-side scripting</li>
+<li>Command-line scripting</li>
+<li>Creating dynamic websites</li>
+<li>Interacting with databases (e.g., MySQL)</li>
+<li>Building RESTful APIs</li>
+</ul>
+<h2>3. How do you declare a variable in PHP?</h2>
+<p>Variables are declared using the $ symbol
+e.g., $name = &quot;John&quot;;.</p>
+<h2>4. What are PHP data types?</h2>
+<p>PHP supports:</p>
+<p>String
+Integer
+Float (Double)
+Boolean
+Array
+Object
+NULL
+Resource - a reference to an external resource</p>
+<h2>5. What is the difference between echo and print?</h2>
+<p>echo: Outputs data, can take multiple parameters, no return value.
+print: Outputs data, returns 1, works like a function.</p>
+<h2>6. How do you define a constant in PHP?</h2>
+<p>Using the define() function, e.g., define(&quot;SITE_NAME&quot;, &quot;Shikshatech&quot;);.</p>
+<h2>7. What are PHP magic constants?</h2>
+<p>Special constants starting with double underscores, like:</p>
+<pre><code class="language-php">__LINE__
+
+__FILE__
+
+__DIR__
+
+__FUNCTION__
+
+__CLASS__
+
+define('MIN_VALUE', '0.0');   // RIGHT - Works OUTSIDE of a class definition.
+define('MAX_VALUE', '1.0');   // RIGHT - Works OUTSIDE of a class definition.
+
+//const MIN_VALUE = 0.0;         RIGHT - Works both INSIDE and OUTSIDE of a class definition.
+//const MAX_VALUE = 1.0;         RIGHT - Works both INSIDE and OUTSIDE of a class definition.
+</code></pre>
+<h2>8. What is the difference between == and ===?</h2>
+<p>==: Compares values only.</p>
+<p>===: Compares values and data types.</p>
+<h2>9. What is a session in PHP?</h2>
+<p>Sessions allow data to be stored across multiple pages. session_start() is used to initiate a session.</p>
+<h2>10. What is a cookie in PHP?</h2>
+<p>Cookies are small files stored on the client’s device. Created using setcookie().</p>
+<h3>Intermediate</h3>
+<h2>11. What is the difference between GET and POST?</h2>
+<p>GET: Sends data via URL, limited length, less secure.</p>
+<p>POST: Sends data via HTTP headers, no limit, more secure.</p>
+<h2>12. What are arrays in PHP?</h2>
+<p>Arrays are collections of data:</p>
+<p>Indexed Arrays: $fruits = array(&quot;Apple&quot;, &quot;Banana&quot;, &quot;Mango&quot;);</p>
+<p>Associative Arrays: $age = array(&quot;John&quot; =&gt; 30, &quot;Jane&quot; =&gt; 25);
+Multidimensional Arrays: $marks = array(&quot;John&quot; =&gt; array(90, 85), &quot;Jane&quot; =&gt; array(78, 88));</p>
+<h2>13. Explain PHP error types.</h2>
+<p>Notice: Non-critical errors (e.g., undefined variables).</p>
+<p>Warning: Recoverable errors (e.g., missing files).</p>
+<p>Fatal Error: Non-recoverable errors (e.g., calling undefined functions).</p>
+<p>Parse Error: Errors in code structure.</p>
+<pre><code class="language-php">&lt;?php
+
+set_error_handler(function(int $number, string $message) {
+   echo &quot;Handler captured error $number: '$message'&quot; . PHP_EOL  ;
+});
+
+try {
+    echo $x; # notice, handled on callable
+    pg_exec(null, null); # warning, handled on callable
+    fho(); # fatal error, stop running and catched
+} catch (Throwable $e) {
+    echo &quot;Captured Throwable: &quot; . $e-&gt;getMessage() . PHP_EOL;
+}
+
+?&gt;
+
+set_error_handler will also works without try and catch
+</code></pre>
+<h2>14. What is isset()?</h2>
+<p>Checks if a variable is set and is not NULL. Returns true if the variable exists and is not NULL.</p>
+<h2>15. What is empty()?</h2>
+<p>Checks if a variable is empty. Returns true if it is NULL, 0, &quot;&quot;, false, or an empty array.</p>
+<h2>16. What are PHP filters?</h2>
+<p>Filters are used to validate and sanitize data. Example: filter_var($email, FILTER_VALIDATE_EMAIL);.</p>
+<h2>17. What is PDO in PHP?</h2>
+<p>PHP Data Objects (PDO) is a database access layer that provides a uniform interface for multiple databases.</p>
+<h2>18. How do you connect to a MySQL database using PDO?</h2>
+<pre><code class="language-php">$pdo = new PDO(&quot;mysql:host=localhost;dbname=testdb&quot;, &quot;username&quot;, &quot;password&quot;);
+</code></pre>
+<h2>19. What is SQL Injection? How to prevent it?</h2>
+<p>SQL Injection is a technique where attackers inject malicious SQL queries.</p>
+<p>Prevention: Use prepared statements and parameterized queries.</p>
+<h2>20. What is a trait in PHP?</h2>
+<p>A trait is a code reuse mechanism used to include methods in a class without inheritance.</p>
+<h3>Advanced</h3>
+<h2>21. What is Object-Oriented Programming (OOP) in PHP?</h2>
+<p>A programming model organized around objects rather than actions. Core concepts include classes, objects, inheritance, polymorphism, encapsulation, and abstraction.</p>
+<h3>Inheritance</h3>
+<p>For example, when extending a class, the subclass inherits all of the public and protected methods, properties and constants from the parent class. Unless a class overrides those methods, they will retain their original functionality.</p>
+<h3>Abstraction</h3>
+<p>PHP has abstract classes, methods, and properties. Classes defined as abstract cannot be instantiated, and any class that contains at least one abstract method or property must also be abstract. Methods defined as abstract simply declare the method's signature and whether it is public or protected; they cannot define the implementation</p>
+<h3>Polymorphism</h3>
+<p>Polymorphism is an OOP concept that allows objects of different classes to be treated as instances of a common parent class or interface. The word originates from Greek, meaning &quot;many forms&quot;. In practice, a single method call can behave differently depending on the object it acts on.</p>
+<h3>Encapsulation</h3>
+<p>Encapsulation bundles data (properties) and the methods that operate on them into a single unit, usually a class. Its primary purpose is to hide the internal state of an object and only allow interaction through a controlled public interface, which protects data integrity.</p>
+<h3>Key Components of Encapsulation</h3>
+<ul>
+<li>Access Modifiers: These keywords define the visibility of class members:</li>
+<li>private: Members are only accessible within the class that defines them.</li>
+<li>protected: Members are accessible within the class itself and by its child classes.</li>
+<li>public: Members are accessible from anywhere, both inside and outside the class.</li>
+<li>Getter and Setter Methods: These are public methods used to retrieve (get) or update (set) private properties. - Setters often include validation logic to prevent invalid data from being assigned.</li>
+<li>Data Hiding: By making properties private or protected, you prevent external code from directly modifying them, which protects the object's internal state from accidental damage or misuse</li>
+</ul>
+<h2>22. What are Namespaces in PHP?</h2>
+<p>Namespaces provide a way to group related classes, functions, and constants to avoid naming conflicts.</p>
+<h2>23. Explain the MVC architecture.</h2>
+<p>MVC stands for Model-View-Controller. It separates application logic, presentation, and user interaction.</p>
+<h2>24. What is Composer in PHP?</h2>
+<p>Composer is a dependency manager for PHP, allowing you to manage libraries and packages in your projects.</p>
+<h2>25. What is the difference between include and require?</h2>
+<p>include(): Produces a warning if the file is missing but continues execution.</p>
+<p>require(): Produces a fatal error if the file is missing and stops execution.</p>
+<h2>26. What is json_encode() and json_decode()?</h2>
+<p>Functions to convert data between JSON format and PHP arrays/objects.</p>
+<h2>27. How to handle file uploads in PHP?</h2>
+<p>Using the $_FILES superglobal and moving files via move_uploaded_file().</p>
+<h2>28. Explain PHP's session_destroy() function.</h2>
+<p>Destroys all data registered to a session and deletes the session itself.</p>
+<h2>29. What is OPcache?</h2>
+<p>built-in caching engine that improves PHP performance by storing precompiled script bytecode in memory.</p>
+<h2>30. How to improve PHP performance?</h2>
+<p>Use caching (OPcache, Memcached).
+Optimize database queries.
+Minimize file I/O.
+Use CDN for static resources.
+Code refactoring.</p>
+<p>Yes, PHP is widely classified as an interpreted language. However, its execution process is more complex than simple line-by-line reading; modern PHP uses a hybrid approach involving internal compilation.</p>
+<h3>How PHP Execution Works</h3>
+<p>The standard PHP interpreter, the Zend Engine, processes code in several internal stages to balance development flexibility with speed:</p>
+<ul>
+<li>
+<p>Lexical Analysis (Tokenizing): The Zend Engine breaks the raw PHP source code into a sequence of small, manageable units called tokens.</p>
+</li>
+<li>
+<p>Parsing: These tokens are structured into an Abstract Syntax Tree (AST), which represents the logical structure of your code.</p>
+</li>
+<li>
+<p>Internal Compilation (Opcodes): The AST is compiled into intermediate Opcodes (operation codes). These are similar to Java bytecode and are much faster for a computer to process than raw text.</p>
+</li>
+<li>
+<p>Execution: The Zend Virtual Machine executes these opcodes step-by-step to produce the final output for the web browser.</p>
+</li>
+</ul>
+<h2>Key Performance Features</h2>
+<p>To overcome the speed limitations of traditional interpretation, PHP utilizes advanced optimization tools:</p>
+<ul>
+<li>
+<p>OPcache: Instead of recompiling scripts on every request, OPcache stores the precompiled opcodes in memory, significantly reducing server load and response times.</p>
+</li>
+<li>
+<p>Just-In-Time (JIT) Compilation: Introduced in PHP 8, JIT further blurs the line between interpreted and compiled languages. It identifies frequently used code (&quot;hot spots&quot;) and compiles them directly into native machine code at runtime for maximum performance.</p>
+</li>
+</ul>
+<h3>Singleton</h3>
+<h2>Laravel</h2>
+<p>Laravel interview notes. Numbering here is from the Laravel set, not the PHP questions above.</p>
+<h3>What is Artisan?</h3>
+<p>Artisan is Laravel’s command-line interface (CLI).
+It automates common tasks like creating files, running migrations, clearing cache, and starting the server.</p>
+<p>Common Artisan commands:</p>
+<pre><code class="language-bash">php artisan serve
+php artisan make:controller UserController
+php artisan make:model Post -m
+php artisan migrate
+php artisan cache:clear
+</code></pre>
+<h3>How do you create email functionality in Laravel?</h3>
+<p>Laravel uses Mail classes, Blade templates, and mail drivers (SMTP, Gmail, Mailtrap).</p>
+<p>Steps:</p>
+<ul>
+<li>Create a Mail class: php artisan make:mail WelcomeMail</li>
+<li>Design the email using Blade</li>
+<li>Configure mail settings in .env</li>
+<li>Send mail: Mail::to($user-&gt;email)-&gt;send(new WelcomeMail());</li>
+</ul>
+<h3>How do you create a migration without CLI?</h3>
+<p>You can manually create a migration file in database/migrations/ and define up() and down() methods.</p>
+<p>Using Artisan (php artisan make:migration) is recommended for consistency.</p>
+<h3>Laravel Architecture</h3>
+<p>Laravel follows the MVC architecture:</p>
+<p>Model — database logic</p>
+<p>View — UI (Blade templates)</p>
+<p>Controller — request &amp; response</p>
+<p>It also uses middleware, routing, and service containers.</p>
+<h3>Laravel Request Life Cycle</h3>
+<ul>
+<li>Request enters public/index.php</li>
+<li>Goes to HTTP Kernel</li>
+<li>Middleware handles the request</li>
+<li>Route matches the request</li>
+<li>Controller executes</li>
+<li>Response returned to the browser</li>
+</ul>
+<h3>Laravel Default Port</h3>
+<p>Laravel runs on port 8000 by default:</p>
+<p>php artisan serve</p>
+<h3>What is ORM?</h3>
+<p>ORM (Object Relational Mapping)</p>
+<p>Allows developers to interact with the database using objects instead of writing raw SQL queries.</p>
+<h3>What is Eloquent?</h3>
+<p>Eloquent is Laravel’s built-in ORM.
+It provides clean syntax for database operations and supports relationships between models.</p>
+<h3>Difference between Raw SQL, Query Builder, and ORM</h3>
+<h3>Raw SQL</h3>
+<ul>
+<li>Written manually</li>
+<li>Fast but hard to maintain</li>
+<li>Not reusable</li>
+<li>No model or relationship support</li>
+</ul>
+<h3>Query Builder</h3>
+<ul>
+<li>Programmatic SQL</li>
+<li>Cleaner and readable</li>
+<li>Reusable queries</li>
+<li>Limited relationship support</li>
+</ul>
+<h3>ORM (Eloquent)</h3>
+<ul>
+<li>Object-based using models</li>
+<li>Most readable and maintainable</li>
+<li>Highly reusable</li>
+<li>Supports full model relationships</li>
+</ul>
+<h3>SQL Query — Find users with name “ram”</h3>
+<p>SELECT * FROM users WHERE name LIKE '%ram%';</p>
+<h2>Inheritance types</h2>
+<ul>
+<li>
+<p>Single (One child inherits from one parent.)</p>
+</li>
+<li>
+<p>Multilevel (A child inherits from a parent, which is also a child of another parent.)</p>
+</li>
+<li>
+<p>Hierarchical	(Multiple children inherit from one parent.)</p>
+</li>
+</ul>
+<h3>Does PHP support multiple inheritance?</h3>
+<p>❌ PHP does not support multiple inheritance using classes.</p>
+<p>✅ It can be implemented using Traits.</p>
+<h3>What is SQL Injection?</h3>
+<p>SQL Injection is an attack where malicious SQL code is injected through user input to manipulate the database.</p>
+<pre><code class="language-php">Example (unsafe):
+
+SELECT * FROM users WHERE email = '$email' AND password = '$password';
+
+Safe way (Laravel Eloquent):
+
+User::where('email', $email)-&gt;first();
+</code></pre>
+<h3>Why do we use CSRF?</h3>
+<p>CSRF protects the application from unauthorized requests. Laravel uses CSRF tokens to validate forms.</p>
+<pre><code class="language-php">Example:
+
+&lt;form method=&quot;POST&quot;&gt;
+    @csrf
+    &lt;button&gt;Submit&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+<h3>What is Laravel Sanctum?</h3>
+<p>Sanctum is a lightweight authentication system for APIs, SPAs, and mobile apps using token-based authentication.</p>
+<pre><code class="language-php">Example:
+
+$token = $user-&gt;createToken('api-token')-&gt;plainTextToken;
+</code></pre>
+<h3>Difference between Sanctum and Passport</h3>
+<p>Sanctum — Simple token-based auth, best for SPAs and mobile apps.</p>
+<p>Passport — Full OAuth2, best for large APIs or third-party integrations.</p>
+<pre><code class="language-php">Route::middleware('auth:sanctum')-&gt;get('/user', function () {
+    return auth()-&gt;user();
+});
+</code></pre>
+<h3>What is Middleware in Laravel?</h3>
+<p>Middleware acts as a filter between the request and response.
+It handles tasks like authentication, authorization, logging, or request modification.</p>
+<pre><code class="language-php">Example:
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})-&gt;middleware('auth');
+</code></pre>
+<h2>Architecture concepts</h2>
+<h2>Request Lifecycle</h2>
+<ul>
+<li>
+<p>The entry point for all requests to a Laravel application is the public/index.php file.</p>
+</li>
+<li>
+<p>The index.php file loads the Composer generated autoloader definition and then retrieves an instance of the Laravel application from bootstrap/app.php.</p>
+</li>
+<li>
+<p>The first action taken by Laravel itself is to create an instance of the application / service container.</p>
+</li>
+</ul>
+<h2>Service Container</h2>
+<p>The Laravel service container is a powerful tool for managing class dependencies and performing dependency injection. Dependency injection is a fancy phrase that essentially means this: class dependencies are &quot;injected&quot; into the class via the constructor or, in some cases, &quot;setter&quot; methods.</p>
+<p>One of the most important kernel bootstrapping actions is loading the service providers for your application. Service providers are responsible for bootstrapping all of the framework's various components, such as the database, queue, validation, and routing components.</p>
+<p>Laravel will iterate through this list of providers and instantiate each of them. After instantiating the providers, the register method will be called on all of the providers. Then, once all of the providers have been registered, the boot method will be called on each provider. This is so service providers may depend on every container binding being registered and available by the time their boot method is executed.</p>
+<p>Essentially every major feature offered by Laravel is bootstrapped and configured by a service provider. Since they bootstrap and configure so many features offered by the framework, service providers are the most important aspect of the entire Laravel bootstrap process.</p>
+<p>While the framework internally uses dozens of service providers, you also have the option to create your own. You can find a list of the user-defined or third-party service providers that your application is using in the bootstrap/providers.php file.</p>
+<h2>HTTP / Console Kernels</h2>
+<p>Next, the incoming request is sent to either the HTTP kernel or the console kernel, using the handleRequest or handleCommand methods of the application instance, depending on the type of request entering the application. These two kernels serve as the central location through which all requests flow. For now, let's just focus on the HTTP kernel, which is an instance of Illuminate\Foundation\Http\Kernel.</p>
+<p>The HTTP kernel defines an array of bootstrappers that will be run before the request is executed. These bootstrappers configure error handling, configure logging, detect the application environment, and perform other tasks that need to be done before the request is actually handled. Typically, these classes handle internal Laravel configuration that you do not need to worry about.</p>
+<p>The HTTP kernel is also responsible for passing the request through the application's middleware stack. These middleware handle reading and writing the HTTP session, determining if the application is in maintenance mode, verifying the CSRF token, and more. We'll talk more about these soon.</p>
+<p>The method signature for the HTTP kernel's handle method is quite simple: it receives a Request and returns a Response. Think of the kernel as being a big black box that represents your entire application. Feed it HTTP requests and it will return HTTP responses.</p>
+<h2>Routing</h2>
+<p>Once the application has been bootstrapped and all service providers have been registered, the Request will be handed off to the router for dispatching. The router will dispatch the request to a route or controller, as well as run any route specific middleware.</p>
+<p>Finally, once the response travels back through the middleware, the HTTP kernel's handle method returns the response object to the handleRequest of the application instance, and this method calls the send method on the returned response. The send method sends the response content to the user's web browser. We've now completed our journey through the entire Laravel request lifecycle!</p>
+<h2>Facades</h2>
+<p>Throughout the Laravel documentation, you will see examples of code that interacts with Laravel's features via &quot;facades&quot;. Facades provide a &quot;static&quot; interface to classes that are available in the application's service container. Laravel ships with many facades which provide access to almost all of Laravel's features.</p>
+<h2>Helper Functions</h2>
+<p>To complement facades, Laravel offers a variety of global &quot;helper functions&quot; that make it even easier to interact with common Laravel features. Some of the common helper functions you may interact with are view, response, url, config, and more. Each helper function offered by Laravel is documented with their corresponding feature; however, a complete list is available within the dedicated helper documentation.</p>
+<h2>When to Utilize Facades</h2>
+<p>Facades have many benefits. They provide a terse, memorable syntax that allows you to use Laravel's features without remembering long class names that must be injected or configured manually. Furthermore, because of their unique usage of PHP's dynamic methods, they are easy to test.</p>
+<p>However, some care must be taken when using facades. The primary danger of facades is class &quot;scope creep&quot;. Since facades are so easy to use and do not require injection, it can be easy to let your classes continue to grow and use many facades in a single class. Using dependency injection, this potential is mitigated by the visual feedback a large constructor gives you that your class is growing too large. So, when using facades, pay special attention to the size of your class so that its scope of responsibility stays narrow. If your class is getting too large, consider splitting it into multiple smaller classes.</p>
+<h2>Facades vs. Dependency Injection</h2>
+<p>One of the primary benefits of dependency injection is the ability to swap implementations of the injected class. This is useful during testing since you can inject a mock or stub and assert that various methods were called on the stub.</p>
+<p>Typically, it would not be possible to mock or stub a truly static class method. However, since facades use dynamic methods to proxy method calls to objects resolved from the service container, we actually can test facades just as we would test an injected class instance. For example, given the following route:</p>
+<h2>Testing</h2>
+<ul>
+<li>HTTP Tests</li>
+<li>Console Tests</li>
+<li>Browser Tests</li>
+<li>Database</li>
+<li>Mocking</li>
+</ul>
+<h2>Laravel event system</h2>
+<h2>Events:</h2>
+<p>These are simple PHP classes that serve as a signal that something important has happened, such as a user registering or an order being placed.</p>
+<h2>Listeners:</h2>
+<p>These are classes that contain the logic to respond to a specific event. For instance, an OrderPlaced event might have separate listeners for SendOrderConfirmation and UpdateInventory.</p>
+<h2>Event Dispatcher:</h2>
+<p>The central hub that connects events to their registered listeners.</p>
+<h3>Core Benefits</h3>
+<h3>Decoupling:</h3>
+<p>Business logic (e.g., creating a user) remains separate from side effects (e.g., sending a welcome SMS), leading to cleaner, more modular code.</p>
+<h3>Asynchronous Processing:</h3>
+<p>You can offload time-consuming tasks to Laravel Queues by simply having a listener implement the ShouldQueue interface.</p>
+<h3>Scalability:</h3>
+<p>New functionality can be added by creating a new listener without modifying the original code that triggers the event.</p>
+<h3>Model Events:</h3>
+<p>Laravel provides built-in events for Eloquent Models (creating, saving, updating, deleting), allowing you to automate tasks whenever data changes.</p>
+<p>Implementation Workflow</p>
+<p>Generate the Event:
+Use Artisan to create the event class: php artisan make:event UserRegistered.</p>
+<h3>Generate the Listener:</h3>
+<p>Create a listener and link it to the event: php artisan make:listener SendWelcomeEmail --event=UserRegistered.</p>
+<h3>Dispatch the Event:</h3>
+<p>Trigger the event from your controller or service: event(new UserRegistered($user));.
+Define Logic: Add the reaction logic inside the listener's handle() method.</p>
+<h3>Advanced Patterns</h3>
+<p>Observers:
+If you are listening to many events on a single Eloquent model, you can group them into an Observer Class.</p>
+<p>Broadcasting: For real-time updates (like chat or live notifications), Laravel can broadcast events over
+WebSockets using tools like Pusher or Laravel Reverb.</p>
+<p>Event Sourcing:
+For complex systems requiring a full audit trail, you can treat every change as an immutable event to reconstruct state at any point in time.</p>
+<h2>References</h2>
+<ul>
+<li><a href="https://www.php.net/">https://www.php.net/</a></li>
+<li><a href="https://dev.to/robin-ivi/top-50-php-interview-questions-4p69#:~:text=PHP%20is%20one%20of%20the,What%20are%20PHP%20magic%20constants?">https://dev.to/robin-ivi/top-50-php-interview-questions-4p69#:~:text=PHP%20is%20one%20of%20the,What%20are%20PHP%20magic%20constants?</a></li>
+<li><a href="https://refactoring.guru/design-patterns/singleton/php/example">https://refactoring.guru/design-patterns/singleton/php/example</a></li>
+<li><a href="https://medium.com/@aakriticodes/laravel-interview-questions-quick-notes-for-developers-74541f0f5b5e">https://medium.com/@aakriticodes/laravel-interview-questions-quick-notes-for-developers-74541f0f5b5e</a></li>
+<li><a href="https://laravel.com/">https://laravel.com/</a></li>
+<li><a href="https://api.laravel.com/docs/13.x/index.html">https://api.laravel.com/docs/13.x/index.html</a></li>
+</ul>
+
+    </div>
+    <span class="sr-only">End of article</span>
+</article>    </main>
+
+    </section>
+
+    <footer aria-label="Page footer" class="flex py-4 px-6 w-full text-center mt-auto bg-slate-100 dark:bg-gray-800">
+        <div class="prose dark:prose-invert text-center mx-auto">
+            <p>Site proudly built with <a href="https://github.com/hydephp/hyde">HydePHP</a> 🎩</p>
+        </div>
+                    <a href="#app" aria-label="Go to top of page" class="float-right" @click.prevent="document.querySelector('#app').scrollIntoView({ behavior: 'smooth' })">
+                <button title="Scroll to top">
+                    <svg width="1.5rem" height="1.5rem" role="presentation" class="fill-current text-gray-500 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+                    </svg>
+                </button>
+            </a>
+            </footer>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.3/dist/cdn.min.js" integrity="sha256-gOkV4d9/FmMNEkjOzVlyM2eNAWSUXisT+1RbMTTIgXI=" crossorigin="anonymous"></script>
+
+<script>
+    function toggleTheme() {
+        if (localStorage.getItem('color-theme') === 'dark' || !('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem('color-theme', 'light');
+            document.getElementById('meta-color-scheme').setAttribute('content', 'light');
+        } else {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem('color-theme', 'dark');
+            document.getElementById('meta-color-scheme').setAttribute('content', 'dark');
+        }
+    }
+</script>
+
+
+
+
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+  const isDark =
+    document.documentElement.classList.contains('dark') ||
+    (!('color-theme' in localStorage) &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches) ||
+    localStorage.getItem('color-theme') === 'dark';
+
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: isDark ? 'dark' : 'default',
+    securityLevel: 'loose',
+  });
+
+  document.querySelectorAll('pre code.language-mermaid').forEach((code) => {
+    const pre = code.closest('pre');
+    if (!pre) return;
+
+    const container = document.createElement('div');
+    container.className = 'mermaid';
+    container.textContent = code.textContent;
+    pre.replaceWith(container);
+  });
+
+  await mermaid.run({ querySelector: '.mermaid' });
+</script>
+
+</body>
+</html>

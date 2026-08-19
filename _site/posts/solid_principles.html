@@ -3,14 +3,18 @@
 <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DevBlog - Projects</title>
+<title>DevBlog - SOLID Principles</title>
 
 
 
-<meta name="description" content="Selected project write-ups">
-<meta name="twitter:title" content="DevBlog - Projects">
-<meta property="og:description" content="Selected project write-ups">
-<meta property="og:title" content="DevBlog - Projects">
+<meta name="description" content="Five principles of object-oriented design">
+<meta name="twitter:title" content="DevBlog - SOLID Principles">
+<meta name="author" content="John Mason">
+<meta name="keywords" content="Interviewing">
+<meta property="og:description" content="Five principles of object-oriented design">
+<meta property="og:title" content="DevBlog - SOLID Principles">
+<meta property="og:article:published_time" content="2026-08-19T12:00:00+00:00">
+<meta property="og:type" content="article">
 
 
 <meta name="generator" content="HydePHP v2.0.3">
@@ -22,7 +26,7 @@
 <style>[x-cloak] {display: none!important}</style>
 
 
-            <link rel="stylesheet" href="media/app.css?v=9450b0e0">
+            <link rel="stylesheet" href="../media/app.css?v=9450b0e0">
     
 
     
@@ -42,7 +46,7 @@
 <body id="app" class="flex flex-col min-h-screen overflow-x-hidden dark:bg-gray-900 dark:text-white" x-data="{ navigationOpen: false }" x-on:keydown.escape="navigationOpen = false;">
     <a href="#content" id="skip-to-content" class="sr-only focus:not-sr-only bg-black border-4 border-yellow-400 focus:absolute focus:mt-2 focus:mx-auto focus:p-2 focus:w-64 h-auto left-0 overflow-auto right-0 rounded-md text-center text-lg text-white top-auto z-50 ">Skip to content</a>    <nav aria-label="Main navigation" id="main-navigation" class="flex flex-wrap items-center justify-between p-4 shadow-lg sm:shadow-xl md:shadow-none dark:bg-gray-800">
     <div id="main-navigation-brand" class="flex grow items-center shrink-0 text-gray-700 dark:text-gray-200">
-        <a href="index.html" class="font-bold px-4" aria-label="Home page">
+        <a href="../index.html" class="font-bold px-4" aria-label="Home page">
     DevBlog
 </a>
         <div class="ml-auto">
@@ -80,40 +84,54 @@
          :class="navigationOpen ? 'block!' : ''">
         <ul aria-label="Navigation links" class="md:grow md:flex justify-end">
                             <li class="md:mx-2">
-                                            <a href="index.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Home</a>                                    </li>
+                                            <a href="../index.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Home</a>                                    </li>
                             <li class="md:mx-2">
-                                            <a href="projects.html" aria-current="page" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100 navigation-link-active border-l-4 border-indigo-500 md:border-none font-medium -ml-6 pl-5 md:ml-0 md:pl-0 bg-gray-100 dark:bg-gray-800 md:bg-transparent dark:md:bg-transparent">Projects</a>                                    </li>
+                                            <a href="../projects.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Projects</a>                                    </li>
                     </ul>
     </div>
 </nav>
     <section>
         
     <main id="content" class="mx-auto max-w-7xl py-16 px-8">
-        <article class="mx-auto prose dark:prose-invert">
-            <h1>Projects</h1>
-<h2>Positive Thought Counselling Onboarding Module</h2>
-<pre><code class="language-mermaid">flowchart LR
-  A[Idea] --&gt; B[Build]
-  B --&gt; C[Ship]
-</code></pre>
-<h2>Positive Thought Counselling Dental Module</h2>
-<pre><code class="language-mermaid">flowchart LR
-  A[Idea] --&gt; B[Build]
-  B --&gt; C[Ship]
-</code></pre>
-<h2>Logging and Subscription System</h2>
-<pre><code class="language-mermaid">flowchart LR
-  A[Idea] --&gt; B[Build]
-  B --&gt; C[Ship]
-</code></pre>
-<h2>Serverless Online Shopping Cart</h2>
-<pre><code class="language-mermaid">flowchart LR
-  A[Idea] --&gt; B[Build]
-  B --&gt; C[Ship]
-</code></pre>
+        <article aria-label="Article" id="solid_principles" itemscope itemtype="https://schema.org/BlogPosting"
+    class="post-article mx-auto prose dark:prose-invert">
+    <meta itemprop="identifier" content="solid_principles">
+    
+    <header aria-label="Header section" role="doc-pageheader">
+        <h1 itemprop="headline" class="mb-4">SOLID Principles</h1>
+        <div id="byline" aria-label="About the post" role="doc-introduction">
+            Posted <time itemprop="dateCreated datePublished" datetime="2026-08-19T12:00:00+00:00" title="Wednesday Aug 19th, 2026, at 12:00pm">Aug 19th, 2026</time>            by author
+<address itemprop="author" itemscope itemtype="https://schema.org/Person" aria-label="The post author" style="display: inline;">
+                <span itemprop="name" aria-label="The author's name" title=@john_mason>John Mason</span>
+            </address>            in the category "Interviewing"        </div>
+    </header>
+        <div aria-label="Article body" itemprop="articleBody">
+        <h2>SRP — Single Responsibility Principle</h2>
+<p>A class should have only one reason to change, meaning it should only have one job or responsibility.</p>
+<p><strong>Example:</strong> Consider a class <code>Report</code>. Instead of giving it methods for both generating and printing a report, separate these functions into two classes: <code>ReportGenerator</code> and <code>ReportPrinter</code>.</p>
+<h2>OCP — Open-Closed Principle</h2>
+<p>Software entities should be <strong>open for extension</strong> but <strong>closed for modification</strong>.</p>
+<p>This means you should be able to add new functionality without changing the existing code.</p>
+<p><strong>Example:</strong> An <code>Invoice</code> class can be extended to support different types of invoices, like <code>ProformaInvoice</code> or <code>CreditInvoice</code>, without modifying the original <code>Invoice</code> class.</p>
+<h2>LSP — Liskov Substitution Principle</h2>
+<p>Objects of a superclass should be replaceable with objects of its subclasses without affecting the correctness of the program.</p>
+<p><strong>Example:</strong> If <code>Bird</code> is a superclass and <code>Duck</code> is a subclass, then you should be able to replace <code>Bird</code> with <code>Duck</code> without altering the program's behavior.</p>
+<h2>ISP — Interface Segregation Principle</h2>
+<p>Clients should not be forced to depend on interfaces they do not use.</p>
+<p>This principle suggests splitting large interfaces into smaller ones.</p>
+<p><strong>Example:</strong> Instead of one large <code>Worker</code> interface, have separate interfaces like <code>Workable</code>, <code>Feedable</code>, and <code>Maintainable</code> for different types of work.</p>
+<h2>DIP — Dependency Inversion Principle</h2>
+<p>High-level modules should not depend on low-level modules. Both should depend on abstractions.</p>
+<p>Additionally, abstractions should not depend on details; details should depend on abstractions.</p>
+<p><strong>Example:</strong> An <code>OrderProcessor</code> class should depend on an <code>IOrder</code> interface, not on a concrete <code>Order</code> class. This makes it easy to introduce new types of orders.</p>
+<h2>References</h2>
+<ul>
+<li><a href="https://codefinity.com/blog/The-SOLID-Principles-in-Software-Development">The SOLID Principles in Software Development</a></li>
+</ul>
 
-        </article>
-    </main>
+    </div>
+    <span class="sr-only">End of article</span>
+</article>    </main>
 
     </section>
 

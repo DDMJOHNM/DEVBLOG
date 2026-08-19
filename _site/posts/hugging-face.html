@@ -3,14 +3,18 @@
 <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DevBlog - Projects</title>
+<title>DevBlog - Hugging Face Dental Models</title>
 
 
 
-<meta name="description" content="Selected project write-ups">
-<meta name="twitter:title" content="DevBlog - Projects">
-<meta property="og:description" content="Selected project write-ups">
-<meta property="og:title" content="DevBlog - Projects">
+<meta name="description" content="Open-source models for dental plaque segmentation and imaging">
+<meta name="twitter:title" content="DevBlog - Hugging Face Dental Models">
+<meta name="author" content="John Mason">
+<meta name="keywords" content="AI">
+<meta property="og:description" content="Open-source models for dental plaque segmentation and imaging">
+<meta property="og:title" content="DevBlog - Hugging Face Dental Models">
+<meta property="og:article:published_time" content="2026-08-19T12:49:00+00:00">
+<meta property="og:type" content="article">
 
 
 <meta name="generator" content="HydePHP v2.0.3">
@@ -22,7 +26,7 @@
 <style>[x-cloak] {display: none!important}</style>
 
 
-            <link rel="stylesheet" href="media/app.css?v=9450b0e0">
+            <link rel="stylesheet" href="../media/app.css?v=9450b0e0">
     
 
     
@@ -42,7 +46,7 @@
 <body id="app" class="flex flex-col min-h-screen overflow-x-hidden dark:bg-gray-900 dark:text-white" x-data="{ navigationOpen: false }" x-on:keydown.escape="navigationOpen = false;">
     <a href="#content" id="skip-to-content" class="sr-only focus:not-sr-only bg-black border-4 border-yellow-400 focus:absolute focus:mt-2 focus:mx-auto focus:p-2 focus:w-64 h-auto left-0 overflow-auto right-0 rounded-md text-center text-lg text-white top-auto z-50 ">Skip to content</a>    <nav aria-label="Main navigation" id="main-navigation" class="flex flex-wrap items-center justify-between p-4 shadow-lg sm:shadow-xl md:shadow-none dark:bg-gray-800">
     <div id="main-navigation-brand" class="flex grow items-center shrink-0 text-gray-700 dark:text-gray-200">
-        <a href="index.html" class="font-bold px-4" aria-label="Home page">
+        <a href="../index.html" class="font-bold px-4" aria-label="Home page">
     DevBlog
 </a>
         <div class="ml-auto">
@@ -80,40 +84,53 @@
          :class="navigationOpen ? 'block!' : ''">
         <ul aria-label="Navigation links" class="md:grow md:flex justify-end">
                             <li class="md:mx-2">
-                                            <a href="index.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Home</a>                                    </li>
+                                            <a href="../index.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Home</a>                                    </li>
                             <li class="md:mx-2">
-                                            <a href="projects.html" aria-current="page" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100 navigation-link-active border-l-4 border-indigo-500 md:border-none font-medium -ml-6 pl-5 md:ml-0 md:pl-0 bg-gray-100 dark:bg-gray-800 md:bg-transparent dark:md:bg-transparent">Projects</a>                                    </li>
+                                            <a href="../projects.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Projects</a>                                    </li>
                     </ul>
     </div>
 </nav>
     <section>
         
     <main id="content" class="mx-auto max-w-7xl py-16 px-8">
-        <article class="mx-auto prose dark:prose-invert">
-            <h1>Projects</h1>
-<h2>Positive Thought Counselling Onboarding Module</h2>
-<pre><code class="language-mermaid">flowchart LR
-  A[Idea] --&gt; B[Build]
-  B --&gt; C[Ship]
-</code></pre>
-<h2>Positive Thought Counselling Dental Module</h2>
-<pre><code class="language-mermaid">flowchart LR
-  A[Idea] --&gt; B[Build]
-  B --&gt; C[Ship]
-</code></pre>
-<h2>Logging and Subscription System</h2>
-<pre><code class="language-mermaid">flowchart LR
-  A[Idea] --&gt; B[Build]
-  B --&gt; C[Ship]
-</code></pre>
-<h2>Serverless Online Shopping Cart</h2>
-<pre><code class="language-mermaid">flowchart LR
-  A[Idea] --&gt; B[Build]
-  B --&gt; C[Ship]
-</code></pre>
+        <article aria-label="Article" id="hugging-face" itemscope itemtype="https://schema.org/BlogPosting"
+    class="post-article mx-auto prose dark:prose-invert">
+    <meta itemprop="identifier" content="hugging-face">
+    
+    <header aria-label="Header section" role="doc-pageheader">
+        <h1 itemprop="headline" class="mb-4">Hugging Face Dental Models</h1>
+        <div id="byline" aria-label="About the post" role="doc-introduction">
+            Posted <time itemprop="dateCreated datePublished" datetime="2026-08-19T12:49:00+00:00" title="Wednesday Aug 19th, 2026, at 12:49pm">Aug 19th, 2026</time>            by author
+<address itemprop="author" itemscope itemtype="https://schema.org/Person" aria-label="The post author" style="display: inline;">
+                <span itemprop="name" aria-label="The author's name" title=@john_mason>John Mason</span>
+            </address>            in the category "AI"        </div>
+    </header>
+        <div aria-label="Article body" itemprop="articleBody">
+        <p>The best open-source AI model architecture for identifying and segmenting teeth plaque (particularly from dental photos) is the <strong>UNet Transformer</strong>, which has been shown to achieve high performance in segmentation tasks with an Intersection over Union (IoU) of 0.7845. For broader dental tasks on Hugging Face, <strong>OralGPT</strong> (specifically versions utilizing Qwen2.5-VL-7B) is a leading open-source multimodal large language model (MLLM) for dental imaging.</p>
+<h2>Top Open-Source Models &amp; Architectures</h2>
+<ul>
+<li><strong>UNet Transformer:</strong> Identified as the best-performing model for segmenting dental plaque, superior to standard CNNs in research trials.</li>
+<li><strong>YOLOv11m / YOLOv9 / YOLOv10:</strong> These, particularly YOLOv11m, have been validated for detecting different types of plaque (new, mature, over-mature) with high accuracy.</li>
+<li><strong>OralGPT-Omni:</strong> A specialized dental MLLM (open-source) designed for comprehensive analysis of dental images.</li>
+<li><strong>U-Net (Basic):</strong> Widely used on Hugging Face for semantic segmentation of teeth in panoramic x-ray images.</li>
+</ul>
+<h2>Key Resources on Hugging Face</h2>
+<ul>
+<li><strong>OralGPT:</strong> Available via <a href="https://github.com/isbrycee/OralGPT">github.com/isbrycee/OralGPT</a>.</li>
+<li><strong>AI-in-Dentistry (VGG / YOLOv8 / U-Net):</strong> A repository containing models for calculus, caries, and segmentation.</li>
+<li><strong>DENTEX Dataset:</strong> A dataset for panoramic X-ray dental diagnosis, suitable for fine-tuning models.</li>
+<li><strong>Dental Plaque (Roboflow / Hugging Face):</strong> Specifically curated datasets (e.g. <code>instance-segmentation-dental-plaque</code>) for fine-tuning, with 70 images / 2 models specifically on plaque.</li>
+</ul>
+<h2>Key Considerations</h2>
+<ul>
+<li><strong>Data Quality:</strong> Models trained on images with plaque-disclosing agents provide the most accurate ground truth for segmentation.</li>
+<li><strong>Evaluation Metric:</strong> The <strong>Intersection over Union (IoU)</strong> is the primary metric for measuring how accurately the model identifies the precise location of plaque.</li>
+<li><strong>State-of-the-Art:</strong> Recent studies show AI models (specifically UNet Transformer) can perform at or above the level of human experts (dentists) in segmenting plaque.</li>
+</ul>
 
-        </article>
-    </main>
+    </div>
+    <span class="sr-only">End of article</span>
+</article>    </main>
 
     </section>
 

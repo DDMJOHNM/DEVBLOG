@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DevBlog - Top 50 Node.js</title>
+
+
+
+<meta name="description" content="Node.js interview questions covering the event loop, modules, streams, scaling, and production patterns">
+<meta name="twitter:title" content="DevBlog - Top 50 Node.js">
+<meta name="author" content="John Mason">
+<meta name="keywords" content="Interviewing">
+<meta property="og:description" content="Node.js interview questions covering the event loop, modules, streams, scaling, and production patterns">
+<meta property="og:title" content="DevBlog - Top 50 Node.js">
+<meta property="og:article:published_time" content="2026-08-19T15:42:00+00:00">
+<meta property="og:type" content="article">
+
+
+<meta name="generator" content="HydePHP v2.0.3">
+<meta property="og:site_name" content="HydePHP">
+
+
+
+
+<style>[x-cloak] {display: none!important}</style>
+
+
+            <link rel="stylesheet" href="../media/app.css?v=9450b0e0">
+    
+
+    
+    
+
+
+    
+    <meta id="meta-color-scheme" name="color-scheme" content="light">
+    <script>if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); document.getElementById('meta-color-scheme').setAttribute('content', 'dark');} else { document.documentElement.classList.remove('dark') } </script>
+
+
+
+
+
+
+</head>
+<body id="app" class="flex flex-col min-h-screen overflow-x-hidden dark:bg-gray-900 dark:text-white" x-data="{ navigationOpen: false }" x-on:keydown.escape="navigationOpen = false;">
+    <a href="#content" id="skip-to-content" class="sr-only focus:not-sr-only bg-black border-4 border-yellow-400 focus:absolute focus:mt-2 focus:mx-auto focus:p-2 focus:w-64 h-auto left-0 overflow-auto right-0 rounded-md text-center text-lg text-white top-auto z-50 ">Skip to content</a>    <nav aria-label="Main navigation" id="main-navigation" class="flex flex-wrap items-center justify-between p-4 shadow-lg sm:shadow-xl md:shadow-none dark:bg-gray-800">
+    <div id="main-navigation-brand" class="flex grow items-center shrink-0 text-gray-700 dark:text-gray-200">
+        <a href="../index.html" class="font-bold px-4" aria-label="Home page">
+    DevBlog
+</a>
+        <div class="ml-auto">
+            <button @click="toggleTheme" class="theme-toggle-button flex items-center px-2 py-1 hover:text-gray-700 dark:text-gray-200" title="Toggle theme">
+        <span class="sr-only">Toggle dark theme</span>
+        <svg width="1.25rem" height="1.25rem" class="w-5 h-5 hidden dark:block" fill="#FFFFFF" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+        <svg width="1.25rem" height="1.25rem" class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+    </button>
+        </div>
+    </div>
+
+    <div class="block md:hidden">
+        <button id="navigation-toggle-button" class="flex items-center px-3 py-1 hover:text-gray-700 dark:text-gray-200"
+                aria-label="Toggle navigation menu" @click="navigationOpen = ! navigationOpen">
+            <svg x-show="! navigationOpen" title="Open Navigation Menu" class="dark:fill-gray-200"
+                 style="display: block;"
+                 id="open-main-navigation-menu-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24"
+                 width="24">
+                <title>Open Menu</title>
+                <path d="M0 0h24v24H0z" fill="none"/>
+                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+            </svg>
+            <svg x-show="navigationOpen" title="Close Navigation Menu" class="dark:fill-gray-200" style="display: none;"
+                 id="close-main-navigation-menu-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24"
+                 width="24">
+                <title>Close Menu</title>
+                <path d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+            </svg>
+        </button>
+    </div>
+
+    <div id="main-navigation-links" 
+         class="w-full hidden md:flex grow md:grow-0 md:items-center md:w-auto px-6 -mx-4 border-t mt-3 pt-3 md:border-none md:mt-0 md:py-0 border-gray-200 dark:border-gray-700"
+         :class="navigationOpen ? 'block!' : ''">
+        <ul aria-label="Navigation links" class="md:grow md:flex justify-end">
+                            <li class="md:mx-2">
+                                            <a href="../index.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Home</a>                                    </li>
+                            <li class="md:mx-2">
+                                            <a href="../projects.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Projects</a>                                    </li>
+                    </ul>
+    </div>
+</nav>
+    <section>
+        
+    <main id="content" class="mx-auto max-w-7xl py-16 px-8">
+        <article aria-label="Article" id="top-50-nodejs" itemscope itemtype="https://schema.org/BlogPosting"
+    class="post-article mx-auto prose dark:prose-invert">
+    <meta itemprop="identifier" content="top-50-nodejs">
+    
+    <header aria-label="Header section" role="doc-pageheader">
+        <h1 itemprop="headline" class="mb-4">Top 50 Node.js</h1>
+        <div id="byline" aria-label="About the post" role="doc-introduction">
+            Posted <time itemprop="dateCreated datePublished" datetime="2026-08-19T15:42:00+00:00" title="Wednesday Aug 19th, 2026, at 3:42pm">Aug 19th, 2026</time>            by author
+<address itemprop="author" itemscope itemtype="https://schema.org/Person" aria-label="The post author" style="display: inline;">
+                <span itemprop="name" aria-label="The author's name" title=@john_mason>John Mason</span>
+            </address>            in the category "Interviewing"        </div>
+    </header>
+        <div aria-label="Article body" itemprop="articleBody">
+        <p>Interview notes for Node.js. Answers are short enough to revise from, with code where it helps.</p>
+<h2>1. What is Node.js?</h2>
+<p>Node.js is a JavaScript runtime built on Chrome's V8 engine. It runs JavaScript outside the browser and is designed around non-blocking, event-driven I/O so a single thread can handle many concurrent connections.</p>
+<h2>2. How does Node.js differ from browser JavaScript?</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Browser</th>
+<th>Node.js</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Globals</td>
+<td><code>window</code>, <code>document</code></td>
+<td><code>global</code>, <code>process</code></td>
+</tr>
+<tr>
+<td>APIs</td>
+<td>DOM, <code>fetch</code>, Web APIs</td>
+<td><code>fs</code>, <code>http</code>, <code>net</code>, <code>crypto</code></td>
+</tr>
+<tr>
+<td>Modules</td>
+<td>ES modules in browsers</td>
+<td>CommonJS and ESM</td>
+</tr>
+<tr>
+<td>Use</td>
+<td>UI</td>
+<td>Servers, CLIs, tooling</td>
+</tr>
+</tbody>
+</table>
+<p>Both use V8 and share language features (promises, async/await, classes).</p>
+<h2>3. What is the event loop?</h2>
+<p>The event loop is how Node.js runs asynchronous callbacks on a single JavaScript thread. Synchronous code runs on the call stack. When that stack is empty, the loop takes work from queues (microtasks, then timers, I/O, <code>setImmediate</code>) and runs those callbacks.</p>
+<p>This is why Node.js can serve many clients without one thread per request: waiting on I/O does not block the thread.</p>
+<h2>4. What is libuv?</h2>
+<p>libuv is the C library Node.js uses for the event loop, thread pool, and async I/O (files, DNS, some crypto). JavaScript talks to libuv through Node's C++ bindings. Heavy work that cannot be done asynchronously in the OS is offloaded to libuv's thread pool (default size 4, via <code>UV_THREADPOOL_SIZE</code>).</p>
+<h2>5. Call stack, microtasks, and macrotasks</h2>
+<ul>
+<li><strong>Call stack:</strong> currently executing functions (LIFO).</li>
+<li><strong>Microtasks:</strong> <code>process.nextTick</code>, Promise <code>.then</code> / <code>queueMicrotask</code>. Drained before the next macrotask.</li>
+<li><strong>Macrotasks:</strong> <code>setTimeout</code>, <code>setInterval</code>, I/O callbacks, <code>setImmediate</code>.</li>
+</ul>
+<pre><code class="language-js">console.log('sync');
+setTimeout(() =&gt; console.log('timeout'), 0);
+setImmediate(() =&gt; console.log('immediate'));
+Promise.resolve().then(() =&gt; console.log('promise'));
+process.nextTick(() =&gt; console.log('nextTick'));
+// sync, nextTick, promise, then timeout/immediate (order of the last two depends on context)
+</code></pre>
+<h2>6. <code>process.nextTick</code> vs <code>setImmediate</code> vs <code>setTimeout</code></h2>
+<ul>
+<li><code>process.nextTick(fn)</code> — runs before the rest of the current event-loop phase finishes. Can starve the loop if you keep queueing nextTicks.</li>
+<li><code>setImmediate(fn)</code> — runs in the check phase, after I/O callbacks.</li>
+<li><code>setTimeout(fn, 0)</code> — runs in the timers phase. Not exactly &quot;zero delay&quot;; it is a minimum delay.</li>
+</ul>
+<p>Prefer <code>setImmediate</code> over recursive <code>nextTick</code> when you want to yield to I/O.</p>
+<h2>7. What is an error-first callback?</h2>
+<p>Node's older async style: the first argument is an <code>Error</code> or <code>null</code>, the rest are results.</p>
+<pre><code class="language-js">fs.readFile('file.txt', 'utf8', (err, data) =&gt; {
+  if (err) return console.error(err);
+  console.log(data);
+});
+</code></pre>
+<p>Always handle <code>err</code>. Unhandled callback errors are a common production bug.</p>
+<h2>8. Promises and async/await in Node.js</h2>
+<p>Modern Node APIs return promises (<code>fs.promises</code>, <code>fetch</code> on recent Node). <code>async/await</code> is syntactic sugar over promises.</p>
+<pre><code class="language-js">import { readFile } from 'node:fs/promises';
+
+try {
+  const data = await readFile('file.txt', 'utf8');
+  console.log(data);
+} catch (err) {
+  console.error(err);
+}
+</code></pre>
+<p>Avoid mixing callbacks and promises without wrapping (<code>util.promisify</code>).</p>
+<h2>9. CommonJS vs ES modules</h2>
+<ul>
+<li><strong>CommonJS:</strong> <code>require</code> / <code>module.exports</code>. Synchronous, cached, still the default in many codebases.</li>
+<li><strong>ESM:</strong> <code>import</code> / <code>export</code>. Static, supports top-level await, tree-shaking in bundlers.</li>
+</ul>
+<p>A file is ESM if it has <code>&quot;type&quot;: &quot;module&quot;</code> in <code>package.json</code> or a <code>.mjs</code> extension. CJS uses <code>.cjs</code> when the package is ESM by default.</p>
+<h2>10. <code>require</code> vs <code>import</code></h2>
+<p><code>require</code> is a function you can call conditionally. <code>import</code> is hoisted and statically analysed. You cannot <code>require</code> an ESM module from CJS without a dynamic <code>import()</code>. From ESM, use <code>createRequire</code> if you must load CJS.</p>
+<h2>11. <code>module.exports</code> vs <code>exports</code></h2>
+<p><code>exports</code> is an alias for <code>module.exports</code>. Assigning <code>exports.foo = 1</code> works. Replacing <code>exports = { foo: 1 }</code> breaks the alias — the module still exports the original <code>module.exports</code> object. Prefer <code>module.exports = ...</code> when exporting a single value.</p>
+<h2>12. What is <code>package.json</code>?</h2>
+<p>The manifest for a Node project: <code>name</code>, <code>version</code>, <code>scripts</code>, <code>dependencies</code>, <code>devDependencies</code>, <code>type</code>, <code>engines</code>, <code>exports</code>, <code>main</code>. npm/yarn/pnpm use it to install and run the project.</p>
+<h2>13. npm, yarn, pnpm, and npx</h2>
+<ul>
+<li><strong>npm:</strong> default client, ships with Node.</li>
+<li><strong>yarn / pnpm:</strong> alternative clients; pnpm uses a content-addressable store and hard links.</li>
+<li><strong>npx:</strong> runs a package binary without a global install (<code>npx prisma studio</code>).</li>
+</ul>
+<p>Lockfiles (<code>package-lock.json</code>, <code>yarn.lock</code>, <code>pnpm-lock.yaml</code>) pin exact versions for reproducible installs.</p>
+<h2>14. What is the <code>EventEmitter</code>?</h2>
+<p>The observer pattern used throughout Node (<code>http.Server</code>, streams). Objects emit named events; listeners subscribe with <code>on</code> / <code>once</code>.</p>
+<pre><code class="language-js">import { EventEmitter } from 'node:events';
+
+const bus = new EventEmitter();
+bus.on('ready', (name) =&gt; console.log('ready', name));
+bus.emit('ready', 'api');
+</code></pre>
+<p>Always handle the <code>error</code> event or the process can crash. <code>setMaxListeners</code> warns about leaks when too many listeners are attached.</p>
+<h2>15. What are streams?</h2>
+<p>Streams process data in chunks instead of loading everything into memory.</p>
+<ul>
+<li><strong>Readable:</strong> <code>fs.createReadStream</code>, HTTP request</li>
+<li><strong>Writable:</strong> <code>fs.createWriteStream</code>, HTTP response</li>
+<li><strong>Duplex:</strong> sockets</li>
+<li><strong>Transform:</strong> zlib gzip, crypto cipher</li>
+</ul>
+<pre><code class="language-js">import { createReadStream, createWriteStream } from 'node:fs';
+import { pipeline } from 'node:stream/promises';
+
+await pipeline(
+  createReadStream('in.txt'),
+  createWriteStream('out.txt'),
+);
+</code></pre>
+<p>Prefer <code>pipeline</code> over <code>.pipe()</code> so errors and cleanup are handled.</p>
+<h2>16. What is a Buffer?</h2>
+<p>A Buffer is a fixed-length chunk of binary data (outside V8's heap strings). Used for files, TCP, and crypto. In modern Node, <code>Buffer</code> is a subclass of <code>Uint8Array</code>.</p>
+<pre><code class="language-js">const buf = Buffer.from('hello', 'utf8');
+console.log(buf.toString('hex'));
+</code></pre>
+<p>Do not concatenate untrusted input into buffers without size limits (DoS).</p>
+<h2>17. The <code>fs</code> module</h2>
+<p>Filesystem APIs: <code>readFile</code> / <code>writeFile</code>, <code>stat</code>, <code>mkdir</code>, <code>watch</code>, streams. Use <code>node:fs/promises</code> in new code. Synchronous <code>readFileSync</code> blocks the event loop — fine in startup scripts, not in a request handler.</p>
+<h2>18. The <code>path</code> module</h2>
+<p>Joins and normalises paths in a cross-platform way: <code>path.join</code>, <code>path.resolve</code>, <code>path.basename</code>, <code>path.extname</code>. Never concatenate paths with <code>/</code> if you care about Windows. <code>path.posix</code> / <code>path.win32</code> exist when you need a specific style.</p>
+<h2>19. Building an HTTP server</h2>
+<pre><code class="language-js">import http from 'node:http';
+
+const server = http.createServer((req, res) =&gt; {
+  res.writeHead(200, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify({ ok: true }));
+});
+
+server.listen(3000);
+</code></pre>
+<p>Frameworks (Express, Fastify, Nest, Hono) add routing, middleware, and validation on top of <code>http</code>.</p>
+<h2>20. Middleware</h2>
+<p>A function <code>(req, res, next)</code> that runs before the route handler: logging, auth, parsing JSON, CORS. Call <code>next()</code> to continue, <code>next(err)</code> to jump to error middleware.</p>
+<pre><code class="language-js">app.use((req, res, next) =&gt; {
+  console.log(req.method, req.url);
+  next();
+});
+</code></pre>
+<p>Order matters. Error middleware has four arguments: <code>(err, req, res, next)</code>.</p>
+<h2>21. Express vs Fastify vs NestJS</h2>
+<ul>
+<li><strong>Express:</strong> minimal, huge ecosystem, callback-style middleware.</li>
+<li><strong>Fastify:</strong> schema-based, faster JSON, first-class plugins and hooks.</li>
+<li><strong>NestJS:</strong> opinionated architecture (modules, DI, decorators) on Express or Fastify.</li>
+</ul>
+<p>Pick Express for small APIs, Fastify for performance-sensitive JSON APIs, Nest when you want structure on a large team.</p>
+<h2>22. REST APIs in Node.js</h2>
+<p>Map HTTP verbs and URLs to resources: <code>GET /users</code>, <code>POST /users</code>, <code>GET /users/:id</code>. Return JSON, correct status codes (200, 201, 400, 401, 404, 500), and validate input. Keep handlers thin; put business logic in services.</p>
+<h2>23. Error handling</h2>
+<ul>
+<li>Operational errors (bad input, network): handle and return a response.</li>
+<li>Programmer errors (undefined is not a function): crash in development; log and restart in production (process manager).</li>
+</ul>
+<pre><code class="language-js">process.on('unhandledRejection', (reason) =&gt; {
+  console.error('unhandledRejection', reason);
+  process.exit(1);
+});
+</code></pre>
+<p>Do not swallow errors. Use a single error-mapping layer so clients get a consistent JSON shape.</p>
+<h2>24. Uncaught exceptions vs unhandled rejections</h2>
+<ul>
+<li><code>uncaughtException</code> — thrown error with no <code>try/catch</code>. The process is in an unknown state; log and exit.</li>
+<li><code>unhandledRejection</code> — a rejected promise with no <code>.catch</code>. Same advice on modern Node: treat it as fatal.</li>
+</ul>
+<h2>25. Environment variables</h2>
+<p>Config that changes per environment: <code>PORT</code>, <code>DATABASE_URL</code>, <code>NODE_ENV</code>. Load with <code>process.env</code>, optionally <code>dotenv</code> in development. Never commit secrets. Validate env at startup (zod, envalid) so the app fails fast.</p>
+<h2>26. The <code>process</code> object</h2>
+<p>Runtime info and control: <code>process.env</code>, <code>process.argv</code>, <code>process.cwd()</code>, <code>process.exit()</code>, <code>process.memoryUsage()</code>, <code>process.pid</code>, signals (<code>SIGINT</code>, <code>SIGTERM</code>). Handle <code>SIGTERM</code> for graceful shutdown in Kubernetes/Docker.</p>
+<h2>27. Cluster module</h2>
+<p><code>cluster</code> forks worker processes that share a port. Each worker is a full Node process with its own event loop and memory. The primary process distributes connections.</p>
+<p>Useful on multi-core machines. State is not shared — use Redis or a database for sessions. PM2 and Kubernetes often replace hand-rolled clustering.</p>
+<h2>28. Worker threads</h2>
+<p><code>worker_threads</code> run JavaScript in parallel threads that share memory via <code>SharedArrayBuffer</code> or <code>MessageChannel</code>. Use them for CPU-heavy work (hashing, image processing) so the main event loop stays free. Not a replacement for <code>cluster</code> for HTTP scale-out.</p>
+<h2>29. Child processes</h2>
+<p><code>child_process.spawn</code>, <code>exec</code>, <code>execFile</code>, <code>fork</code>. <code>fork</code> is specialised for Node children with an IPC channel. Use <code>spawn</code> for streaming output; <code>exec</code> buffers everything (dangerous for large output). Sanitize arguments to avoid command injection.</p>
+<h2>30. Blocking vs non-blocking I/O</h2>
+<p>Non-blocking: <code>fs.readFile</code>, <code>http</code>, most network APIs — the thread continues while the OS works. Blocking: <code>fs.readFileSync</code>, tight CPU loops, large JSON.parse on huge payloads. One blocking call stalls every request on that process.</p>
+<h2>31. CORS</h2>
+<p>Cross-Origin Resource Sharing. Browsers block frontend JS on <code>app.com</code> from calling <code>api.com</code> unless the API sends <code>Access-Control-Allow-Origin</code> (and friends). Handle preflight <code>OPTIONS</code> requests. In Express, the <code>cors</code> package is the usual approach. Never use <code>*</code> with credentials.</p>
+<h2>32. Authentication: JWT vs sessions</h2>
+<ul>
+<li><strong>Sessions:</strong> server stores session id in a cookie; state lives in Redis/DB. Easy to revoke.</li>
+<li><strong>JWT:</strong> client stores a signed token. Stateless, harder to revoke without a denylist or short TTL.</li>
+</ul>
+<p>Use <code>httpOnly</code>, <code>Secure</code>, <code>SameSite</code> cookies. Hash passwords with bcrypt/argon2. HTTPS everywhere.</p>
+<h2>33. Rate limiting</h2>
+<p>Protects against brute force and abuse. Token bucket / sliding window in memory (single instance) or Redis (multiple instances). Return <code>429 Too Many Requests</code>. Place it early in the middleware stack.</p>
+<h2>34. Security basics</h2>
+<ul>
+<li>Helmet (HTTP headers)</li>
+<li>Validate and sanitise input (NoSQL/SQL injection, XSS)</li>
+<li>Parameterised queries / ORMs</li>
+<li>Limit payload size</li>
+<li>Keep dependencies updated (<code>npm audit</code>)</li>
+<li>Do not run as root</li>
+<li>Secrets in a vault or env, not source</li>
+</ul>
+<h2>35. File uploads</h2>
+<p>Use a dedicated parser (<code>multer</code>, <code>busboy</code>). Stream to disk or S3; do not buffer entire files in memory. Check MIME type and size. Store uploads outside the web root. Virus-scan when needed.</p>
+<h2>36. WebSockets</h2>
+<p>Persistent bidirectional sockets (<code>ws</code>, Socket.IO). The HTTP server upgrades the connection. Sticky sessions or a pub/sub adapter (Redis) are needed behind multiple Node processes. Heartbeats detect dead clients.</p>
+<h2>37. Caching</h2>
+<ul>
+<li>In-process: fast, not shared, lost on restart.</li>
+<li>Redis: shared, TTL, good for sessions and hot keys.</li>
+<li>HTTP: <code>Cache-Control</code>, ETags, CDNs for static assets.</li>
+</ul>
+<p>Cache expensive reads; invalidate on writes. Stampede protection (locks or singleflight) matters at scale.</p>
+<h2>38. Databases and connection pooling</h2>
+<p>Keep a pool of DB connections per process (<code>pg</code>, <code>mysql2</code>, Prisma). Pool size × process count must not exhaust the database. Use transactions for multi-step writes. Prefer migrations over ad-hoc schema changes.</p>
+<h2>39. Testing</h2>
+<ul>
+<li><strong>Unit:</strong> Jest / Vitest / node:test</li>
+<li><strong>HTTP:</strong> Supertest against the app without a real port</li>
+<li><strong>Integration:</strong> testcontainers or a dedicated test DB</li>
+</ul>
+<p>Mock I/O at boundaries. Keep tests deterministic; avoid depending on wall-clock time without fakes.</p>
+<h2>40. Debugging</h2>
+<p><code>node --inspect</code> + Chrome DevTools, VS Code attach, <code>console.log</code> with care in prod. <code>NODE_DEBUG=http</code> for core modules. OpenTelemetry / pino for structured logs. Heap snapshots for leaks; <code>clinic.js</code> for event-loop delay.</p>
+<h2>41. Memory leaks</h2>
+<p>Typical causes: global caches that grow, EventEmitter listeners not removed, unclosed streams, closures holding large objects, detached DOM (less relevant in Node). Monitor <code>process.memoryUsage()</code> and restart when RSS climbs without bound.</p>
+<h2>42. Garbage collection and V8</h2>
+<p>V8 manages heap memory. Young generation collects often; old generation less often. Large objects and many hidden classes hurt performance. <code>--max-old-space-size</code> raises the heap limit. CPU profiling shows hot functions; heap snapshots show retained objects.</p>
+<h2>43. The V8 engine</h2>
+<p>Compiles JavaScript to machine code (Ignition interpreter + TurboFan optimiser). Node embeds V8 and adds libuv. Language features land in Node after V8 supports them. <code>node --version</code> vs V8 version are related but not the same number.</p>
+<h2>44. REPL</h2>
+<p><code>node</code> with no file drops you into a Read-Eval-Print Loop. Useful for trying APIs. <code>_</code> holds the last result. <code>.exit</code> to quit. <code>NODE_REPL_HISTORY</code> controls history.</p>
+<h2>45. Global objects in Node.js</h2>
+<p><code>global</code> / <code>globalThis</code>, <code>process</code>, <code>Buffer</code>, <code>console</code>, <code>setTimeout</code>, <code>setImmediate</code>, <code>URL</code>, <code>fetch</code> (modern Node), <code>__dirname</code> and <code>__filename</code> in CJS only. In ESM use <code>import.meta.url</code> and <code>fileURLToPath</code>.</p>
+<h2>46. Scaling Node.js</h2>
+<p>Vertical: faster CPU, more RAM, larger libuv pool. Horizontal: more processes (cluster, PM2) or more machines (load balancer, Kubernetes). Stateless APIs scale easily; sticky sessions and local disk do not. Offload CPU to workers or another service.</p>
+<h2>47. PM2</h2>
+<p>A process manager: cluster mode, zero-downtime reload, logs, restart on crash, startup scripts. In Kubernetes you often run one Node process per container and let the orchestrator restart — PM2 is more common on VMs.</p>
+<h2>48. Graceful shutdown</h2>
+<p>On <code>SIGTERM</code>: stop accepting new connections, drain in-flight requests, close DB pools, then <code>process.exit(0)</code>. Kubernetes sends SIGTERM then SIGKILL after <code>terminationGracePeriodSeconds</code>.</p>
+<pre><code class="language-js">server.close(async () =&gt; {
+  await db.end();
+  process.exit(0);
+});
+</code></pre>
+<h2>49. When should you not use Node.js?</h2>
+<p>CPU-heavy number crunching, tight real-time deadlines, or workloads that need many threads sharing memory without a worker model. Node shines at I/O-bound APIs, tooling, and realtime apps. Use Go, Rust, or Java when the bottleneck is CPU or you need a different concurrency model.</p>
+<h2>50. Typical Node.js interview checklist</h2>
+<ul>
+<li>Event loop phases and <code>nextTick</code> vs Promises vs timers</li>
+<li>Streams + <code>pipeline</code> vs buffering whole files</li>
+<li>CJS vs ESM</li>
+<li>Error handling and process crash policy</li>
+<li>Cluster vs worker threads</li>
+<li>Security headers, injection, rate limits</li>
+<li>How you would scale a chat API or a file-upload service</li>
+</ul>
+<h2>References</h2>
+<ul>
+<li><a href="https://nodejs.org/docs/latest/api/">Node.js docs</a></li>
+<li><a href="https://libuv.org/">libuv</a></li>
+<li><a href="https://nodejs.org/en/learn/asynchronous-work/event-loop-timers-and-nexttick">Node.js event loop</a></li>
+</ul>
+
+    </div>
+    <span class="sr-only">End of article</span>
+</article>    </main>
+
+    </section>
+
+    <footer aria-label="Page footer" class="flex py-4 px-6 w-full text-center mt-auto bg-slate-100 dark:bg-gray-800">
+        <div class="prose dark:prose-invert text-center mx-auto">
+            <p>Site proudly built with <a href="https://github.com/hydephp/hyde">HydePHP</a> 🎩</p>
+        </div>
+                    <a href="#app" aria-label="Go to top of page" class="float-right" @click.prevent="document.querySelector('#app').scrollIntoView({ behavior: 'smooth' })">
+                <button title="Scroll to top">
+                    <svg width="1.5rem" height="1.5rem" role="presentation" class="fill-current text-gray-500 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+                    </svg>
+                </button>
+            </a>
+            </footer>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.3/dist/cdn.min.js" integrity="sha256-gOkV4d9/FmMNEkjOzVlyM2eNAWSUXisT+1RbMTTIgXI=" crossorigin="anonymous"></script>
+
+<script>
+    function toggleTheme() {
+        if (localStorage.getItem('color-theme') === 'dark' || !('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem('color-theme', 'light');
+            document.getElementById('meta-color-scheme').setAttribute('content', 'light');
+        } else {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem('color-theme', 'dark');
+            document.getElementById('meta-color-scheme').setAttribute('content', 'dark');
+        }
+    }
+</script>
+
+
+
+
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+  const isDark =
+    document.documentElement.classList.contains('dark') ||
+    (!('color-theme' in localStorage) &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches) ||
+    localStorage.getItem('color-theme') === 'dark';
+
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: isDark ? 'dark' : 'default',
+    securityLevel: 'loose',
+  });
+
+  document.querySelectorAll('pre code.language-mermaid').forEach((code) => {
+    const pre = code.closest('pre');
+    if (!pre) return;
+
+    const container = document.createElement('div');
+    container.className = 'mermaid';
+    container.textContent = code.textContent;
+    pre.replaceWith(container);
+  });
+
+  await mermaid.run({ querySelector: '.mermaid' });
+</script>
+
+</body>
+</html>

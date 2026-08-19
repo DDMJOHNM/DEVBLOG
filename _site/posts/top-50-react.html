@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DevBlog - Top 50 React</title>
+
+
+
+<meta name="description" content="React interview questions covering hooks, rendering, performance, and component patterns">
+<meta name="twitter:title" content="DevBlog - Top 50 React">
+<meta name="author" content="John Mason">
+<meta name="keywords" content="Interviewing">
+<meta property="og:description" content="React interview questions covering hooks, rendering, performance, and component patterns">
+<meta property="og:title" content="DevBlog - Top 50 React">
+<meta property="og:article:published_time" content="2026-08-19T15:42:00+00:00">
+<meta property="og:type" content="article">
+
+
+<meta name="generator" content="HydePHP v2.0.3">
+<meta property="og:site_name" content="HydePHP">
+
+
+
+
+<style>[x-cloak] {display: none!important}</style>
+
+
+            <link rel="stylesheet" href="../media/app.css?v=9450b0e0">
+    
+
+    
+    
+
+
+    
+    <meta id="meta-color-scheme" name="color-scheme" content="light">
+    <script>if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); document.getElementById('meta-color-scheme').setAttribute('content', 'dark');} else { document.documentElement.classList.remove('dark') } </script>
+
+
+
+
+
+
+</head>
+<body id="app" class="flex flex-col min-h-screen overflow-x-hidden dark:bg-gray-900 dark:text-white" x-data="{ navigationOpen: false }" x-on:keydown.escape="navigationOpen = false;">
+    <a href="#content" id="skip-to-content" class="sr-only focus:not-sr-only bg-black border-4 border-yellow-400 focus:absolute focus:mt-2 focus:mx-auto focus:p-2 focus:w-64 h-auto left-0 overflow-auto right-0 rounded-md text-center text-lg text-white top-auto z-50 ">Skip to content</a>    <nav aria-label="Main navigation" id="main-navigation" class="flex flex-wrap items-center justify-between p-4 shadow-lg sm:shadow-xl md:shadow-none dark:bg-gray-800">
+    <div id="main-navigation-brand" class="flex grow items-center shrink-0 text-gray-700 dark:text-gray-200">
+        <a href="../index.html" class="font-bold px-4" aria-label="Home page">
+    DevBlog
+</a>
+        <div class="ml-auto">
+            <button @click="toggleTheme" class="theme-toggle-button flex items-center px-2 py-1 hover:text-gray-700 dark:text-gray-200" title="Toggle theme">
+        <span class="sr-only">Toggle dark theme</span>
+        <svg width="1.25rem" height="1.25rem" class="w-5 h-5 hidden dark:block" fill="#FFFFFF" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+        <svg width="1.25rem" height="1.25rem" class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+    </button>
+        </div>
+    </div>
+
+    <div class="block md:hidden">
+        <button id="navigation-toggle-button" class="flex items-center px-3 py-1 hover:text-gray-700 dark:text-gray-200"
+                aria-label="Toggle navigation menu" @click="navigationOpen = ! navigationOpen">
+            <svg x-show="! navigationOpen" title="Open Navigation Menu" class="dark:fill-gray-200"
+                 style="display: block;"
+                 id="open-main-navigation-menu-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24"
+                 width="24">
+                <title>Open Menu</title>
+                <path d="M0 0h24v24H0z" fill="none"/>
+                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+            </svg>
+            <svg x-show="navigationOpen" title="Close Navigation Menu" class="dark:fill-gray-200" style="display: none;"
+                 id="close-main-navigation-menu-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24"
+                 width="24">
+                <title>Close Menu</title>
+                <path d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+            </svg>
+        </button>
+    </div>
+
+    <div id="main-navigation-links" 
+         class="w-full hidden md:flex grow md:grow-0 md:items-center md:w-auto px-6 -mx-4 border-t mt-3 pt-3 md:border-none md:mt-0 md:py-0 border-gray-200 dark:border-gray-700"
+         :class="navigationOpen ? 'block!' : ''">
+        <ul aria-label="Navigation links" class="md:grow md:flex justify-end">
+                            <li class="md:mx-2">
+                                            <a href="../index.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Home</a>                                    </li>
+                            <li class="md:mx-2">
+                                            <a href="../projects.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Projects</a>                                    </li>
+                    </ul>
+    </div>
+</nav>
+    <section>
+        
+    <main id="content" class="mx-auto max-w-7xl py-16 px-8">
+        <article aria-label="Article" id="top-50-react" itemscope itemtype="https://schema.org/BlogPosting"
+    class="post-article mx-auto prose dark:prose-invert">
+    <meta itemprop="identifier" content="top-50-react">
+    
+    <header aria-label="Header section" role="doc-pageheader">
+        <h1 itemprop="headline" class="mb-4">Top 50 React</h1>
+        <div id="byline" aria-label="About the post" role="doc-introduction">
+            Posted <time itemprop="dateCreated datePublished" datetime="2026-08-19T15:42:00+00:00" title="Wednesday Aug 19th, 2026, at 3:42pm">Aug 19th, 2026</time>            by author
+<address itemprop="author" itemscope itemtype="https://schema.org/Person" aria-label="The post author" style="display: inline;">
+                <span itemprop="name" aria-label="The author's name" title=@john_mason>John Mason</span>
+            </address>            in the category "Interviewing"        </div>
+    </header>
+        <div aria-label="Article body" itemprop="articleBody">
+        <p>Interview notes for React. Numbered questions with short answers and examples.</p>
+<h2>1. What is React and its benefits?</h2>
+<p>React is a JavaScript library by Facebook for building user interfaces, especially in single-page apps. Components are reusable and can hold their own state.</p>
+<p>Key benefits:</p>
+<ul>
+<li>Component-based structure</li>
+<li>Efficient updates via the virtual DOM</li>
+<li>Declarative UI</li>
+<li>A large ecosystem and community</li>
+</ul>
+<h2>2. Difference Between React Node, Element, and Component</h2>
+<ul>
+<li>A React Node is any renderable unit in React, like an element, string, number, or null.</li>
+<li>A React Element is an immutable object describing what to render, created with JSX or React.createElement.</li>
+<li>A React Component is a function or class that returns React Elements, allowing for reusable UI pieces.</li>
+</ul>
+<h2>3. What is JSX and how does it work?</h2>
+<p>JSX stands for JavaScript XML and is a syntax extension for JavaScript that lets you write HTML-like code within JavaScript.</p>
+<p>It simplifies creating React components.
+JSX is transformed into JavaScript function calls, usually by Babel.
+For example, <div>Hello, world!</div> becomes React.createElement('div', null, 'Hello, world!').</p>
+<h2>4. Difference between state and props in React</h2>
+<p>In React, state is local data managed within a component that can change over time,
+while props are read-only attributes passed from a parent to a child component.</p>
+<ul>
+<li>state is used for data that changes within a component,</li>
+<li>whereas props are used to pass data and event handlers to child components.</li>
+</ul>
+<h2>5. What is the purpose of the key prop in React?</h2>
+<p>The key prop in React uniquely identifies elements in a list,
+helping React optimize rendering by efficiently updating and reordering items.</p>
+<p>Without unique keys, React may unnecessarily re-render elements, leading to performance issues and bugs.</p>
+<h2>6. What is the consequence of using array indices as keys in React?</h2>
+<p>Using array indices as keys in React can cause performance issues and bugs.</p>
+<p>When the order of items changes, React may fail to correctly identify which items have changed, leading to unnecessary re-renders or incorrect updates.</p>
+<p>It's better to use unique identifiers for keys to ensure efficient DOM management.</p>
+<h2>7. What is the difference between Controlled and Uncontrolled React components?</h2>
+<p>In controlled components, form data is managed by the component's state, making it the single source of truth.
+Changes to input values are handled via event handlers.</p>
+<p>In uncontrolled components, the form state is internal and accessed through refs. Controlled components offer more control and are easier to test, while uncontrolled components are simpler to implement for basic cases.</p>
+<p>Example of controlled component:</p>
+<pre><code class="language-jsx">function ControlledInput() {
+  const [value, setValue] = React.useState('');
+  return (
+    &lt;input
+      type=&quot;text&quot;
+      value={value}
+      onChange={(e) =&gt; setValue(e.target.value)}
+    /&gt;
+  );
+}
+</code></pre>
+<p>Example of uncontrolled component:</p>
+<pre><code class="language-jsx">function UncontrolledInput() {
+  const inputRef = React.useRef();
+  return &lt;input type=&quot;text&quot; ref={inputRef} /&gt;;
+}
+</code></pre>
+<h2>8. What are some pitfalls of using context in React?</h2>
+<p>Context in React can lead to performance issues if not handled carefully,
+causing unnecessary re-renders of components that consume the context,
+even if only part of the context changes.</p>
+<p>Overusing context for state management can also make the code harder to maintain and understand.
+It's best to use context sparingly and consider other state management solutions like Redux or Zustand for more complex scenarios.</p>
+<h2>9. What are the benefits of using hooks in React?</h2>
+<p>Hooks allow you to use state and other React features in functional components, eliminating the need for classes.</p>
+<p>They simplify code by reducing reliance on lifecycle methods, improve code readability, and make it easier to reuse stateful logic across components.
+Common hooks like useState and useEffect help manage state and side effects.</p>
+<h2>10. What are the rules of React hooks?</h2>
+<p>React hooks must be called at the top level of a function, never inside loops, conditions, or nested functions.
+They should only be called from React function components or custom hooks.
+These rules help maintain correct state and lifecycle behavior.</p>
+<h2>11. What is the difference between useEffect and useLayoutEffect in React?</h2>
+<p>useEffect and useLayoutEffect are both used for handling side effects in React functional components but differ in timing:</p>
+<ul>
+<li>useEffect runs asynchronously after the DOM has painted, ideal for tasks like data fetching or subscriptions.</li>
+<li>useLayoutEffect runs synchronously after DOM mutations but before the browser paints, useful for tasks like measuring DOM elements or synchronizing the UI with the DOM.</li>
+</ul>
+<h2>12. What does the dependency array of useEffect affect?</h2>
+<p>The dependency array of useEffect controls when the effect re-runs:</p>
+<ul>
+<li>If it's empty, the effect runs only once after the initial render.</li>
+<li>If it contains variables, the effect re-runs whenever any of those variables change.</li>
+<li>If omitted, the effect runs after every render.</li>
+</ul>
+<h2>13. What is the useRef hook in React and when should it be used?</h2>
+<p>The useRef hook creates a mutable object that persists through renders, allowing direct access to DOM elements,
+storing mutable values without causing re-renders,
+and maintaining references to values.
+For instance, useRef can be utilized to focus on an input element:</p>
+<pre><code class="language-jsx">import React, { useRef, useEffect } from 'react';
+
+function TextInputWithFocusButton() {
+  const inputEl = useRef(null);
+  useEffect(() =&gt; {
+    inputEl.current.focus();
+  }, []);
+  return &lt;input ref={inputEl} type=&quot;text&quot; /&gt;;
+}
+</code></pre>
+<h2>14. What is the purpose of callback function argument format of setState() in React and when should it be used?</h2>
+<p>The callback function format of setState() in React ensures that state updates are based on the most current state and props.
+This is essential when the new state depends on the previous state.
+Instead of passing an object directly to setState(), you provide a function that takes the previous state and props as arguments, returning the updated state.</p>
+<pre><code class="language-jsx">this.setState((prevState, props) =&gt; ({
+  counter: prevState.counter + props.increment,
+}));
+</code></pre>
+<h2>15. What is the useCallback hook in React and when should it be used?</h2>
+<p>The useCallback hook memoizes functions to prevent their recreation on every render.
+This is especially beneficial when passing callbacks to optimized child components that depend on reference equality to avoid unnecessary renders.
+Use it when a function is passed as a prop to a child component.</p>
+<pre><code class="language-jsx">const memoizedCallback = useCallback(() =&gt; {
+  doSomething(a, b);
+}, [a, b]);
+</code></pre>
+<h2>16. What is the useMemo hook in React and when should it be used?</h2>
+<p>The useMemo hook memoizes costly calculations, recomputing them only when dependencies change.
+This enhances performance by avoiding unnecessary recalculations.
+It should be used for computationally intensive functions that don't need to run on every render.</p>
+<pre><code class="language-jsx">const memoizedValue = useMemo(() =&gt; computeExpensiveValue(a, b), [a, b]);
+</code></pre>
+<h2>17. What is the useReducer hook in React and when should it be used?</h2>
+<p>The useReducer hook manages complex state logic in functional components, serving as an alternative to useState.
+It's ideal when state has multiple sub-values or when the next state relies on the previous one. It accepts a reducer function and an initial state.</p>
+<pre><code class="language-jsx">const [state, dispatch] = useReducer(reducer, initialState);
+</code></pre>
+<h2>18. What is the useId hook in React and when should it be used?</h2>
+<p>The useId hook generates unique IDs for elements within a component, which is crucial for accessibility by linking form inputs with labels.
+It guarantees unique IDs across the application even if the component renders multiple times.</p>
+<pre><code class="language-jsx">import { useId } from 'react';
+
+function MyComponent() {
+  const id = useId();
+  return (
+    &lt;div&gt;
+      &lt;label htmlFor={id}&gt;Name:&lt;/label&gt;
+      &lt;input id={id} type=&quot;text&quot; /&gt;
+    &lt;/div&gt;
+  );
+}
+</code></pre>
+<h2>19. What does re-rendering mean in React?</h2>
+<p>Re-rendering refers to updating a component's output in the DOM due to changes in state or props.</p>
+<p>When these changes occur, React triggers a re-render to ensure the UI reflects current data by calling the render method again.</p>
+<h2>20. What are React Fragments used for?</h2>
+<p>React Fragments group multiple elements without adding extra nodes to the DOM.
+This allows returning multiple elements from a component's render method without wrapping them in an additional HTML element.
+You can utilize shorthand syntax &lt;&gt;...&lt;/&gt; or React.Fragment.</p>
+<pre><code class="language-jsx">return (
+  &lt;&gt;
+    &lt;ChildComponent1 /&gt;
+    &lt;ChildComponent2 /&gt;
+  &lt;/&gt;
+);
+</code></pre>
+<h2>21. What is forwardRef() in React used for?</h2>
+<p>forwardRef() allows passing a ref through a component to one of its children. This is useful for accessing a DOM element or child component's instance directly from a parent.</p>
+<pre><code class="language-jsx">import React, { forwardRef } from 'react';
+
+const MyComponent = forwardRef((props, ref) =&gt; &lt;input ref={ref} {...props} /&gt;);
+</code></pre>
+<p>Refs provide a way to access DOM nodes or React elements created in the render method.</p>
+<p>In the typical React dataflow, props are the only way that parent components interact with their children. To modify a child, you re-render it with new props. However, there are a few cases where you need to imperatively modify a child outside of the typical dataflow. The child to be modified could be an instance of a React component, or it could be a DOM element. For both of these cases, React provides an escape hatch.</p>
+<p>When to Use Refs
+There are a few good use cases for refs:</p>
+<p>Managing focus, text selection, or media playback.
+Triggering imperative animations.
+Integrating with third-party DOM libraries.
+Avoid using refs for anything that can be done declaratively.</p>
+<p>For example, instead of exposing open() and close() methods on a Dialog component, pass an isOpen prop to it.</p>
+<h2>22. How do you reset a component's state in React?</h2>
+<p>To reset state in React, set it back to its initial value using the setState function. For example:</p>
+<pre><code class="language-jsx">const [state, setState] = useState(initialState);
+setState(initialState);
+</code></pre>
+<h2>23. Why does React recommend against mutating state?</h2>
+<p>React advises against mutating state as it can lead to unexpected behaviors and bugs.</p>
+<p>State immutability helps efficiently determine when components need re-rendering; direct mutations may prevent React from detecting changes.</p>
+<h2>24. What are error boundaries in React for?</h2>
+<p>Error boundaries catch JavaScript errors in their child components, log them, and display fallback UI instead of crashing the application.</p>
+<p>They utilize componentDidCatch and static getDerivedStateFromError methods but do not catch errors in event handlers or asynchronous code.</p>
+<h2>25. How do you test React applications?</h2>
+<p>Testing React applications can be done using Jest and React Testing Library.</p>
+<p>Jest serves as the testing framework while React Testing Library provides utilities for testing components similarly to user interactions.</p>
+<h2>26. Explain what React hydration is</h2>
+<p>Hydration involves attaching event listeners and making server-rendered HTML interactive on the client side.</p>
+<p>After server-side rendering, React initializes dynamic behavior by attaching event handlers.</p>
+<h2>27. What are React Portals used for?</h2>
+<p>React Portals allow rendering children into a DOM node outside the parent component's hierarchy.</p>
+<p>This is useful for modals or tooltips that need to escape parent overflow or z-index constraints.</p>
+<h2>28. How do you debug React applications?</h2>
+<p>Debugging can be done using the React Developer Tools extension for inspecting component hierarchies and states along with console.log statements for logging data and errors.</p>
+<h2>29. What is React strict mode and what are its benefits?</h2>
+<p>React strict mode helps identify potential issues by activating additional checks and warnings without affecting production builds.</p>
+<p>Benefits include highlighting unsafe lifecycle methods and detecting unexpected side effects.</p>
+<h2>30. How do you localize React applications?</h2>
+<p>Localization typically involves libraries like react-i18next or react-intl. Set up translation files for different languages and configure the library within your app using provided hooks or components.</p>
+<pre><code class="language-jsx">// Example using react-i18next
+import { useTranslation } from 'react-i18next';
+
+const MyComponent = () =&gt; {
+  const { t } = useTranslation();
+  return &lt;p&gt;{t('welcome_message')}&lt;/p&gt;;
+};
+</code></pre>
+<h2>31. What is code splitting in a React application?</h2>
+<p>Code splitting enhances performance by dividing code into smaller chunks loaded on demand, thereby reducing initial load times. This can be achieved through dynamic import() statements or using React's React.lazy and Suspense.</p>
+<pre><code class="language-jsx">// Using React.lazy and Suspense
+const LazyComponent = React.lazy(() =&gt; import('./LazyComponent'));
+
+function App() {
+  return (
+    &lt;React.Suspense fallback={&lt;div&gt;Loading...&lt;/div&gt;}&gt;
+      &lt;LazyComponent /&gt;
+    &lt;/React.Suspense&gt;
+  );
+}
+</code></pre>
+<h2>32. How would one optimize the performance of React contexts to reduce rerenders?</h2>
+<p>Optimizing context performance involves memoizing context values with useMemo, splitting contexts for isolated state changes, and employing selectors to rerender only necessary components.</p>
+<p>const value = useMemo(() =&gt; ({ state, dispatch }), [state, dispatch]);</p>
+<p>Memoizing context values
+One of the most effective ways to reduce unnecessary rerenders is to memoize the context value. By using useMemo, you can ensure that the context value only changes when its dependencies change.</p>
+<p>import React, { createContext, useMemo, useState } from 'react';</p>
+<p>const MyContext = createContext();</p>
+<p>const MyProvider = ({ children }) =&gt; {
+const [state, setState] = useState(initialState);</p>
+<p>const value = useMemo(() =&gt; ({ state, setState }), [state]);</p>
+<p>return &lt;MyContext.Provider value={value}&gt;{children}&lt;/MyContext.Provider&gt;;
+};</p>
+<h2>33. What are higher-order components in React?</h2>
+<p>Higher-order components (HOCs) are functions that take a component and return a new one with added props or behavior, facilitating logic reuse across components.</p>
+<pre><code class="language-jsx">const withExtraProps = (WrappedComponent) =&gt; {
+  return (props) =&gt; &lt;WrappedComponent {...props} extraProp=&quot;value&quot; /&gt;;
+};
+
+const EnhancedComponent = withExtraProps(MyComponent);
+</code></pre>
+<h2>34. What is the Flux pattern?</h2>
+<p>The Flux pattern manages application state through unidirectional data flow, simplifying debugging and enhancing maintainability with clear separation of concerns between Dispatcher, Stores, Actions, and Views.</p>
+<h2>35. Explain one-way data flow of React</h2>
+<p>One-way data flow means data moves from parent to child components only, making it predictable and easier to debug while enhancing maintainability and performance.</p>
+<h2>36. How do you handle asynchronous data loading in React applications?</h2>
+<p>Asynchronous data loading uses useEffect alongside useState hooks; fetching data inside useEffect updates state with fetched results ensuring re-renders occur with new data.</p>
+<pre><code class="language-jsx">import React, { useState, useEffect } from 'react';
+
+const FetchAndDisplayData = () =&gt; {
+  const [info, updateInfo] = useState(null);
+  const [isLoading, toggleLoading] = useState(true);
+
+  useEffect(() =&gt; {
+    const retrieveData = async () =&gt; {
+      try {
+        const res = await fetch('https://api.example.com/data');
+        const data = await res.json();
+        updateInfo(data);
+      } catch (err) {
+        console.error('Error fetching data:', err);
+      } finally {
+        toggleLoading(false);
+      }
+    };
+
+    retrieveData();
+  }, []);
+
+  return (
+    &lt;div&gt;
+      {isLoading ? (
+        &lt;p&gt;Fetching data, please wait...&lt;/p&gt;
+      ) : (
+        &lt;pre&gt;{JSON.stringify(info, null, 2)}&lt;/pre&gt;
+      )}
+    &lt;/div&gt;
+  );
+};
+
+export default FetchAndDisplayData;
+</code></pre>
+<h2>37. Explain server-side rendering of React applications and its benefits</h2>
+<p>Server-side rendering (SSR) involves rendering components on the server before sending fully rendered HTML to clients,
+improving initial load times and SEO through efficient hydration processes.</p>
+<h2>38. Explain static generation of React applications</h2>
+<p>Static generation pre-renders HTML at build time instead of runtime;
+this approach enhances performance by delivering static content quickly while improving SEO outcomes.</p>
+<h2>39. Explain the presentational vs container component pattern in React</h2>
+<p>In React, the presentational vs container component pattern distinguishes between components that focus on appearance (presentational components) and those that manage logic and state (container components).</p>
+<p>Presentational components render HTML and CSS, while container components handle data and behavior. This separation leads to a cleaner and more organized codebase.</p>
+<h2>40. What are some common pitfalls when doing data fetching in React?</h2>
+<p>Common pitfalls in data fetching with React include failing to handle loading and error states, neglecting to clean up subscriptions which can cause memory leaks, and improperly using lifecycle methods or hooks.
+Always ensure proper handling of these states, clean up after components, and utilize useEffect for side effects in functional components.</p>
+<h2>41. What are render props in React?</h2>
+<p>Render props in React allow code sharing between components through a prop that is a function. This function returns a React element, enabling data to be passed to child components. This technique facilitates logic reuse without relying on higher-order components or hooks.</p>
+<pre><code class="language-jsx">class DataFetcher extends React.Component {
+  state = { data: null };
+
+  componentDidMount() {
+    fetch(this.props.url)
+      .then((response) =&gt; response.json())
+      .then((data) =&gt; this.setState({ data }));
+  }
+
+  render() {
+    return this.props.render(this.state.data);
+  }
+}
+
+// Usage
+&lt;DataFetcher
+  url=&quot;/api/data&quot;
+  render={(data) =&gt; &lt;div&gt;{data ? data.name : 'Loading...'}&lt;/div&gt;}
+/&gt;;
+</code></pre>
+<h2>42. What are some React anti-patterns?</h2>
+<p>React anti-patterns are practices that can lead to inefficient or hard-to-maintain code.</p>
+<p>Common examples include:</p>
+<ul>
+<li>Directly mutating state instead of using setState</li>
+<li>Using componentWillMount for data fetching</li>
+<li>Overusing componentWillReceiveProps</li>
+<li>Not using keys in lists</li>
+<li>Excessive inline functions in render</li>
+<li>Deeply nested state</li>
+</ul>
+<h2>43. How do you decide between using React state, context, and external state managers?</h2>
+<p>Choosing between React state, context, and external state managers depends on your application's complexity.
+Use React state for local component state, context for global state shared across multiple components, and external managers like Redux or MobX for complex state management requiring advanced features.</p>
+<h2>44. Explain the composition pattern in React</h2>
+<p>The composition pattern in React involves building components by combining smaller, reusable ones instead of using inheritance.</p>
+<p>This encourages creating complex UIs by passing components as children or props.</p>
+<pre><code class="language-jsx">function WelcomeDialog() {
+  return (
+    &lt;Dialog&gt;
+      &lt;h1&gt;Welcome&lt;/h1&gt;
+      &lt;p&gt;Thank you for visiting our spacecraft!&lt;/p&gt;
+    &lt;/Dialog&gt;
+  );
+}
+
+function Dialog(props) {
+  return &lt;div className=&quot;dialog&quot;&gt;{props.children}&lt;/div&gt;;
+}
+</code></pre>
+<h2>45. What is virtual DOM in React?</h2>
+<p>The virtual DOM is a lightweight representation of the actual DOM used by React.
+It enables efficient UI updates by comparing the virtual DOM with the real DOM and applying only necessary changes through a process called reconciliation.##</p>
+<h2>46. How does virtual DOM in React work? What are its benefits and downsides?</h2>
+<p>The virtual DOM works by creating a new tree whenever a component's state changes and comparing it with the previous tree through &quot;reconciliation.&quot;
+This allows only the differences to be updated in the actual DOM, enhancing performance.
+Benefits include improved efficiency and a declarative UI management style, while downsides may include added complexity for simple applications.</p>
+<h2>47. What is React Fiber and how is it an improvement over the previous approach?</h2>
+<p>React Fiber is a complete rewrite of React's reconciliation algorithm introduced in version 16.
+It enhances rendering by breaking tasks into smaller units, allowing React to pause and resume work, which improves UI responsiveness.
+This enables features like time slicing and suspense that weren't possible before.</p>
+<h2>48. What is reconciliation in React?</h2>
+<p>Reconciliation is the process where React updates the DOM to match changes in the virtual DOM. When a component's state or props change,
+a new virtual DOM tree is created and compared with the previous one through &quot;diffing,&quot; allowing efficient updates to only changed parts of the actual DOM.</p>
+<h2>49. What is React Suspense?</h2>
+<p>React Suspense allows handling asynchronous operations more elegantly within components.
+It provides fallback content while waiting for resources like data or code to load. You can use it alongside React.lazy for code splitting.</p>
+<pre><code class="language-jsx">const LazyComponent = React.lazy(() =&gt; import('./LazyComponent'));
+
+function MyComponent() {
+  return (
+    &lt;React.Suspense fallback={&lt;div&gt;Loading...&lt;/div&gt;}&gt;
+      &lt;LazyComponent /&gt;
+    &lt;/React.Suspense&gt;
+  );
+}
+</code></pre>
+<h2>50. Explain what happens when setState is called in React</h2>
+<p>When setState is invoked, it schedules an update to the component's state object.
+React merges the new state with the current one and triggers a re-render of the component.
+This process is asynchronous; thus, changes may not occur immediately,
+and multiple setState calls can be batched for performance optimization.</p>
+<h2>References</h2>
+<ul>
+<li><a href="https://www.greatfrontend.com/blog/50-essential-reactjs-interviews-questions">https://www.greatfrontend.com/blog/50-essential-reactjs-interviews-questions</a></li>
+<li><a href="https://api.example.com/data'">https://api.example.com/data'</a></li>
+</ul>
+
+    </div>
+    <span class="sr-only">End of article</span>
+</article>    </main>
+
+    </section>
+
+    <footer aria-label="Page footer" class="flex py-4 px-6 w-full text-center mt-auto bg-slate-100 dark:bg-gray-800">
+        <div class="prose dark:prose-invert text-center mx-auto">
+            <p>Site proudly built with <a href="https://github.com/hydephp/hyde">HydePHP</a> 🎩</p>
+        </div>
+                    <a href="#app" aria-label="Go to top of page" class="float-right" @click.prevent="document.querySelector('#app').scrollIntoView({ behavior: 'smooth' })">
+                <button title="Scroll to top">
+                    <svg width="1.5rem" height="1.5rem" role="presentation" class="fill-current text-gray-500 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+                    </svg>
+                </button>
+            </a>
+            </footer>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.3/dist/cdn.min.js" integrity="sha256-gOkV4d9/FmMNEkjOzVlyM2eNAWSUXisT+1RbMTTIgXI=" crossorigin="anonymous"></script>
+
+<script>
+    function toggleTheme() {
+        if (localStorage.getItem('color-theme') === 'dark' || !('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem('color-theme', 'light');
+            document.getElementById('meta-color-scheme').setAttribute('content', 'light');
+        } else {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem('color-theme', 'dark');
+            document.getElementById('meta-color-scheme').setAttribute('content', 'dark');
+        }
+    }
+</script>
+
+
+
+
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+  const isDark =
+    document.documentElement.classList.contains('dark') ||
+    (!('color-theme' in localStorage) &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches) ||
+    localStorage.getItem('color-theme') === 'dark';
+
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: isDark ? 'dark' : 'default',
+    securityLevel: 'loose',
+  });
+
+  document.querySelectorAll('pre code.language-mermaid').forEach((code) => {
+    const pre = code.closest('pre');
+    if (!pre) return;
+
+    const container = document.createElement('div');
+    container.className = 'mermaid';
+    container.textContent = code.textContent;
+    pre.replaceWith(container);
+  });
+
+  await mermaid.run({ querySelector: '.mermaid' });
+</script>
+
+</body>
+</html>

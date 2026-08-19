@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DevBlog - Networking</title>
+
+
+
+<meta name="description" content="Core networking concepts from IP addresses to CDNs">
+<meta name="twitter:title" content="DevBlog - Networking">
+<meta name="author" content="John Mason">
+<meta name="keywords" content="System Design">
+<meta property="og:description" content="Core networking concepts from IP addresses to CDNs">
+<meta property="og:title" content="DevBlog - Networking">
+<meta property="og:article:published_time" content="2026-08-19T15:33:00+00:00">
+<meta property="og:type" content="article">
+
+
+<meta name="generator" content="HydePHP v2.0.3">
+<meta property="og:site_name" content="HydePHP">
+
+
+
+
+<style>[x-cloak] {display: none!important}</style>
+
+
+            <link rel="stylesheet" href="../media/app.css?v=9450b0e0">
+    
+
+    
+    
+
+
+    
+    <meta id="meta-color-scheme" name="color-scheme" content="light">
+    <script>if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); document.getElementById('meta-color-scheme').setAttribute('content', 'dark');} else { document.documentElement.classList.remove('dark') } </script>
+
+
+
+
+
+
+</head>
+<body id="app" class="flex flex-col min-h-screen overflow-x-hidden dark:bg-gray-900 dark:text-white" x-data="{ navigationOpen: false }" x-on:keydown.escape="navigationOpen = false;">
+    <a href="#content" id="skip-to-content" class="sr-only focus:not-sr-only bg-black border-4 border-yellow-400 focus:absolute focus:mt-2 focus:mx-auto focus:p-2 focus:w-64 h-auto left-0 overflow-auto right-0 rounded-md text-center text-lg text-white top-auto z-50 ">Skip to content</a>    <nav aria-label="Main navigation" id="main-navigation" class="flex flex-wrap items-center justify-between p-4 shadow-lg sm:shadow-xl md:shadow-none dark:bg-gray-800">
+    <div id="main-navigation-brand" class="flex grow items-center shrink-0 text-gray-700 dark:text-gray-200">
+        <a href="../index.html" class="font-bold px-4" aria-label="Home page">
+    DevBlog
+</a>
+        <div class="ml-auto">
+            <button @click="toggleTheme" class="theme-toggle-button flex items-center px-2 py-1 hover:text-gray-700 dark:text-gray-200" title="Toggle theme">
+        <span class="sr-only">Toggle dark theme</span>
+        <svg width="1.25rem" height="1.25rem" class="w-5 h-5 hidden dark:block" fill="#FFFFFF" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+        <svg width="1.25rem" height="1.25rem" class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+    </button>
+        </div>
+    </div>
+
+    <div class="block md:hidden">
+        <button id="navigation-toggle-button" class="flex items-center px-3 py-1 hover:text-gray-700 dark:text-gray-200"
+                aria-label="Toggle navigation menu" @click="navigationOpen = ! navigationOpen">
+            <svg x-show="! navigationOpen" title="Open Navigation Menu" class="dark:fill-gray-200"
+                 style="display: block;"
+                 id="open-main-navigation-menu-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24"
+                 width="24">
+                <title>Open Menu</title>
+                <path d="M0 0h24v24H0z" fill="none"/>
+                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+            </svg>
+            <svg x-show="navigationOpen" title="Close Navigation Menu" class="dark:fill-gray-200" style="display: none;"
+                 id="close-main-navigation-menu-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24"
+                 width="24">
+                <title>Close Menu</title>
+                <path d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+            </svg>
+        </button>
+    </div>
+
+    <div id="main-navigation-links" 
+         class="w-full hidden md:flex grow md:grow-0 md:items-center md:w-auto px-6 -mx-4 border-t mt-3 pt-3 md:border-none md:mt-0 md:py-0 border-gray-200 dark:border-gray-700"
+         :class="navigationOpen ? 'block!' : ''">
+        <ul aria-label="Navigation links" class="md:grow md:flex justify-end">
+                            <li class="md:mx-2">
+                                            <a href="../index.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Home</a>                                    </li>
+                            <li class="md:mx-2">
+                                            <a href="../projects.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Projects</a>                                    </li>
+                    </ul>
+    </div>
+</nav>
+    <section>
+        
+    <main id="content" class="mx-auto max-w-7xl py-16 px-8">
+        <article aria-label="Article" id="networking" itemscope itemtype="https://schema.org/BlogPosting"
+    class="post-article mx-auto prose dark:prose-invert">
+    <meta itemprop="identifier" content="networking">
+    
+    <header aria-label="Header section" role="doc-pageheader">
+        <h1 itemprop="headline" class="mb-4">Networking</h1>
+        <div id="byline" aria-label="About the post" role="doc-introduction">
+            Posted <time itemprop="dateCreated datePublished" datetime="2026-08-19T15:33:00+00:00" title="Wednesday Aug 19th, 2026, at 3:33pm">Aug 19th, 2026</time>            by author
+<address itemprop="author" itemscope itemtype="https://schema.org/Person" aria-label="The post author" style="display: inline;">
+                <span itemprop="name" aria-label="The author's name" title=@john_mason>John Mason</span>
+            </address>            in the category "System Design"        </div>
+    </header>
+        <div aria-label="Article body" itemprop="articleBody">
+        <p>Networks need addresses so other devices can find them. These notes cover the concepts that get traffic to the right machine, process, and user.</p>
+<h2>IP Address</h2>
+<p>Two versions are in use:</p>
+<ul>
+<li><strong>IPv4</strong> (0–255): about 4.3 billion addresses, e.g. <code>142.250.80.46</code></li>
+<li><strong>IPv6</strong>: a much larger address space, e.g. <code>2001:db8:85a3::8a2e:370:7334</code></li>
+</ul>
+<p>Addresses can be public or private:</p>
+<pre><code>Your laptop:    192.168.1.10     private
+Home router:    73.128.42.15     public → translates traffic to the private addresses
+Google server:  142.250.80.46    public
+</code></pre>
+<p>A laptop uses a private IP address inside the network. Nobody wants to memorize IP addresses for every website, which is where DNS comes in.</p>
+<h2>DNS</h2>
+<p>DNS translates a human-friendly name such as <code>google.com</code> into an IP address.</p>
+<pre><code>client → resolver (checks google.com)
+     → returns .com from TLD root servers
+     → returns google.com from TLD authoritative name server
+     → returns 142.250.183.100 from the authoritative name server
+</code></pre>
+<ol>
+<li>The browser and operating system check if they already know the answer.</li>
+<li>If not, the request goes to a recursive resolver (ISP or a public provider like Google DNS).</li>
+<li>The resolver talks to the DNS hierarchy: root server, TLD server, then the authoritative name server for the domain.</li>
+</ol>
+<p>Results are cached at multiple levels, so most lookups are fast.</p>
+<p>DNS and IP get traffic to the right machine. Ports get it to the right program on that machine.</p>
+<h2>Ports</h2>
+<p>Ports are numbers from 0 to 65535. Common ports:</p>
+<ul>
+<li><strong>22:</strong> SSH</li>
+<li><strong>53:</strong> DNS</li>
+<li><strong>80:</strong> HTTP</li>
+<li><strong>443:</strong> HTTPS</li>
+<li><strong>5432:</strong> PostgreSQL</li>
+<li><strong>6379:</strong> Redis</li>
+</ul>
+<p>When you visit a website, the browser connects to port 443 by default.</p>
+<p>A server is usually identified by an <code>(IP, port)</code> pair. That is why two web servers on the same machine need different ports, like 8080 and 8081.</p>
+<h2>MAC Address</h2>
+<p>A MAC address is a hardware address assigned to a network interface, usually written like <code>a4:83:e7:1b:22:9c</code>.</p>
+<p>IP addresses help route traffic across networks. MAC addresses help deliver traffic inside the same local network, like home Wi-Fi or an office LAN.</p>
+<p>When a laptop wants to talk to another device on the same network, it uses ARP to ask:</p>
+<pre><code>Who has IP 192.168.1.20?
+
+The device with that IP replies with its MAC address.
+</code></pre>
+<p>The switch then uses that MAC address to forward the data to the right device.</p>
+<p>IPs can change when you move networks or get a new DHCP assignment. MAC addresses are meant to be fixed, though modern devices often randomize them on public Wi-Fi for privacy.</p>
+<p>You rarely configure MAC addresses yourself, but you may see them in DHCP reservations, firewall rules, and switch settings.</p>
+<h2>NAT</h2>
+<p>Most homes have many devices but only one public IP address. <strong>NAT</strong> (Network Address Translation) lets all those devices share that one public IP.</p>
+<p>When a laptop sends a request to the internet, the router replaces the private IP and port with its own public IP and a new port:</p>
+<pre><code>192.168.1.10:51234  →  73.128.42.15:40001
+192.168.1.11:49876  →  73.128.42.15:40002
+</code></pre>
+<p>The router stores this mapping in a NAT table, so when responses come back, it knows which internal device should receive them.</p>
+<p>From the internet’s point of view, it looks like one machine making many connections.</p>
+<p>NAT helped IPv4 survive the address shortage. It is also one reason peer-to-peer connections are harder: two devices behind NAT cannot always connect directly without help.</p>
+<h2>DHCP</h2>
+<p><strong>DHCP</strong> (Dynamic Host Configuration Protocol) gives a device its network settings automatically when it joins a network.</p>
+<p>Without DHCP, you would have to manually configure the IP address, subnet mask, default gateway, and DNS server for every device.</p>
+<p>The DHCP flow is often called <strong>DORA</strong>:</p>
+<ol>
+<li><strong>Discover:</strong> Client asks, “Is there an IP for me?”</li>
+<li><strong>Offer:</strong> DHCP server offers an available IP.</li>
+<li><strong>Request:</strong> Client asks to use that IP.</li>
+<li><strong>Acknowledge:</strong> Server confirms and records the lease.</li>
+</ol>
+<p>The IP is usually leased for a limited time. When the lease is close to expiring, the device renews it.</p>
+<h2>Packets and Layers</h2>
+<p>Data does not travel across a network as one big blob. It is broken into smaller chunks called packets.</p>
+<p>Each packet carries metadata, such as source IP, destination IP, sequence number, and a small part of the actual data.</p>
+<pre><code>Message: &quot;Hello, this is a long message from the server&quot;
+
+Packet 1: seq=1, data=&quot;Hello, thi&quot;
+Packet 2: seq=2, data=&quot;s is a lon&quot;
+Packet 3: seq=3, data=&quot;g message &quot;
+Packet 4: seq=4, data=&quot;from the s&quot;
+</code></pre>
+<p>Packets may take different routes, arrive out of order, or get dropped. The receiving side has to put them back together. That is why the transport layer matters.</p>
+<h2>OSI Model</h2>
+<p>The OSI model is a 7-layer mental model for how networking is organized. Real systems often use the simpler TCP/IP model, but OSI is still useful vocabulary.</p>
+<p>Each layer only depends on the layer above and below it. HTTP does not need to know how IP routing works. TCP does not care whether bytes travel over Wi-Fi, Ethernet, or fiber.</p>
+<p>That separation is why you can change the underlying network without rewriting your application.</p>
+<p>For most engineers, layers 3, 4, and 7 matter the most:</p>
+<ul>
+<li><strong>Layer 3:</strong> IP and routing</li>
+<li><strong>Layer 4:</strong> TCP and UDP</li>
+<li><strong>Layer 7:</strong> HTTP, DNS, and application protocols</li>
+</ul>
+<h2>Subnetting and CIDR</h2>
+<p>A subnet is a smaller logical slice of an IP network. Subnetting lets us split one large network into smaller, manageable parts.</p>
+<p><strong>CIDR</strong> is the notation used to describe those slices. Example: <code>192.168.1.0/24</code></p>
+<p>Here, <code>/24</code> means the first 24 bits identify the network. The remaining bits are used for devices inside that network.</p>
+<p>Subnetting is common in cloud networks. For example, you might create a production VPC as <code>10.0.0.0/16</code> and give each availability zone a smaller slice.</p>
+<p>It also makes firewall rules cleaner. Allowing <code>10.0.1.0/24</code> to access the database is much better than listing hundreds of IP addresses manually.</p>
+<h2>Router vs Switch</h2>
+<p>Routers and switches both move traffic, but they work at different layers.</p>
+<ul>
+<li>A <strong>switch</strong> works at layer 2. It connects devices inside the same local network and forwards data using MAC addresses.</li>
+<li>A <strong>router</strong> works at layer 3. It connects different networks and forwards packets using IP addresses.</li>
+</ul>
+<p>A home router is usually a router, switch, and Wi-Fi access point combined in one box.</p>
+<p>Switches keep local traffic fast. Routers decide where packets should go next, including across the internet.</p>
+<h2>Protocols</h2>
+<h3>TCP vs UDP</h3>
+<p>At the transport layer, the two most common protocols are TCP and UDP.</p>
+<p><strong>TCP</strong> is reliable. It creates a connection before sending data, tracks what was sent, retries lost data, and delivers everything in order.</p>
+<p>Use TCP when correctness matters: web pages, APIs, databases, SSH, and file transfers.</p>
+<p><strong>UDP</strong> is lighter and faster. It sends data without creating a connection, and it does not guarantee delivery or ordering.</p>
+<p>Use UDP when low latency matters more than perfect reliability: video calls, DNS, online gaming, and live telemetry.</p>
+<p>Modern protocols like QUIC, used by HTTP/3, are built on UDP. They keep UDP’s speed benefits while adding reliability at the protocol level.</p>
+<h2>HTTP / HTTPS</h2>
+<p>HTTP is the request-response protocol behind the web.</p>
+<p>A client sends a request. The server sends back a response with a status code, headers, and a body.</p>
+<p>HTTP is <strong>stateless</strong>. Each request is independent, so cookies, sessions, and tokens are used to remember who the user is between requests.</p>
+<p><strong>HTTPS</strong> is HTTP over TLS.</p>
+<p>The request format stays mostly the same, but the connection is encrypted and the server’s identity is verified.</p>
+<p>For public websites and APIs, HTTPS is the default today. Plain HTTP should be treated as the exception.</p>
+<h2>TLS</h2>
+<p><strong>TLS</strong> (Transport Layer Security) is what puts the S in HTTPS. It gives HTTPS three important guarantees:</p>
+<ul>
+<li><strong>Confidentiality:</strong> Others cannot read the data.</li>
+<li><strong>Integrity:</strong> Data cannot be silently changed in transit.</li>
+<li><strong>Authenticity:</strong> The server is really who it claims to be.</li>
+</ul>
+<p>At a high level, the TLS handshake works like this: the server certificate is signed by a trusted Certificate Authority. The browser verifies it before trusting the connection.</p>
+<p>After the handshake, both sides use fast symmetric encryption for the actual data transfer.</p>
+<p>TLS 1.3 made this process much faster by reducing the number of round trips. With session resumption, repeat connections can be even faster.</p>
+<h2>WebSocket</h2>
+<p>HTTP is request-response. The client asks, the server replies.</p>
+<p>That works well for normal web pages and APIs, but not for apps where the server needs to push updates instantly, like chat, live scores, trading dashboards, multiplayer games, or collaborative editing.</p>
+<p>A <strong>WebSocket</strong> is a persistent, two-way connection between a client and server. It starts as an HTTP request and then upgrades to a WebSocket connection.</p>
+<p>After the upgrade, both sides can send messages anytime without creating a new HTTP request for every update.</p>
+<p>Use WebSockets when you need real-time, two-way communication.</p>
+<p>For one-way server-to-client updates, <strong>Server-Sent Events (SSE)</strong> is often a simpler option.</p>
+<h2>Infrastructure</h2>
+<h3>Firewall</h3>
+<p>A firewall controls which network traffic is allowed in or out. It checks traffic against rules based on fields like source IP, destination IP, port, and protocol.</p>
+<pre><code>ALLOW tcp from any to 10.0.1.0/24 port 443
+ALLOW tcp from 10.0.0.0/16 to 10.0.2.10 port 5432
+DENY  all from any to any
+</code></pre>
+<p>The last rule is important: block everything that is not explicitly allowed.</p>
+<p>Firewalls can be stateful or stateless:</p>
+<ul>
+<li>A <strong>stateful</strong> firewall tracks active connections. If your server sends a request out, the response is allowed back in automatically.</li>
+<li>A <strong>stateless</strong> firewall checks each packet independently. It is simpler, but less flexible.</li>
+</ul>
+<p>In cloud platforms, you usually see firewalls as security groups in AWS, NSGs in Azure, or firewall rules in GCP.</p>
+<h3>VPN</h3>
+<p>A <strong>VPN</strong> (Virtual Private Network) creates an encrypted tunnel over the public internet. It makes a remote device behave as if it is connected to a private network.</p>
+<p>Two common use cases:</p>
+<ul>
+<li><strong>Corporate VPN:</strong> Lets employees access internal company systems from outside the office.</li>
+<li><strong>Consumer VPN:</strong> Routes traffic through a VPN provider to hide the user’s public IP or change apparent location.</li>
+</ul>
+<p>VPNs are built using protocols like WireGuard, OpenVPN, or IPsec.</p>
+<p>The key idea is simple: traffic goes through an encrypted tunnel before reaching the destination.</p>
+<p>A VPN does not make you fully anonymous. The VPN provider can still see where your traffic is going, so you are shifting trust from your ISP or network provider to the VPN provider.</p>
+<h3>Proxy vs Reverse Proxy</h3>
+<p>A proxy sits between a client and a server. The difference is which side it represents.</p>
+<ul>
+<li>A <strong>forward proxy</strong> sits in front of clients. It forwards client requests to the internet. Companies use forward proxies for content filtering, caching, and hiding internal IPs.</li>
+<li>A <strong>reverse proxy</strong> sits in front of servers. Clients send requests to the reverse proxy, and it forwards them to the right backend server.</li>
+</ul>
+<p>Reverse proxies are common in production systems. They can terminate TLS, cache responses, rate-limit clients, and route traffic to different backend services.</p>
+<p>Tools like Nginx, HAProxy, Envoy, and Cloudflare often work as reverse proxies.</p>
+<h3>Load Balancer</h3>
+<p>Once you have multiple backend servers, you need a way to spread traffic across them. That is what a load balancer does.</p>
+<p>A load balancer is usually a reverse proxy that decides which backend should handle each request.</p>
+<p>Common algorithms:</p>
+<ul>
+<li><strong>Round robin:</strong> Send each request to the next server.</li>
+<li><strong>Least connections:</strong> Send traffic to the server with the fewest active connections.</li>
+<li><strong>IP hash:</strong> Send the same client IP to the same server.</li>
+<li><strong>Weighted:</strong> Send more traffic to stronger servers.</li>
+</ul>
+<p>Load balancers also run health checks. If a server stops responding, the load balancer removes it from rotation and sends traffic to healthy servers.</p>
+<p>This is how one bad instance does not bring down the whole service.</p>
+<h3>CDN</h3>
+<p>A <strong>CDN</strong> (Content Delivery Network) is a group of servers spread across the world that cache content close to users.</p>
+<p>Instead of every request going back to the origin server, the CDN serves cached content from a nearby edge location. This reduces latency because data travels a shorter distance.</p>
+<p>CDNs are commonly used for static assets like images, CSS, JavaScript, and video. Modern CDNs can also cache API responses, terminate TLS, run edge functions, and help absorb DDoS attacks.</p>
+<h2>Performance</h2>
+<h3>Latency vs Bandwidth vs Throughput</h3>
+<p>Latency, bandwidth, and throughput are often mixed up, but they mean different things:</p>
+<ul>
+<li><strong>Latency:</strong> How long one packet takes to travel from source to destination</li>
+<li><strong>Bandwidth:</strong> The maximum amount of data a network can carry per second</li>
+<li><strong>Throughput:</strong> The actual amount of data transferred per second</li>
+</ul>
+<p>More bandwidth does not always reduce latency. A 1 Gbps connection can still feel slow if the server is on the other side of the world.</p>
+<p>In system design:</p>
+<ul>
+<li>Caches and CDNs reduce latency.</li>
+<li>More servers and network capacity increase bandwidth.</li>
+<li>Compression, fewer round trips, and better protocols improve throughput.</li>
+</ul>
+<p>Good systems optimize all three, but they are not the same thing.</p>
+<h2>References</h2>
+<ul>
+<li><a href="https://blog.algomaster.io/p/20-networking-concepts-explained">20 Networking Concepts Explained (AlgoMaster)</a></li>
+</ul>
+
+    </div>
+    <span class="sr-only">End of article</span>
+</article>    </main>
+
+    </section>
+
+    <footer aria-label="Page footer" class="flex py-4 px-6 w-full text-center mt-auto bg-slate-100 dark:bg-gray-800">
+        <div class="prose dark:prose-invert text-center mx-auto">
+            <p>Site proudly built with <a href="https://github.com/hydephp/hyde">HydePHP</a> 🎩</p>
+        </div>
+                    <a href="#app" aria-label="Go to top of page" class="float-right" @click.prevent="document.querySelector('#app').scrollIntoView({ behavior: 'smooth' })">
+                <button title="Scroll to top">
+                    <svg width="1.5rem" height="1.5rem" role="presentation" class="fill-current text-gray-500 h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+                    </svg>
+                </button>
+            </a>
+            </footer>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.3/dist/cdn.min.js" integrity="sha256-gOkV4d9/FmMNEkjOzVlyM2eNAWSUXisT+1RbMTTIgXI=" crossorigin="anonymous"></script>
+
+<script>
+    function toggleTheme() {
+        if (localStorage.getItem('color-theme') === 'dark' || !('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem('color-theme', 'light');
+            document.getElementById('meta-color-scheme').setAttribute('content', 'light');
+        } else {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem('color-theme', 'dark');
+            document.getElementById('meta-color-scheme').setAttribute('content', 'dark');
+        }
+    }
+</script>
+
+
+
+
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+  const isDark =
+    document.documentElement.classList.contains('dark') ||
+    (!('color-theme' in localStorage) &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches) ||
+    localStorage.getItem('color-theme') === 'dark';
+
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: isDark ? 'dark' : 'default',
+    securityLevel: 'loose',
+  });
+
+  document.querySelectorAll('pre code.language-mermaid').forEach((code) => {
+    const pre = code.closest('pre');
+    if (!pre) return;
+
+    const container = document.createElement('div');
+    container.className = 'mermaid';
+    container.textContent = code.textContent;
+    pre.replaceWith(container);
+  });
+
+  await mermaid.run({ querySelector: '.mermaid' });
+</script>
+
+</body>
+</html>

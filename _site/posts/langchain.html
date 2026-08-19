@@ -3,14 +3,18 @@
 <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DevBlog - Projects</title>
+<title>DevBlog - LangChain</title>
 
 
 
-<meta name="description" content="Selected project write-ups">
-<meta name="twitter:title" content="DevBlog - Projects">
-<meta property="og:description" content="Selected project write-ups">
-<meta property="og:title" content="DevBlog - Projects">
+<meta name="description" content="System design with LangChain and OpenAI">
+<meta name="twitter:title" content="DevBlog - LangChain">
+<meta name="author" content="John Mason">
+<meta name="keywords" content="Agentic AI">
+<meta property="og:description" content="System design with LangChain and OpenAI">
+<meta property="og:title" content="DevBlog - LangChain">
+<meta property="og:article:published_time" content="2026-08-19T13:00:00+00:00">
+<meta property="og:type" content="article">
 
 
 <meta name="generator" content="HydePHP v2.0.3">
@@ -22,7 +26,7 @@
 <style>[x-cloak] {display: none!important}</style>
 
 
-            <link rel="stylesheet" href="media/app.css?v=9450b0e0">
+            <link rel="stylesheet" href="../media/app.css?v=9450b0e0">
     
 
     
@@ -42,7 +46,7 @@
 <body id="app" class="flex flex-col min-h-screen overflow-x-hidden dark:bg-gray-900 dark:text-white" x-data="{ navigationOpen: false }" x-on:keydown.escape="navigationOpen = false;">
     <a href="#content" id="skip-to-content" class="sr-only focus:not-sr-only bg-black border-4 border-yellow-400 focus:absolute focus:mt-2 focus:mx-auto focus:p-2 focus:w-64 h-auto left-0 overflow-auto right-0 rounded-md text-center text-lg text-white top-auto z-50 ">Skip to content</a>    <nav aria-label="Main navigation" id="main-navigation" class="flex flex-wrap items-center justify-between p-4 shadow-lg sm:shadow-xl md:shadow-none dark:bg-gray-800">
     <div id="main-navigation-brand" class="flex grow items-center shrink-0 text-gray-700 dark:text-gray-200">
-        <a href="index.html" class="font-bold px-4" aria-label="Home page">
+        <a href="../index.html" class="font-bold px-4" aria-label="Home page">
     DevBlog
 </a>
         <div class="ml-auto">
@@ -80,40 +84,76 @@
          :class="navigationOpen ? 'block!' : ''">
         <ul aria-label="Navigation links" class="md:grow md:flex justify-end">
                             <li class="md:mx-2">
-                                            <a href="index.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Home</a>                                    </li>
+                                            <a href="../index.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Home</a>                                    </li>
                             <li class="md:mx-2">
-                                            <a href="projects.html" aria-current="page" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100 navigation-link-active border-l-4 border-indigo-500 md:border-none font-medium -ml-6 pl-5 md:ml-0 md:pl-0 bg-gray-100 dark:bg-gray-800 md:bg-transparent dark:md:bg-transparent">Projects</a>                                    </li>
+                                            <a href="../projects.html" class="navigation-link block my-2 md:my-0 md:inline-block py-1 text-gray-700 hover:text-gray-900 dark:text-gray-100">Projects</a>                                    </li>
                     </ul>
     </div>
 </nav>
     <section>
         
     <main id="content" class="mx-auto max-w-7xl py-16 px-8">
-        <article class="mx-auto prose dark:prose-invert">
-            <h1>Projects</h1>
-<h2>Positive Thought Counselling Onboarding Module</h2>
-<pre><code class="language-mermaid">flowchart LR
-  A[Idea] --&gt; B[Build]
-  B --&gt; C[Ship]
-</code></pre>
-<h2>Positive Thought Counselling Dental Module</h2>
-<pre><code class="language-mermaid">flowchart LR
-  A[Idea] --&gt; B[Build]
-  B --&gt; C[Ship]
-</code></pre>
-<h2>Logging and Subscription System</h2>
-<pre><code class="language-mermaid">flowchart LR
-  A[Idea] --&gt; B[Build]
-  B --&gt; C[Ship]
-</code></pre>
-<h2>Serverless Online Shopping Cart</h2>
-<pre><code class="language-mermaid">flowchart LR
-  A[Idea] --&gt; B[Build]
-  B --&gt; C[Ship]
-</code></pre>
+        <article aria-label="Article" id="langchain" itemscope itemtype="https://schema.org/BlogPosting"
+    class="post-article mx-auto prose dark:prose-invert">
+    <meta itemprop="identifier" content="langchain">
+    
+    <header aria-label="Header section" role="doc-pageheader">
+        <h1 itemprop="headline" class="mb-4">LangChain</h1>
+        <div id="byline" aria-label="About the post" role="doc-introduction">
+            Posted <time itemprop="dateCreated datePublished" datetime="2026-08-19T13:00:00+00:00" title="Wednesday Aug 19th, 2026, at 1:00pm">Aug 19th, 2026</time>            by author
+<address itemprop="author" itemscope itemtype="https://schema.org/Person" aria-label="The post author" style="display: inline;">
+                <span itemprop="name" aria-label="The author's name" title=@john_mason>John Mason</span>
+            </address>            in the category "Agentic AI"        </div>
+    </header>
+        <div aria-label="Article body" itemprop="articleBody">
+        <p>System design with LangChain and OpenAI uses LangChain as an orchestration framework to build applications that leverage OpenAI's large language models (LLMs) and tools. LangChain provides the structure for integrating OpenAI models with external data sources, memory, and complex decision-making logic, resulting in robust, context-aware AI applications.</p>
+<h2>Core Concepts</h2>
+<ul>
+<li><strong>OpenAI LLMs</strong> are the engine. They perform language processing, generation, and reasoning.</li>
+<li><strong>LangChain</strong> is the orchestrator. It connects LLM calls to other components and data sources, creating multi-step workflows.</li>
+<li>The design is modular. Developers can swap models or components with minimal code changes.</li>
+<li>The combination allows for building <strong>agents</strong>. These agents can decide which tools to use, going beyond simple prompt-response flows.</li>
+</ul>
+<h2>Key Architectural Components</h2>
+<ul>
+<li><strong>Models &amp; Prompts:</strong> LangChain provides a standardized interface for interacting with OpenAI models and tools. It also provides prompt templates.</li>
+<li><strong>Chains &amp; LangGraph:</strong>
+<ul>
+<li><strong>Chains</strong> define a linear sequence of steps.</li>
+<li><strong>LangGraph</strong> is for complex workflows with loops and branching logic. It is ideal for complex reasoning and decision-making.</li>
+</ul>
+</li>
+<li><strong>Data Connection (RAG):</strong>
+<ul>
+<li><strong>Document Loaders:</strong> Import data from various sources.</li>
+<li><strong>Vector Stores &amp; Embeddings:</strong> Data is split into chunks and converted to vector embeddings. The data is stored in a vector database for efficient retrieval.</li>
+<li><strong>Retrieval-Augmented Generation (RAG):</strong> This injects context from external data into the LLM prompt. This improves accuracy and reduces hallucinations.</li>
+</ul>
+</li>
+<li><strong>Memory:</strong> Components add short-term or long-term memory. This allows the AI to remember past interactions and user context.</li>
+<li><strong>Tools:</strong> The system can give the OpenAI model access to external tools. This allows it to interact with the real world.</li>
+</ul>
+<h2>System Design Process</h2>
+<ol>
+<li><strong>Define the Goal:</strong> Clearly define the application's purpose.</li>
+<li><strong>Integrate OpenAI:</strong> Set up your OpenAI API key and integrate the model using LangChain's interface.</li>
+<li><strong>Choose Workflow Structure:</strong>
+<ul>
+<li>Use standard chains for simple tasks.</li>
+<li>Use LangGraph for complex agents.</li>
+</ul>
+</li>
+<li><strong>Add Context (if needed):</strong> Implement a RAG system to give the model access to specific knowledge.</li>
+<li><strong>Enable Tool Use:</strong> Integrate necessary tools that the agent can call.</li>
+<li><strong>Add Memory:</strong> Configure memory components to maintain conversation history.</li>
+<li><strong>Debug and Evaluate:</strong> Use LangSmith to optimize the application's performance.</li>
+<li><strong>Deploy:</strong> Turn the chain or graph into a deployable API using tools like LangServe.</li>
+</ol>
+<p>This approach accelerates the development of AI systems with OpenAI technology.</p>
 
-        </article>
-    </main>
+    </div>
+    <span class="sr-only">End of article</span>
+</article>    </main>
 
     </section>
 
