@@ -7,13 +7,18 @@
 
 
 
-<meta name="description" content="Reusable solutions within a system architecture">
+<meta name="description" content="title: &#039;Design Patterns&#039;
+
+description: &#039;Reusable solutions within a system architecture&#039;
+category: &#039;System Design&#039;
+author: &#039;J...">
 <meta name="twitter:title" content="DevBlog - Design Patterns">
-<meta name="author" content="John Mason">
-<meta name="keywords" content="System Design">
-<meta property="og:description" content="Reusable solutions within a system architecture">
+<meta property="og:description" content="title: &#039;Design Patterns&#039;
+
+description: &#039;Reusable solutions within a system architecture&#039;
+category: &#039;System Design&#039;
+author: &#039;J...">
 <meta property="og:title" content="DevBlog - Design Patterns">
-<meta property="og:article:published_time" content="2026-08-19T12:00:00+00:00">
 <meta property="og:type" content="article">
 
 
@@ -100,20 +105,658 @@
     <header aria-label="Header section" role="doc-pageheader">
         <h1 itemprop="headline" class="mb-4">Design Patterns</h1>
         <div id="byline" aria-label="About the post" role="doc-introduction">
-            Posted <time itemprop="dateCreated datePublished" datetime="2026-08-19T12:00:00+00:00" title="Wednesday Aug 19th, 2026, at 12:00pm">Aug 19th, 2026</time>            by author
-<address itemprop="author" itemscope itemtype="https://schema.org/Person" aria-label="The post author" style="display: inline;">
-                <span itemprop="name" aria-label="The author's name" title=@john_mason>John Mason</span>
-            </address>            in the category "System Design"        </div>
+                                            </div>
     </header>
         <div aria-label="Article body" itemprop="articleBody">
-        <ul>
+        <hr />
+<h2>title: 'Design Patterns'</h2>
+<p>description: 'Reusable solutions within a system architecture'
+category: 'System Design'
+author: 'John Mason'
+date: '2026-08-19 12:00'</p>
+<ul>
 <li><strong>System design</strong> defines a high-level blueprint for a system's overall architecture.</li>
 <li><strong>Design patterns</strong> offer mid-level, reusable solutions for recurring challenges within that architecture.</li>
 </ul>
 <h2>References</h2>
 <ul>
 <li><a href="https://refactoring.guru/design-patterns">Refactoring Guru — Design Patterns</a></li>
+<li>Gang of Four (23 Patterns)</li>
+<li><a href="https://www.youtube.com/watch?v=rpt8PpIPhJQ">Algomaster Blog -</a></li>
 </ul>
+<h2>Creational</h2>
+<ul>
+<li>Objects are created</li>
+</ul>
+<h3>Singleton</h3>
+<p>One shared instance of a class eg app config, logger, cache manager and thread pool</p>
+<pre><code class="language-mermaid">flowchart LR
+    OrderService[Order service] --&gt;|AppConfig::getInstance| AppConfig[(Shared AppConfig)]
+    EmailWorker[Email worker] --&gt;|AppConfig::getInstance| AppConfig
+    ApiHandler[API handler] --&gt;|AppConfig::getInstance| AppConfig
+</code></pre>
+<pre><code class="language-php">final class AppConfig
+{
+    private static ?self $instance = null;
+
+    private function __construct(
+        public readonly string $environment = 'production',
+    ) {}
+
+    private function __clone(): void {}
+
+    public function __wakeup(): void
+    {
+        throw new LogicException('Cannot unserialize a singleton.');
+    }
+
+    public static function getInstance(): self
+    {
+        return self::$instance ??= new self();
+    }
+}
+
+final class OrderService
+{
+    public function config(): AppConfig
+    {
+        return AppConfig::getInstance();
+    }
+}
+
+final class EmailWorker
+{
+    public function config(): AppConfig
+    {
+        return AppConfig::getInstance();
+    }
+}
+
+final class ApiHandler
+{
+    public function config(): AppConfig
+    {
+        return AppConfig::getInstance();
+    }
+}
+
+$orderService = new OrderService();
+$emailWorker = new EmailWorker();
+$apiHandler = new ApiHandler();
+
+assert($orderService-&gt;config() === $emailWorker-&gt;config());
+assert($emailWorker-&gt;config() === $apiHandler-&gt;config());
+</code></pre>
+<h3>Builder</h3>
+<ul>
+<li>Helps construct one complex object</li>
+</ul>
+<p>For example, a user profile with many optional fields.</p>
+<pre><code class="language-mermaid">flowchart LR
+    Client[Client] --&gt; Builder[UserProfileBuilder]
+    Builder --&gt; Name[withName]
+    Builder --&gt; Email[withEmail]
+    Builder --&gt; Address[withAddress]
+    Builder --&gt; Preferences[withPreferences]
+    Builder --&gt; Build[build]
+    Build --&gt; Profile[UserProfile]
+</code></pre>
+<pre><code class="language-php">final readonly class UserProfile
+{
+    public function __construct(
+        public string $name,
+        public string $email,
+        public ?string $address,
+        public array $preferences,
+    ) {}
+}
+
+final class UserProfileBuilder
+{
+    private string $name = '';
+    private string $email = '';
+    private ?string $address = null;
+    private array $preferences = [];
+
+    public function withName(string $name): self
+    {
+        $this-&gt;name = $name;
+
+        return $this;
+    }
+
+    public function withEmail(string $email): self
+    {
+        $this-&gt;email = $email;
+
+        return $this;
+    }
+
+    public function withAddress(string $address): self
+    {
+        $this-&gt;address = $address;
+
+        return $this;
+    }
+
+    public function withPreferences(array $preferences): self
+    {
+        $this-&gt;preferences = $preferences;
+
+        return $this;
+    }
+
+    public function build(): UserProfile
+    {
+        return new UserProfile(
+            name: $this-&gt;name,
+            email: $this-&gt;email,
+            address: $this-&gt;address,
+            preferences: $this-&gt;preferences,
+        );
+    }
+}
+
+$profile = (new UserProfileBuilder())
+    -&gt;withName('Ada Lovelace')
+    -&gt;withEmail('ada@example.com')
+    -&gt;withPreferences(['newsletter' =&gt; true])
+    -&gt;build();
+</code></pre>
+<h3>Factory</h3>
+<p>Creates objects without requiring the client to know their concrete classes. For example, email and SMS notification services can be created through their respective notification factories.</p>
+<p>Client uses notification workflow without knowing how the internal details are created  this avoids duplication in the code base</p>
+<p>NotificationFactory is abstract because it defines the shared notification workflow but cannot decide which notification type to create.</p>
+<pre><code class="language-mermaid">classDiagram
+    class Notification {
+        &lt;&lt;interface&gt;&gt;
+        +send(string recipient, string message) void
+    }
+
+    class EmailNotification {
+        +send(string recipient, string message) void
+    }
+
+    class SmsNotification {
+        +send(string recipient, string message) void
+    }
+
+    class NotificationFactory {
+        &lt;&lt;abstract&gt;&gt;
+        +createNotification() Notification
+        +notify(string recipient, string message) void
+    }
+
+    class EmailNotificationFactory {
+        +createNotification() Notification
+    }
+
+    class SmsNotificationFactory {
+        +createNotification() Notification
+    }
+
+    Notification &lt;|.. EmailNotification
+    Notification &lt;|.. SmsNotification
+    NotificationFactory &lt;|-- EmailNotificationFactory
+    NotificationFactory &lt;|-- SmsNotificationFactory
+    EmailNotificationFactory ..&gt; EmailNotification : creates
+    SmsNotificationFactory ..&gt; SmsNotification : creates
+    NotificationFactory --&gt; Notification : uses
+</code></pre>
+<pre><code class="language-php">interface Notification
+{
+    public function send(string $recipient, string $message): void;
+}
+
+final class EmailNotification implements Notification
+{
+    public function send(string $recipient, string $message): void
+    {
+        echo &quot;Email sent to {$recipient}: {$message}&quot;;
+    }
+}
+
+final class SmsNotification implements Notification
+{
+    public function send(string $recipient, string $message): void
+    {
+        echo &quot;SMS sent to {$recipient}: {$message}&quot;;
+    }
+}
+
+abstract class NotificationFactory
+{
+    abstract public function createNotification(): Notification;
+
+    public function notify(string $recipient, string $message): void
+    {
+        $notification = $this-&gt;createNotification();
+        $notification-&gt;send($recipient, $message);
+    }
+}
+
+final class EmailNotificationFactory extends NotificationFactory
+{
+    public function createNotification(): Notification
+    {
+        return new EmailNotification();
+    }
+}
+
+final class SmsNotificationFactory extends NotificationFactory
+{
+    public function createNotification(): Notification
+    {
+        return new SmsNotification();
+    }
+}
+
+$emailFactory = new EmailNotificationFactory();
+$emailFactory-&gt;notify('ada@example.com', 'Your order has shipped.');
+
+$smsFactory = new SmsNotificationFactory();
+$smsFactory-&gt;notify('+441234567890', 'Your order has shipped.');
+</code></pre>
+<h2>Structural</h2>
+<p>How objects are organized and combined</p>
+<h3>Adapter</h3>
+<p>Helps two components work together when their interfaces do not match.</p>
+<p>For example, an application expects a payment gateway with a <code>charge</code> method, but a
+third-party gateway provides a <code>makePayment</code> method. An adapter translates between them.</p>
+<pre><code class="language-mermaid">flowchart LR
+    Checkout[Checkout service] --&gt;|charge amount| Adapter[Payment gateway adapter]
+    Adapter --&gt;|makePayment amount| Gateway[Third-party payment gateway]
+    Gateway --&gt;|payment result| Adapter
+    Adapter --&gt;|payment result| Checkout
+</code></pre>
+<pre><code class="language-php">interface PaymentGateway
+{
+    public function charge(int $amountInCents): bool;
+}
+
+final class ThirdPartyPaymentGateway
+{
+    public function makePayment(int $amountInCents): bool
+    {
+        // Send the payment request to the third-party provider.
+        return true;
+    }
+}
+
+final class PaymentGatewayAdapter implements PaymentGateway
+{
+    public function __construct(
+        private readonly ThirdPartyPaymentGateway $gateway,
+    ) {}
+
+    public function charge(int $amountInCents): bool
+    {
+        return $this-&gt;gateway-&gt;makePayment($amountInCents);
+    }
+}
+
+final class CheckoutService
+{
+    public function __construct(
+        private readonly PaymentGateway $gateway,
+    ) {}
+
+    public function checkout(int $amountInCents): bool
+    {
+        return $this-&gt;gateway-&gt;charge($amountInCents);
+    }
+}
+
+$gateway = new PaymentGatewayAdapter(new ThirdPartyPaymentGateway());
+$checkout = new CheckoutService($gateway);
+
+$checkout-&gt;checkout(4999);
+</code></pre>
+<h3>Facade</h3>
+<p>Provides one simple method over a complex workflow. (Access to a complicated system)</p>
+<p>For example, a video publishing facade can hide a five-step process so its orchestration
+logic is not duplicated throughout the application.</p>
+<pre><code class="language-mermaid">flowchart LR
+    Client[Application] --&gt;|publish video| Facade[Video publishing facade]
+    Facade --&gt; Validate[1. Validate]
+    Validate --&gt; Transcode[2. Transcode]
+    Transcode --&gt; Thumbnail[3. Generate thumbnail]
+    Thumbnail --&gt; Upload[4. Upload]
+    Upload --&gt; Notify[5. Notify subscribers]
+    Notify --&gt; Result[Published video]
+</code></pre>
+<pre><code class="language-php">final class VideoValidator
+{
+    public function validate(string $videoPath): void
+    {
+        // Verify the file format, size, and duration.
+    }
+}
+
+final class VideoTranscoder
+{
+    public function transcode(string $videoPath): string
+    {
+        return '/tmp/video-1080p.mp4';
+    }
+}
+
+final class ThumbnailGenerator
+{
+    public function generate(string $videoPath): string
+    {
+        return '/tmp/thumbnail.jpg';
+    }
+}
+
+final class VideoStorage
+{
+    public function upload(string $videoPath, string $thumbnailPath): string
+    {
+        return 'https://videos.example.com/video-123';
+    }
+}
+
+final class SubscriberNotifier
+{
+    public function notify(string $videoUrl): void
+    {
+        // Notify subscribers that the video is available.
+    }
+}
+
+final class VideoPublishingFacade
+{
+    public function __construct(
+        private readonly VideoValidator $validator,
+        private readonly VideoTranscoder $transcoder,
+        private readonly ThumbnailGenerator $thumbnailGenerator,
+        private readonly VideoStorage $storage,
+        private readonly SubscriberNotifier $notifier,
+    ) {}
+
+    public function publish(string $videoPath): string
+    {
+        $this-&gt;validator-&gt;validate($videoPath);
+        $transcodedVideo = $this-&gt;transcoder-&gt;transcode($videoPath);
+        $thumbnail = $this-&gt;thumbnailGenerator-&gt;generate($transcodedVideo);
+        $videoUrl = $this-&gt;storage-&gt;upload($transcodedVideo, $thumbnail);
+        $this-&gt;notifier-&gt;notify($videoUrl);
+
+        return $videoUrl;
+    }
+}
+
+$publisher = new VideoPublishingFacade(
+    new VideoValidator(),
+    new VideoTranscoder(),
+    new ThumbnailGenerator(),
+    new VideoStorage(),
+    new SubscriberNotifier(),
+);
+
+$videoUrl = $publisher-&gt;publish('/uploads/my-video.mov');
+</code></pre>
+<h3>Proxy</h3>
+<p>A proxy places a substitute object in front of a real object to control access to it.
+For example, an image proxy can delay loading a high-resolution image until it is displayed.</p>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant Client
+    participant Proxy as ImageProxy
+    participant Image as HighResolutionImage
+
+    Client-&gt;&gt;Proxy: display()
+    Proxy-&gt;&gt;Image: create and load image
+    Proxy-&gt;&gt;Image: display()
+    Image--&gt;&gt;Client: rendered image
+</code></pre>
+<pre><code class="language-php">interface Image
+{
+    public function display(): void;
+}
+
+final class HighResolutionImage implements Image
+{
+    public function __construct(
+        private readonly string $filename,
+    ) {
+        $this-&gt;loadFromDisk();
+    }
+
+    private function loadFromDisk(): void
+    {
+        echo &quot;Loading {$this-&gt;filename} from disk.\n&quot;;
+    }
+
+    public function display(): void
+    {
+        echo &quot;Displaying {$this-&gt;filename}.\n&quot;;
+    }
+}
+
+final class ImageProxy implements Image
+{
+    private ?HighResolutionImage $image = null;
+
+    public function __construct(
+        private readonly string $filename,
+    ) {}
+
+    public function display(): void
+    {
+        // Create the expensive object only when it is first needed.
+        $this-&gt;image ??= new HighResolutionImage($this-&gt;filename);
+        $this-&gt;image-&gt;display();
+    }
+}
+
+$image = new ImageProxy('high-resolution-photo.jpg');
+
+// The real image is loaded only on the first call.
+$image-&gt;display();
+$image-&gt;display();
+</code></pre>
+<h3>Decorator</h3>
+<p>Adds new behavior to an object without altering its class. For example, a rich-text editor can wrap a text view with bold and italic decorators.
+each decorater has one responsibility and delegates the rest of the activity to the object it traps
+adds one object and adds beahvior around it doesnt change client behavior</p>
+<pre><code class="language-mermaid">classDiagram
+    class TextView {
+        &lt;&lt;interface&gt;&gt;
+        +render() string
+    }
+    class PlainText {
+        -text string
+        +render() string
+    }
+    class TextDecorator {
+        &lt;&lt;abstract&gt;&gt;
+        #textView TextView
+        +render() string
+    }
+    class BoldDecorator {
+        +render() string
+    }
+    class ItalicDecorator {
+        +render() string
+    }
+
+    TextView &lt;|.. PlainText
+    TextView &lt;|.. TextDecorator
+    TextDecorator &lt;|-- BoldDecorator
+    TextDecorator &lt;|-- ItalicDecorator
+    TextDecorator o-- TextView : wraps
+</code></pre>
+<pre><code class="language-php">interface TextView
+{
+    public function render(): string;
+}
+
+final class PlainText implements TextView
+{
+    public function __construct(
+        private readonly string $text,
+    ) {}
+
+    public function render(): string
+    {
+        return htmlspecialchars($this-&gt;text, ENT_QUOTES, 'UTF-8');
+    }
+}
+
+abstract class TextDecorator implements TextView
+{
+    public function __construct(
+        protected readonly TextView $textView,
+    ) {}
+}
+
+final class BoldDecorator extends TextDecorator
+{
+    public function render(): string
+    {
+        return &quot;&lt;strong&gt;{$this-&gt;textView-&gt;render()}&lt;/strong&gt;&quot;;
+    }
+}
+
+final class ItalicDecorator extends TextDecorator
+{
+    public function render(): string
+    {
+        return &quot;&lt;em&gt;{$this-&gt;textView-&gt;render()}&lt;/em&gt;&quot;;
+    }
+}
+
+$text = new PlainText('Decorator pattern');
+$formattedText = new ItalicDecorator(new BoldDecorator($text));
+
+echo $formattedText-&gt;render();
+// &lt;em&gt;&lt;strong&gt;Decorator pattern&lt;/strong&gt;&lt;/em&gt;
+</code></pre>
+<h3>Composite</h3>
+<p>The Composite pattern lets clients treat a single object and a group of objects through the same interface. For example, files and folders can both report their name and size, while a folder delegates to its children.</p>
+<pre><code class="language-mermaid">classDiagram
+    class FilesystemItem {
+        &lt;&lt;interface&gt;&gt;
+        +name() string
+        +size() int
+        +printTree(indent) void
+    }
+    class FileItem {
+        -filename string
+        -bytes int
+        +name() string
+        +size() int
+        +printTree(indent) void
+    }
+    class Folder {
+        -folderName string
+        -children FilesystemItem[]
+        +add(item) void
+        +name() string
+        +size() int
+        +printTree(indent) void
+    }
+
+    FilesystemItem &lt;|.. FileItem
+    FilesystemItem &lt;|.. Folder
+    Folder &quot;1&quot; *-- &quot;0..*&quot; FilesystemItem : contains
+</code></pre>
+<pre><code class="language-php">interface FilesystemItem
+{
+    public function name(): string;
+
+    public function size(): int;
+
+    public function printTree(string $indent = ''): void;
+}
+
+final class FileItem implements FilesystemItem
+{
+    public function __construct(
+        private readonly string $filename,
+        private readonly int $bytes,
+    ) {}
+
+    public function name(): string
+    {
+        return $this-&gt;filename;
+    }
+
+    public function size(): int
+    {
+        return $this-&gt;bytes;
+    }
+
+    public function printTree(string $indent = ''): void
+    {
+        echo &quot;{$indent}{$this-&gt;name()} ({$this-&gt;size()} bytes)\n&quot;;
+    }
+}
+
+final class Folder implements FilesystemItem
+{
+    /** @var FilesystemItem[] */
+    private array $children = [];
+
+    public function __construct(
+        private readonly string $folderName,
+    ) {}
+
+    public function add(FilesystemItem $item): void
+    {
+        $this-&gt;children[] = $item;
+    }
+
+    public function name(): string
+    {
+        return $this-&gt;folderName;
+    }
+
+    public function size(): int
+    {
+        return array_sum(
+            array_map(
+                fn (FilesystemItem $item): int =&gt; $item-&gt;size(),
+                $this-&gt;children,
+            ),
+        );
+    }
+
+    public function printTree(string $indent = ''): void
+    {
+        echo &quot;{$indent}{$this-&gt;name()}/ ({$this-&gt;size()} bytes)\n&quot;;
+
+        foreach ($this-&gt;children as $child) {
+            $child-&gt;printTree($indent . '  ');
+        }
+    }
+}
+
+$images = new Folder('images');
+$images-&gt;add(new FileItem('logo.svg', 2_048));
+$images-&gt;add(new FileItem('hero.jpg', 120_000));
+
+$project = new Folder('project');
+$project-&gt;add(new FileItem('README.md', 1_024));
+$project-&gt;add($images);
+
+$project-&gt;printTree();
+// project/ (123072 bytes)
+//   README.md (1024 bytes)
+//   images/ (122048 bytes)
+//     logo.svg (2048 bytes)
+//     hero.jpg (120000 bytes)
+</code></pre>
+<h2>Behavioral</h2>
+<p>objects communicate and divide responsibilities</p>
+<h3>Strategy</h3>
+<h3>Observer</h3>
+<h3>State</h3>
+<h3>Command</h3>
+<h3>Template Method</h3>
+<h3>Iterator</h3>
+<h3>Chain fo Responsibility</h3>
 
     </div>
     <span class="sr-only">End of article</span>

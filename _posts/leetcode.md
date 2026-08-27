@@ -74,7 +74,7 @@ The execution time doubles with every single element added to the input. This qu
 - [Neo Kim (LinkedIn)](https://lnkd.in/p/ekpGg3rN)
 - [YouTube: Big O](https://www.youtube.com/watch?v=DjYZk8nrXVY)
 - [YouTube: Complexity](https://www.youtube.com/watch?v=k-BVLx3oh1g&t=57s)
-
+- [Leetcode Patterns](https://blog.algomaster.io/p/15-leetcode-patterns)
 
 ## The 12 patterns you should learn
 
@@ -88,6 +88,9 @@ Practice notes:
 - [Monotonic stack](/posts/monotonic-stack.html)
 - [Linked list in-place reversal](/posts/linked-list-inplace-reversal.html)
 - [Prefix sums](/posts/prefix-sums.html)
+- [Overlapping intervals](/posts/overlapping-intervals.html)
+- [Top K elements](/posts/top-k-elements.html)
+- [Modified binary search](/posts/modified-binary-search.html)
 
 ### 1. Hash-based lookup
 
@@ -190,6 +193,8 @@ Used for:
 
 **Why:** Essential for performance tuning.
 
+**Notes:** [Modified binary search](/posts/modified-binary-search.html)
+
 ### 8. Dynamic programming (lightweight)
 
 Not heavy LeetCode DP — just:
@@ -214,6 +219,8 @@ Used in:
 **DS:** Arrays, heaps
 
 **Why:** Shows up in distributed systems and product logic.
+
+**Notes:** [Overlapping intervals](/posts/overlapping-intervals.html) · [Top K elements](/posts/top-k-elements.html)
 
 ### 10. Topological sorting
 
